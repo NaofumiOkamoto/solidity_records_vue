@@ -1,9 +1,17 @@
 <template>
-  <div class="hello">
-    <p><button v-on:click="getAPI()">Next Product</button></p>
-    <p>{{ record.title }}</p>
-    <img v-bind:src=record.url>
-    <div v-html=record.html></div>
+  <div class="top_page">
+    <!-- <p><button v-on:click="getAPI()">Next Product</button></p> -->
+    <!-- <img v-bind:src=record.url> -->
+    <div>
+      <img class="top_logo" src="../assets/top_logo.jpg">
+      <!-- <fa icon="twitter" type="fab" class="classname"></fa> -->
+    </div>
+    <div v-for="(image, key) in record.images" :key="key" class="products_box">
+      <img class="products_img" v-bind:src=image>
+      <p class="title">{{ record.title[key] }}</p>
+      <p class="price">¥{{ record.price[key] }}</p>
+    </div>
+    <!-- <div v-html=record.html></div> -->
   </div>
 </template>
 
@@ -11,21 +19,27 @@
 import { defineComponent } from 'vue';
 import axios from 'axios'
 
-interface Record {
-  title: string;
-  year: number;
-  url: string;
-  html: string;
-  count: number;
-}
+  interface Records {
+    title: Array<string>;
+    year: number;
+    url: string;
+    html: string;
+    count: number;
+    images: Array<string>;
+    price: Array<string>;
+  }
+// let title = window.title;
+// let images = window.images;
+
 
 export default defineComponent({
   name: 'HelloWorld',
+  // props: ["icon"],
   data() {
     return{
       record: {
-        title: 'jas',
-        year: 2020,
+        title: [],
+        year: 0,
         url: 'https://cdn.shopify.com/s/files/1/0415/0791/3886/products/877_01.jpg?v=1612667135',
         html: '<meta charset="utf-8">\n' +
               '<p data-mce-fragment="1"><span data-mce-fragment="1">●Artist: Carmen McRae</span></p>\n' +
@@ -39,28 +53,38 @@ export default defineComponent({
               '<p data-mce-fragment="1"><span data-mce-fragment="1">●Condition: Used (Sleeve: EX-. with insert and OBI. some light damage on cover. Vinyl: EX-. some light marks. but good shape.)</span><br data-mce-fragment="1"><br data-mce-fragment="1"><span data-mce-fragment="1">-Grading Policy-</span><br data-mce-fragment="1"><span data-mce-fragment="1">M～NM～EX+～EX～EX-～VG+～VG～VG- (8 grades)</span><br data-mce-fragment="1"><br data-mce-fragment="1"><span data-mce-fragment="1">M to EX → Clean copy. </span><br data-mce-fragment="1"><br data-mce-fragment="1"><span data-mce-fragment="1">EX-, VG+ → Some (light) wear and marks. but good shape. </span><br data-mce-fragment="1"><br data-mce-fragment="1"><span data-mce-fragment="1">VG, VG- → Bad condition. some wear and marks.</span><br data-mce-fragment="1"><br data-mce-fragment="1"><span data-mce-fragment="1">You can order by e-mail. Please contact to solidityrecords@gmail.com</span></p>\n' +
               '\n' +
               '<iframe width="560" height="315" src="https://www.youtube.com/embed/4as30GSYIxo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-        count: 1
-      } as Record
+        count: 1,
+        images: [],
+        price: []
+      } as Records
     }
   },
-  methods:{
-    getAPI(){
+  created :function(){
       const num = this.record.count += 1
 
       const url = '/api?num=' + num.toString();
       console.log('url', url);
 
       axios.get(url).then((response) => {
-        console.log('response', response.data.Title);
-        if ( response.data['Title'] !== '' ){
-          this.record.title = response.data['Title'];
-          this.record.html = response.data['Body (HTML)'];
+        //////////////////////////////////////
+        // if ( response.data['Title'] !== '' ){
+        //   this.window.title = response.data['Title'];
+        //   this.window.html = response.data['Body (HTML)'];
+        // }
+        //////////////////////////////////////
+
+        // const lenght = response.data.length;
+
+        for(let i = 0; i < 10; i++ ){
+          if ( response.data[i]['Title'] !== '' ){
+          this.record.title.push(response.data[i]['Title']);
+          this.record.images.push(response.data[i]['Image Src']);
+          this.record.price.push(response.data[i]['Variant Price']);
+          }
         }
-        this.record.url = response.data['Image Src'];
       });
 
     },
-  },
   computed:{
   },
 });
@@ -82,7 +106,22 @@ li {
 a {
   color: #42b983;
 }
-img {
-  zoom: 13%;
+.products_box{
+  float: left;
+  width: 50%;
+}
+.products_img {
+  zoom: 8%;
+}
+.top_logo{
+  zoom: 60%;
+}
+.title{
+  width: 90%;
+  font-size: 80%;
+  margin: 5px 0 0 0;
+}
+.price{
+  margin: 0 0 10px 0;
 }
 </style>
