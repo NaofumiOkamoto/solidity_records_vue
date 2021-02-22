@@ -2,9 +2,9 @@
 	<div class="footer">
 		<hr>
 		<div class="footer_icon_box">
-			<button><router-link to="/">facebook</router-link></button>
-			<button><router-link to="/">twitter</router-link></button>
-			<button><router-link to="/">instagram</router-link></button>
+			<router-link to="/home"> <fa class="footer_icon" icon="facebook" type="fab" /></router-link>
+			<router-link to="/home"> <fa class="footer_icon" icon="twitter" type="fab" /></router-link>
+			<router-link to="/home"> <fa class="footer_icon" icon="instagram" type="fab" /></router-link>
 		</div>
 	</div>
 </template>
@@ -27,9 +27,17 @@ button{
 	position: relative;
 	margin: 0 0 200px 0
 }
+.footer_icon{
+	width: 30px;
+	margin: 0 10px;
+	color: #000;
+}
 .footer_icon_box{
 	position: absolute;
 	top: 50px;
 	right: 5%;
+}
+svg{
+	width: 30px;
 }
 </style>

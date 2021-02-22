@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Top from '../views/Top.vue'
 import Product from '../views/Product.vue'
+import Checkouts from '../views/Checkouts.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,9 +12,15 @@ const routes: Array<RouteRecordRaw> = [
     component: Top
   },
   {
-    path: '/product/:id',
+    path: '/product/:handle',
     name: 'Product',
-    component: Product
+    component: Product,
+    props: route => ({ handle: String(route.params.handle) })
+  },
+  {
+    path: '/checkouts',
+    name: 'Checkouts',
+    component: Checkouts
   },
   {
     path: '/Home',

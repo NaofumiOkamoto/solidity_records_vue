@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header/>
-    <h1>My Page</h1>
+    <h1>checkout page</h1>
     <Footer/>
   </div>
 </template>

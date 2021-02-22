@@ -1,8 +1,6 @@
 <template>
-  <div class="home">
-    <Header/>
-    <h1>My Page</h1>
-    <Footer/>
+  <div class="add_cart">
+    <div style="">You added to the cart</div>
   </div>
 </template>
 
@@ -15,20 +13,23 @@ export default defineComponent({
   name: 'Home',
   data() {
     return {
-      productId: 6
     }
   },
   components: {
-    // HelloWorld,
   },
   methods: {
-    toAbout(){
-      this.$router.push({ path: "about" })
-    },
-    toProduct(){
-      this.$router.push({ path: "/product/" + this.productId })
-    }
-
   }
 });
 </script>
+
+<style scoped>
+.add_cart{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 200px;
+  width: 100%;
+  background: #999;
+  z-index: 1;
+}
+</style>

@@ -1,13 +1,20 @@
 <template>
+<div>
+	<div class="progress">進捗状況 : 4％くらい</div>
 	<div class="header">
 		<router-link to="/"><img class="top_logo" src="../assets/top_logo.jpg"></router-link>
 		<div class="header_icon_box">
-			<button><router-link to="/">search</router-link></button>
-			<button><router-link to="/home">my page</router-link></button>
-			<button><router-link to="/about">cart</router-link></button>
+			<router-link to="/"><fa class="header_icon" icon="search" /></router-link>
+			<router-link to="/about"><fa class="header_icon" icon="user" /></router-link>
+			<router-link to="/home"> <fa class="header_icon" icon="shopping-cart" /></router-link>
+			<fa @click="hamburger" class="header_icon" icon="bars" />
 		</div>
 		<hr>
 	</div>
+	<transition @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave">
+			<Hamburger class="hamburger" v-if="isHamburger"  />
+	</transition>
+</div>
 </template>
 
 <script lang="ts">
@@ -15,8 +22,29 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Header',
-  computed:{
+  data() {
+		return{
+			isHamburger: false
+		}
   },
+  methods: {
+		hamburger(){
+			this.isHamburger = !this.isHamburger
+		},
+
+		beforeEnter: function(el: { style: { height: string } }) {
+			el.style.height = '0';
+		},
+		enter: function(el: { style: { height: string }; scrollHeight: string }) {
+			el.style.height = el.scrollHeight + 'px';
+		},
+		beforeLeave: function(el: { style: { height: string }; scrollHeight: string }) {
+			el.style.height = el.scrollHeight + 'px';
+		},
+		leave: function(el: { style: { height: string } }) {
+			el.style.height = '0';
+		},
+	}
 });
 </script>
 
@@ -33,7 +61,45 @@ export default defineComponent({
 	top: 40%;
 	right: 5%;
 }
-button{
-	margin: 0 5px;
+svg{
+	width: 25px;
+	margin: 0 10px;
+}
+.header_icon{
+	color: #000;
+}
+
+
+.hamburger{
+	overflow: hidden;
+	transition: height 0.4s ease-in-out;
+}
+.v-enter-active{
+	animation-duration: 1s;
+	/* animation-fill-mode: both; */
+	animation-name: hamburger_opend;
+}
+.v-leave-active{
+	animation-duration: 1s;
+	/* animation-fill-mode: both; */
+	animation-name: hamburger_closed;
+}
+@keyframes hamburger_opend {
+	0% {
+		opacity: 0;
+	}
+	100%{
+		opacity: 1;
+
+	}
+}
+@keyframes hamburger_closed {
+	0% {
+		opacity: 1;
+	}
+	100%{
+		opacity: 0;
+
+	}
 }
 </style>
