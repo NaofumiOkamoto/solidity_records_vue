@@ -3,7 +3,6 @@
   <Header />
   <div class="top_page clearfix">
     <div v-for="(image, key) in record.images" :key="key" class="products_box">
-
       <router-link :to="{ name: 'Product', params: { handle: record.handle[key] }}" >
         <img class="products_img" v-bind:src=image>
         <p class="title">{{ record.title[key] }}</p>
