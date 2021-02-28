@@ -4,9 +4,12 @@
       <button @click="back">←</button>
       <input class="search_form" type="text" v-model="keyword">
     </div>
-    <!-- <div style="margin-top:77.5px;"></div> -->
-    <div class="search_result" v-for="(product,key) in filteredProducts" :key="key">
-      <p v-text="product"></p>
+    <div style="margin-top:16%;">
+      <div class="search_result" v-for="(data,key) in filteredProducts" :key="key">
+        <router-link :to="{ name: 'Product', params: { handle: data.split('__')[1] }}" >
+          <p @click="back" v-text="data.split('__')[0]"></p>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -18,6 +21,7 @@ import axios from 'axios';
 
 interface Searches {
   title: Array<string>;
+  handle: string[];
 }
 
 export default defineComponent({
@@ -26,6 +30,7 @@ export default defineComponent({
     return {
       search: {
         title: [],
+        handle: [],
       } as Searches,
       keyword: '',
     }
@@ -33,7 +38,7 @@ export default defineComponent({
   methods: {
     back() {
       this.$emit("back")
-    }
+    },
   },
   created :function() {
       const url = '/api';
@@ -41,38 +46,33 @@ export default defineComponent({
         for(let i = 0; i < response.data.length; i++ ){
           if ( response.data[i]['Title'] !== '' ){
           this.search.title.push(response.data[i]['Title']);
+          this.search.handle.push(response.data[i]['Handle']);
           }
         }
       });
   },
   computed: {
     filteredProducts: function(): string[]{
-      const products = [];
+      const data = [];
       for(let i = 0; i < this.search.title.length; i++) {
         const product = this.search.title[i];
+        const handle = this.search.handle[i];
         // if(product.indexOf(this.keyword) !== -1) {
         if(product.toLowerCase().includes(this.keyword.toLowerCase()) && this.keyword !== "") {
-          console.log(product)
-          products.push(product);
+          data.push(product + '__' + handle);
         }
       }
-      return products;
+      return data;
     }
   }
 });
 </script>
 
 <style scoped>
-.clearfix:before,
-.clearfix:after {
-  content: " ";
-  display: table;
-}
-.clearfix:after {
-  clear: both;
-}
-.clearfix {
-  *zoom: 1;
+.clearfix::after {
+   content: "";
+   display: block;
+   clear: both;
 }
 .search{
   position: absolute;

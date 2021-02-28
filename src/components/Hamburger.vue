@@ -1,30 +1,23 @@
 <template>
-      <div v-if="isSubMenuMain" class="sub_menu_main">
-          <!-- <div v-if="isSubMenuMain" class="sub_menu_main"> -->
-        <div class="category_text">All Products</div><hr>
-        <div class="category_text">New Releases</div><hr>
-        <div @click.self="showJazz" class="category_text">Jazz Userd Viny!<div class="next">></div></div><hr>
-        <div class="category_text">Soul/Funk/Blues Used Viny<div class="next">></div></div><hr>
-        <div class="category_text">Other<div class="next">></div></div><hr>
-      </div>
-      <div v-else-if="isSubMenuJazz" class="sub_menu_jazz">
-      <transition name="submenu">
-        <div v-if="isSubMenuJazz" class="sub_menu_in_jazz">
-        <p @click="showJazz">back</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        <p>aaaaaaaaaaaaaa</p>
-        </div>
-      </transition>
-      </div>
+    <div class="sub_menu_main">
+        <!-- <div v-if="isSubMenuMain" class="sub_menu_main"> -->
+      <!-- <router-link :to="{ name: 'Collections', params: { genre: 'all-products' }}"> -->
+        <div class="category_text">All Products （まだ）</div>
+      <!-- </router-link> -->
+      <hr>
+      <router-link :to="{ name: 'Collections', params: { genre: 'New' }}">
+        <div class="category_text">New Releases</div>
+      </router-link>
+      <hr>
+      <!-- <router-link :to="{ name: 'Collections', params: { genre: 'recent-arrivals' }}"> -->
+        <div class="category_text">Recent Arrivals（まだ）</div>
+      <!-- </router-link> -->
+      <hr>
+      <router-link :to="{ name: 'Collections', params: { genre: 'Used' }}">
+        <div class="category_text">Used Vinyl</div>
+      </router-link>
+      <hr>
+    </div>
 </template>
 
 <script lang="ts">
@@ -39,10 +32,6 @@ export default defineComponent({
     }
   },
   methods: {
-    showJazz(){
-      this.isSubMenuMain = !this.isSubMenuMain
-      this.isSubMenuJazz = !this.isSubMenuJazz
-    }
   }
 });
 </script>
@@ -58,20 +47,8 @@ export default defineComponent({
   top: 0;
   font-size: 180%;
 }
-/* .sub_menu_main{
-  width: 100%;
-} */
 .sub_menu_jazz{
   width: 100%;
 }
-/* .sub_menu_in_jazz{
-}
-.submenu-enter-active,
-.submenu-leave-active{
-  width: 100%;
-}
-.top-enter, .top-leave-to {
-  width: 0%;
-} */
 
 </style>

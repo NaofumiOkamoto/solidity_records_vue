@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Top from '../views/Top.vue'
 import Product from '../views/Product.vue'
+import Collections from '../views/Collections.vue'
 import Checkouts from '../views/Checkouts.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -21,6 +22,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/checkouts',
     name: 'Checkouts',
     component: Checkouts
+  },
+  {
+    path: '/collections/:genre',
+    name: 'Collections',
+    component: Collections,
+    props: route => ({ genre: String(route.params.genre) })
   },
   {
     path: '/Home',

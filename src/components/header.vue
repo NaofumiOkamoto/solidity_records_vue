@@ -13,7 +13,7 @@
 			<hr>
 		</div>
 		<transition name="hamburgerMenu" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-			<Hamburger class="hamburgerComponent" v-if="isHamburger" />
+			<Hamburger class="hamburgerComponent" v-if="isHamburger" @click="hamburger" />
 		</transition>
 	</div>
 </template>
@@ -54,7 +54,7 @@ export default defineComponent({
 
 <style scoped>
 .top_logo{
-  zoom: 60%;
+	zoom: 60%;
 	margin-left: 0%;
 }
 .header{
@@ -75,7 +75,7 @@ svg{
 
 .hamburgerComponent{
 	overflow: hidden;
-	transition: height 0.8s ease-in-out;
+	transition: height 0.5s;
 }
 .hamburgerMenu-enter-active{
 	animation-duration: 1s;

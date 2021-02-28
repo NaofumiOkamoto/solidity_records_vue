@@ -18,7 +18,6 @@
   </div>
 </template>
 
-
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
@@ -37,6 +36,24 @@ export default defineComponent({
   created: function(){
     this.getTitle();
   },
+  watch:{
+    $route(to, from) {
+      const url = '/api?handle=' + to.params.handle;
+      axios.get(url).then((response) => {
+        this.product.image = response.data[0]['Image Src']
+        this.product.title = response.data[0]['Title']
+        this.product.body = response.data[0]['Body']
+
+        const length = response.data.length;
+        this.product.images = []
+        if ( 0 < length ) {
+          for ( let i = 1; i < length; i++ ){
+            this.product.images.push(response.data[i]['Image Src'])
+          }
+        }
+      });
+    }
+  },
   data() {
     return {
       product: {
@@ -49,6 +66,9 @@ export default defineComponent({
     }
   },
   methods: {
+    reload() {
+      this.$router.push(this.$route.fullPath)
+    },
     addCart(){
       this.isShow = true
     },
@@ -56,12 +76,11 @@ export default defineComponent({
       this.isShow = false;
     },
     getTitle(){
-      const url = '/api?handle=' + this.handle;
-      console.log('url', url);
+      const url = '/api?sql=where `Handle` = "' + this.handle + '"';
       axios.get(url).then((response) => {
         this.product.image = response.data[0]['Image Src']
         this.product.title = response.data[0]['Title']
-        this.product.body = response.data[0]['Body (HTML)']
+        this.product.body = response.data[0]['Body']
 
         const length = response.data.length;
         if ( 0 < length ) {

@@ -2,6 +2,7 @@
   <div class="home">
     <Header/>
     <h1>My Page</h1>
+    <p>{{ getData() }}</p>
     <Footer/>
   </div>
 </template>
@@ -9,6 +10,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useStore } from 'vuex'
+import { key } from '../store'
 // import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default defineComponent({
@@ -18,15 +21,18 @@ export default defineComponent({
       productId: 6
     }
   },
-  components: {
-    // HelloWorld,
+  created: function(){
+    this.getData()
   },
   methods: {
-    toAbout(){
-      this.$router.push({ path: "about" })
-    },
-    toProduct(){
-      this.$router.push({ path: "/product/" + this.productId })
+    getData(){
+      const store = useStore(key)
+      return store.state
+    }
+  },
+  computed:{
+    version(){
+      return 1
     }
 
   }

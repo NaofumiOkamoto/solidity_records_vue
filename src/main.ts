@@ -1,22 +1,18 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { store, key } from './store'
 import Header from '@/components/header.vue'
 import Footer from '@/components/footer.vue'
 import AddCart from '@/components/addCart.vue'
 import Hamburger from '@/components/Hamburger.vue'
 import Search from '@/components/search.vue'
 
-// import { library } from '@fortawesome/fontawesome-svg-core'
-// import { faCoffee, faCheck, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { FontAwesomeIcon } from "@/plugins/font-awesome";
-
-// library.add(faCoffee, faCheck, faCheckCircle)
-
 
 const app = createApp(App)
 app.use(router)
+app.use(store, key)
 app.component('Header', Header)
 app.component('Footer', Footer)
 app.component('AddCart', AddCart)

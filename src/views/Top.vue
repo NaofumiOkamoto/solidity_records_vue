@@ -2,12 +2,12 @@
 <div>
   <Header />
   <div class="top_page clearfix">
-    <div v-for="(image, key) in record.images" :key="key" class="products_box">
-      <router-link :to="{ name: 'Product', params: { handle: record.handle[key] }}" >
+    <div v-for="(image, key) in getProduct.images" :key="key" class="products_box">
+      <router-link :to="{ name: 'Product', params: { handle: getProduct.handle[key] }}" >
         <img class="products_img" v-bind:src=image>
-        <p class="title">{{ record.title[key] }}</p>
+        <p class="title">{{ getProduct.title[key] }}</p>
       </router-link>
-      <p class="price">¥{{ record.price[key] }}</p>
+      <p class="price">¥{{ getProduct.price[key] }}</p>
     </div>
   </div>
   <Footer/>
@@ -16,61 +16,19 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import axios from 'axios';
-
-  interface Records {
-    handle: string[];
-    title: Array<string>;
-    year: number;
-    url: string;
-    html: string;
-    count: number;
-    images: Array<string>;
-    price: Array<string>;
-  }
+import { useStore } from 'vuex'
+import { key } from '../store'
 
 export default defineComponent({
   name: 'HelloWorld',
-  data() {
-    return{
-      record: {
-        title: [],
-        year: 0,
-        url: '',
-        html: '',
-        count: 1,
-        images: [],
-        price: [],
-        handle: []
-      } as Records
+  computed: {
+    getProduct(){
+      const store = useStore(key)
+      store.dispatch('filterProdcut', 'ORDER BY Title DESC LIMIT 10;')
+      // store.dispatch('filterProdcut', 'WHERE `Body` LIKE "%25Japanese Jazz%25"')
+      return store.state
     }
-  },
-  created :function(){
-
-      const url = '/api';
-      console.log('url', url);
-
-      axios.get(url).then((response) => {
-        //////////////////////////////////////
-        // if ( response.data['Title'] !== '' ){
-        //   this.window.title = response.data['Title'];
-        //   this.window.html = response.data['Body (HTML)'];
-        // }
-        //////////////////////////////////////
-
-        // const lenght = response.data.length;
-
-        for(let i = 0; i < 10; i++ ){
-          if ( response.data[i]['Title'] !== '' ){
-          this.record.handle.push(response.data[i]['Handle']);
-          this.record.title.push(response.data[i]['Title']);
-          this.record.images.push(response.data[i]['Image Src']);
-          this.record.price.push(response.data[i]['Variant Price']);
-          }
-        }
-      });
-
-  },
+  }
 });
 </script>
 
@@ -78,17 +36,15 @@ export default defineComponent({
 #app {
   margin: 0 2%;
 }
-.clearfix::after {
-   content: "";
-   display: block;
-   clear: both;
+.top_page{
+  display: flex;
+  flex-wrap: wrap;
 }
 .products_box{
-  float: left;
   width: 50%;
 }
 .products_img {
-  zoom: 8%;
+  width: 80%;
 }
 .title{
   width: 90%;
