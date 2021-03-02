@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div class="progress">進捗状況 : 6％くらい</div>
 		<Search v-if="isSearch" @back="search"/>
 		<div class="header">
+			<div class="progress">進捗状況 : 8％くらい</div>
 			<router-link to="/"><img class="top_logo" src="../assets/top_logo.jpg"></router-link>
 			<div class="header_icon_box">
 				<fa @click.stop="search" class="header_icon" icon="search" />
@@ -10,8 +10,8 @@
 				<router-link to="/home"> <fa class="header_icon" icon="shopping-cart" /></router-link>
 				<fa @click="hamburger" class="header_icon" icon="bars" />
 			</div>
-			<hr>
 		</div>
+		<hr>
 		<transition name="hamburgerMenu" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
 			<Hamburger class="hamburgerComponent" v-if="isHamburger" @click="hamburger" />
 		</transition>
@@ -30,25 +30,25 @@ export default defineComponent({
 		}
   },
   methods: {
-		hamburger(){
-			this.isHamburger = !this.isHamburger
-		},
-		search(){
-			this.isSearch = !this.isSearch
-		},
-		beforeEnter: function(el: { style: { height: string } }) {
-			el.style.height = '0';
-		},
-		enter: function(el: { style: { height: string }; scrollHeight: string }) {
-			el.style.height = el.scrollHeight + 'px';
-		},
-		beforeLeave: function(el: { style: { height: string }; scrollHeight: string }) {
-			el.style.height = el.scrollHeight + 'px';
-		},
-		leave: function(el: { style: { height: string } }) {
-			el.style.height = '0';
-		},
-	}
+	hamburger(){
+		this.isHamburger = !this.isHamburger
+	},
+	search(){
+		this.isSearch = !this.isSearch
+	},
+	beforeEnter: function(el: { style: { height: string } }) {
+		el.style.height = '0';
+	},
+	enter: function(el: { style: { height: string }; scrollHeight: string }) {
+		el.style.height = el.scrollHeight + 'px';
+	},
+	beforeLeave: function(el: { style: { height: string }; scrollHeight: string }) {
+		el.style.height = el.scrollHeight + 'px';
+	},
+	leave: function(el: { style: { height: string } }) {
+		el.style.height = '0';
+	},
+}
 });
 </script>
 
@@ -58,6 +58,7 @@ export default defineComponent({
 	margin-left: 0%;
 }
 .header{
+	margin: 0 5%;
 	position: relative;
 }
 .header_icon_box{
@@ -72,7 +73,6 @@ svg{
 .header_icon{
 	color: #000;
 }
-
 .hamburgerComponent{
 	overflow: hidden;
 	transition: height 0.5s;

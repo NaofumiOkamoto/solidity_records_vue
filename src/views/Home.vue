@@ -2,6 +2,7 @@
   <div class="home">
     <Header/>
     <h1>My Page</h1>
+    <button @click="setCookie('naofumi'); getCookie()">setCookie</button>
     <p>{{ getData() }}</p>
     <Footer/>
   </div>
@@ -26,9 +27,18 @@ export default defineComponent({
   },
   methods: {
     getData(){
-      const store = useStore(key)
+      const store = useStore(key);
       return store.state
+    },
+    setCookie(name: string){
+      document.cookie = "cart-product=" + name
+    },
+    getCookie(){
+      const cookies = document.cookie
+      const cookiesArray = cookies.split(';')
+      alert(cookiesArray)
     }
+
   },
   computed:{
     version(){

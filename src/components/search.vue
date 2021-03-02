@@ -41,6 +41,7 @@ export default defineComponent({
     },
   },
   created :function() {
+    console.log("search")
       const url = '/api';
       axios.get(url).then((response) => {
         for(let i = 0; i < response.data.length; i++ ){

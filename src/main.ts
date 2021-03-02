@@ -7,12 +7,22 @@ import Footer from '@/components/footer.vue'
 import AddCart from '@/components/addCart.vue'
 import Hamburger from '@/components/Hamburger.vue'
 import Search from '@/components/search.vue'
+import { VueCookieNext } from 'vue-cookie-next'
 
 import { FontAwesomeIcon } from "@/plugins/font-awesome";
+
+VueCookieNext.config({
+    expire: '1d',
+    path: '/',
+    domain: '',
+    secure: '',
+    sameSite: '',
+  })
 
 const app = createApp(App)
 app.use(router)
 app.use(store, key)
+app.use(VueCookieNext)
 app.component('Header', Header)
 app.component('Footer', Footer)
 app.component('AddCart', AddCart)
@@ -20,6 +30,7 @@ app.component('Hamburger', Hamburger)
 app.component('Search', Search)
 app.component("fa", FontAwesomeIcon)
 app.mount('#app')
+
 
 
 // 書き方１
