@@ -3,6 +3,7 @@
     <div @click="isShow = false " >
       <AddCart v-show="isShow" style="position:fixed"/>
       <Header/>
+      <!--
       <div class="image_box">
         <img class="" v-bind:src=product.image>
       </div>
@@ -15,6 +16,22 @@
       <div @click="addCart(product.title)" class="add_to_cart">ADD TO CART</div>
       <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
       <div v-html="product.body"></div>
+      -->
+        <div class="image_box">
+          <img v-if="getProduct.products[0].condition == 'New'" class="" v-bind:src="imgSrc + getProduct.products[0].img_id + '.jpg' ">
+          <img v-else class="" v-bind:src="imgSrc + getProduct.products[0].img_id + '_01.jpg' ">
+          <p>{{ getProduct.products[0].title }}</p>
+          <div @click="addCart(product.title)" class="add_to_cart">ADD TO CART</div>
+          <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
+          <p class="product_info">Artist : {{ getProduct.products[0].artist }}</p>
+          <p class="product_info">Title : {{ getProduct.products[0].title }}</p>
+          <p class="product_info">Label : {{ getProduct.products[0].label }}</p>
+          <p class="product_info">Number : {{ getProduct.products[0].number }}</p>
+          <p class="product_info">Format : {{ getProduct.products[0].format }}</p>
+          <p class="product_info">Year : {{ getProduct.products[0].year }}</p>
+          <p class="product_info">Recording Date : {{ getProduct.products[0].recoding_date }}</p>
+          <p class="product_info">Condition : {{ getProduct.products[0].condition }}</p>
+        </div>
       <Footer/>
     </div>
   </div>
@@ -42,52 +59,67 @@ export default defineComponent({
     }
   },
   props: {
-    handle: String
+    id: Number
   },
   methods: {
     closeCart(){
       this.isShow = false;
     },
-    getTitle(handle = null){
-      console.log("getTitle")
-      let url = '/api?sql=where `Handle` = "' + this.handle + '"';
-      if (handle !== null) {
-        url = '/api?sql=where `Handle` = "' + handle + '"';
-      }
-      axios.get(url).then((response) => {
-        this.product.image = response.data[0]['Image Src']
-        this.product.title = response.data[0]['Title']
-        this.product.body = response.data[0]['Body']
+    // getTitle(handle = null){
+      // console.log("getTitle")
+      // let url = '/api?sql=where `Handle` = "' + this.handle + '"';
+      // if (handle !== null) {
+      //   url = '/api?sql=where `Handle` = "' + handle + '"';
+      // }
+      // axios.get(url).then((response) => {
+      //   this.product.image = response.data[0]['Image Src']
+      //   this.product.title = response.data[0]['Title']
+      //   this.product.body = response.data[0]['Body']
 
-        const length = response.data.length;
-        this.product.images = []
-        if ( 0 < length ) {
-          for ( let i = 1; i < length; i++ ){
-            this.product.images.push(response.data[i]['Image Src'])
-          }
-        }
-      });
+      //   const length = response.data.length;
+      //   this.product.images = []
+      //   if ( 0 < length ) {
+      //     for ( let i = 1; i < length; i++ ){
+      //       this.product.images.push(response.data[i]['Image Src'])
+      //     }
+      //   }
+      // });
+    // },
+  },
+  computed: {
+    getProduct(){
+      const store = useStore(key)
+      store.dispatch('getProducts', 'where id = ' + this.id)
+      return store.state
     }
   },
   created: function(){
-    this.getTitle();
+    // this.getTitle();
   },
-  watch:{
-    $route(to) {
-      this.getTitle(to.params.handle)
-    }
-  },
-  data() {
-    return {
-      product: {
-        image: "",
-        title: "",
-        body: "",
-        images: [],
-        cartCount: 0
-      } as Product,
+  // watch:{
+  //   $route() {
+  //   }
+  // },
+  // data() {
+  //   return {
+  //     product: {
+  //       image: "",
+  //       title: "",
+  //       body: "",
+  //       images: [],
+  //       cartCount: 0
+  //     } as Product,
+  //     isShow: false
+  //   }
+  // },
+  data(): {
+    imgSrc: string;
+    isShow: boolean;
+  } {
+		return{
+      imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
       isShow: false
-    }
+		}
   },
 });
 </script>
@@ -120,6 +152,10 @@ p {
 .sub_image_box{
   width: 20%;
   float: left
+}
+.product_info{
+  text-align: left;
+  font-size: 60%;
 }
 .add_to_cart{
   border: solid 1px #000;

@@ -1,22 +1,14 @@
 <template>
     <div class="sub_menu_main">
-        <!-- <div v-if="isSubMenuMain" class="sub_menu_main"> -->
-      <!-- <router-link :to="{ name: 'Collections', params: { genre: 'all-products' }}"> -->
-        <div class="category_text">All Products （まだ）</div>
-      <!-- </router-link> -->
+      <div class="category_text">All Products （まだ）</div>
       <hr>
-      <router-link :to="{ name: 'Collections', params: { genre: 'New' }}">
-        <div class="category_text">New Releases</div>
-      </router-link>
-      <hr>
-      <!-- <router-link :to="{ name: 'Collections', params: { genre: 'recent-arrivals' }}"> -->
-        <div class="category_text">Recent Arrivals（まだ）</div>
-      <!-- </router-link> -->
-      <hr>
-      <router-link :to="{ name: 'Collections', params: { genre: 'Used' }}">
-        <div class="category_text">Used Vinyl</div>
-      </router-link>
-      <hr>
+      <div :key="cate" v-for="cate in categorys"  class="">
+        <router-link :to="{ name: 'Category', params: { category: cate } }">
+          <div class="category_text">Search by {{ cate }}</div>
+        </router-link>
+        <hr>
+      </div>
+
     </div>
 </template>
 
@@ -25,11 +17,27 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Hamburger',
-  data() {
-    return {
-      isSubMenuMain: true,
-      isSubMenuJazz: false
-    }
+  data(): {
+    categorys: string[];
+  } {
+		return{
+      categorys: [
+        "genre", // ジャンル!!!
+        "label", // レーベル
+        "artist", // アーティスト
+        "format", // フォーマット!!!
+        "year", // リリース年(10年単位)
+        "録音", // 録音年(10年単位)
+        "price", //価格(1000円単位)
+        "condition", // 状態(新品or中古)!!!
+        // 第二段階 ジャンル 全て or 小ジャンル
+        // 表示される
+        // チェック項目でさらに絞れる
+        // アーティスト絞り込みは無し だけども、個別ページからリンク
+        // 他も個別ページから飛べる
+        //新品は100000番台から
+      ]
+		}
   },
   methods: {
   }

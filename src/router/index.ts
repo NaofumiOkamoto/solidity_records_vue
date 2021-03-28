@@ -5,6 +5,7 @@ import Top from '../views/Top.vue'
 import Product from '../views/Product.vue'
 import Collections from '../views/Collections.vue'
 import Checkouts from '../views/Checkouts.vue'
+import Category from '../views/Category.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,10 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     component: Top
   },
   {
-    path: '/product/:handle',
+    path: '/product/:id',
     name: 'Product',
     component: Product,
-    props: route => ({ handle: String(route.params.handle) })
+    props: route => ({ id: Number(route.params.id) }),
+    meta: { title: 'ページタイトル', desc: 'ディスクリプションを記述' }
   },
   {
     path: '/checkouts',
@@ -27,7 +29,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/collections/:genre',
     name: 'Collections',
     component: Collections,
-    props: route => ({ genre: String(route.params.genre) })
+    // props: route => ({ genre: String(route.params.genre) }),
+  },
+  {
+    path: '/category/:category',
+    name: 'Category',
+    component: Category,
+    props: route => ({ category: String(route.params.category) })
   },
   {
     path: '/Home',
@@ -47,7 +55,14 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { left: 0, top: 0 }
+    }
+  }
 })
 
 export default router

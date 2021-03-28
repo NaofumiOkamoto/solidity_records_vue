@@ -2,11 +2,12 @@
 	<div>
 		<Search v-if="isSearch" @back="search"/>
 		<div class="header">
-			<div class="progress">進捗状況 : 8％くらい</div>
+			<div class="progress">進捗状況 : 10％くらい</div>
 			<router-link to="/"><img class="top_logo" src="../assets/top_logo.jpg"></router-link>
 			<div class="header_icon_box">
 				<fa @click.stop="search" class="header_icon" icon="search" />
 				<router-link to="/about"><fa class="header_icon" icon="user" /></router-link>
+				<span>{{product.cartCount}}</span>
 				<router-link to="/home"> <fa class="header_icon" icon="shopping-cart" /></router-link>
 				<fa @click="hamburger" class="header_icon" icon="bars" />
 			</div>
@@ -20,14 +21,28 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useStore } from 'vuex'
+import { key } from '../store'
+
+interface Product {
+  cartCount: number;
+}
 
 export default defineComponent({
   name: 'Header',
   data() {
 		return{
 			isHamburger: false,
-			isSearch: false
+			isSearch: false,
+			product:{
+				cartCount: 0
+
+			} as Product
 		}
+  },
+  created() {
+    const store = useStore(key)
+	this.product.cartCount = store.state.cartCount
   },
   methods: {
 	hamburger(){

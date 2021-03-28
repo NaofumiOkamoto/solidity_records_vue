@@ -3,6 +3,7 @@ import { createStore, Store } from 'vuex'
 import axios from 'axios';
 
 export interface State {
+products: string[];
 handle: string[];
 title: Array<string>;
 html: string;
@@ -22,12 +23,22 @@ export const store = createStore<State>({
     html: "",
     images: [],
     price: [],
-    cartCount: 0
+    cartCount: 0,
+    products: []
   },
   mutations: {
+    getProducts(state, sql){
+      const url = '/getApi?sql=' + sql;
+      state.title = []
+      axios.get(url).then((response) => {
+        // for(let i = 0; i < response.data.length; i++ ){
+          state.products = response.data
+        // }
+      });
+    },
 		filterProdcut(state, sql){
-      console.log("mutations")
       const url = '/api?sql=' + sql;
+      console.log("filterProduct", url)
       state.handle = []
       state.title = []
       state.images = []
@@ -51,23 +62,31 @@ export const store = createStore<State>({
       document.cookie = "cart-products=" + addProductName
       for(const c of cookiesArray){
         const cArray = c.split('='); //さらに=で分割して配列に
-        if( cArray[0] == ' cart-products'){ // 取り出したいkeyと合致したら
+        if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
           cartProducts = cArray[1] + "__" + addProductName
           const count = cartProducts.split('__').length
           state.cartCount = count
           document.cookie = "cart-products=" + cartProducts
         }
       }
-      console.log("coooookiiiiii")
       alert('カートに商品を入れました。\nカートの中身は' + state.cartCount + "商品あります")
+    },
+    getCartCount(context) {
+      console.log(document.cookie)
     }
   },
   actions: {
+		getProducts(context, sql) {
+			context.commit('getProducts', sql)
+		},
 		filterProdcut(context, sql) {
 			context.commit('filterProdcut', sql)
 		},
     setCartCount(context, addProductName) {
       context.commit('setCartCount', addProductName)
+    },
+    getCartCount(context) {
+      context.commit('getCart')
     }
 
   },
