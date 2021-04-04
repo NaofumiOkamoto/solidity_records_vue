@@ -3,34 +3,26 @@
     <div @click="isShow = false " >
       <AddCart v-show="isShow" style="position:fixed"/>
       <Header/>
-      <!--
-      <div class="image_box">
-        <img class="" v-bind:src=product.image>
-      </div>
-      <div class="image_calusel clearfix">
-        <div v-for="(image, key) in product.images" :key="key" class="sub_image_box">
-            <img class="sub_img" v-bind:src=image>
-        </div>
-      </div>
-      <p>{{ product.title }}</p>
-      <div @click="addCart(product.title)" class="add_to_cart">ADD TO CART</div>
-      <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
-      <div v-html="product.body"></div>
-      -->
         <div class="image_box">
-          <img v-if="getProduct.products[0].condition == 'New'" class="" v-bind:src="imgSrc + getProduct.products[0].img_id + '.jpg' ">
-          <img v-else class="" v-bind:src="imgSrc + getProduct.products[0].img_id + '_01.jpg' ">
+          {{ getProduct.products[0].condition }}
+          ^^^^^^^^^^^^^^^^^^
+          {{ getProduct.products[0]["condition"] }}
+          {{ getProduct.products[0]["condition"] == 'New'}}
+          <img v-if="getProduct.products[0]['condition'] == 'New'" class="" v-bind:src="imgSrc + (id % 100000) + 'N.jpg' ">
+          <img v-else class="" v-bind:src="imgSrc + id + '_01.jpg' ">
           <p>{{ getProduct.products[0].title }}</p>
           <div @click="addCart(product.title)" class="add_to_cart">ADD TO CART</div>
           <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
-          <p class="product_info">Artist : {{ getProduct.products[0].artist }}</p>
-          <p class="product_info">Title : {{ getProduct.products[0].title }}</p>
-          <p class="product_info">Label : {{ getProduct.products[0].label }}</p>
-          <p class="product_info">Number : {{ getProduct.products[0].number }}</p>
-          <p class="product_info">Format : {{ getProduct.products[0].format }}</p>
-          <p class="product_info">Year : {{ getProduct.products[0].year }}</p>
-          <p class="product_info">Recording Date : {{ getProduct.products[0].recoding_date }}</p>
-          <p class="product_info">Condition : {{ getProduct.products[0].condition }}</p>
+          <p class="product_info">Artist : {{ getProduct.products[0]["artist"] }}</p>
+          <p class="product_info">Title : {{ getProduct.products[0]["title"] }}</p>
+          <p class="product_info">Label : {{ getProduct.products[0]["label"] }}</p>
+          <p class="product_info">Number : {{ getProduct.products[0]["number"] }}</p>
+          <p class="product_info">Format : {{ getProduct.products[0]["format"] }}</p>
+          <p class="product_info">Year : {{ getProduct.products[0]["year"] }}</p>
+          <p class="product_info">Recording Date : {{ getProduct.products[0]["recoding_date"] }}</p>
+          <p class="product_info">Condition : {{ getProduct.products[0]["condition"] }}</p>
+          <h1>genre</h1>
+          <!-- {{getGenre.genre}} -->
         </div>
       <Footer/>
     </div>
@@ -52,12 +44,12 @@ interface Product {
 }
 export default defineComponent({
   name: 'Product',
-  setup() {
-    const store = useStore(key)
-    return {
-      addCart:(title: string) => store.dispatch('setCartCount', title)
-    }
-  },
+  // setup() {
+  //   const store = useStore(key)
+  //   return {
+  //     // addCart:(title: string) => store.dispatch('setCartCount', title)
+  //   }
+  // },
   props: {
     id: Number
   },
@@ -91,11 +83,16 @@ export default defineComponent({
       const store = useStore(key)
       store.dispatch('getProducts', 'where id = ' + this.id)
       return store.state
-    }
+    },
+    // getGenre(){
+    //   const store = useStore(key)
+    //   store.dispatch('getGenre', 'where id = ' + this.getProduct.genre)
+    //   return store.state.genre
+    // },
   },
-  created: function(){
-    // this.getTitle();
-  },
+  // created: function(){
+  //   // this.getTitle();
+  // },
   // watch:{
   //   $route() {
   //   }

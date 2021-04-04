@@ -3,13 +3,14 @@ import { createStore, Store } from 'vuex'
 import axios from 'axios';
 
 export interface State {
-products: string[];
-handle: string[];
-title: Array<string>;
-html: string;
-images: Array<string>;
-price: Array<string>;
+products: object[];
+// title: string;
+// html: string;
+// images: Array<string>;
+// price: Array<string>;
 cartCount: number;
+// condition: string;
+genre: string[];
 }
 
 // define injection key
@@ -18,42 +19,47 @@ export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
   state: {
-    handle: [],
-    title: [],
-    html: "",
-    images: [],
-    price: [],
+    // title: "",
+    // html: "",
+    // images: [],
+    // price: [],
     cartCount: 0,
-    products: []
+    products: [{}],
+    // condition: "",
+    genre: []
   },
   mutations: {
     getProducts(state, sql){
-      const url = '/getApi?sql=' + sql;
-      state.title = []
-      axios.get(url).then((response) => {
-        // for(let i = 0; i < response.data.length; i++ ){
-          state.products = response.data
-        // }
+      const producUrl = '/getApi?sql=' + sql;
+      axios.get(producUrl).then((response) => {
+        state.products = response.data
       });
     },
-		filterProdcut(state, sql){
-      const url = '/api?sql=' + sql;
-      console.log("filterProduct", url)
-      state.handle = []
-      state.title = []
-      state.images = []
-      state.price = []
+    getGenre(state, sql){
+      const url = '/getGenre?sql=' + sql;
       axios.get(url).then((response) => {
-        for(let i = 0; i < response.data.length; i++ ){
-          if ( response.data[i]['Title'] !== '' ){
-          state.handle.push(response.data[i]['Handle']);
-          state.title.push(response.data[i]['Title']);
-          state.images.push(response.data[i]['Image Src']);
-          state.price.push(response.data[i]['Variant Price']);
-          }
-        }
+        console.log("store/getGenre")
+          console.log("typeOf")
+          console.log(response.data)
+          console.log(typeof(response.data))
+        state.genre = response.data
       });
-		},
+    },
+		// filterProdcut(state, sql){
+    //   const url = '/api?sql=' + sql;
+    //   console.log("filterProduct", url)
+    //   state.images = []
+    //   state.price = []
+    //   axios.get(url).then((response) => {
+    //     for(let i = 0; i < response.data.length; i++ ){
+    //       if ( response.data[i]['Title'] !== '' ){
+    //       state.title.push(response.data[i]['Title']);
+    //       state.images.push(response.data[i]['Image Src']);
+    //       state.price.push(response.data[i]['Variant Price']);
+    //       }
+    //     }
+    //   });
+		// },
 		setCartCount(state, addProductName){
       const cookies = document.cookie
       const cookiesArray = cookies.split(';'); // ;で分割し配列に
@@ -79,9 +85,12 @@ export const store = createStore<State>({
 		getProducts(context, sql) {
 			context.commit('getProducts', sql)
 		},
-		filterProdcut(context, sql) {
-			context.commit('filterProdcut', sql)
+		getGenre(context, sql) {
+			context.commit('getGenre', sql)
 		},
+		// filterProdcut(context, sql) {
+		// 	context.commit('filterProdcut', sql)
+		// },
     setCartCount(context, addProductName) {
       context.commit('setCartCount', addProductName)
     },

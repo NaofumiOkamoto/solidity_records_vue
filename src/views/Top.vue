@@ -17,8 +17,8 @@
       </div> -->
     <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
       <router-link :to="{ name: 'Product', params: { id: product.id }}" >
-        <img  v-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + product.img_id + '.jpg' ">
-        <img  v-else class="products_img" v-bind:src="imgSrc + product.img_id + '_01.jpg' ">
+        <img  v-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.id % 10000) + 'N.jpg' ">
+        <img  v-else class="products_img" v-bind:src="imgSrc + product.id + '_01.jpg' ">
         <p class="title">{{ product.title }}</p>
         <p class="price">¥{{ product.price }}</p>
       </router-link>

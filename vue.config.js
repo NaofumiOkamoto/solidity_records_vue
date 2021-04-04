@@ -13,6 +13,11 @@ module.exports = {
           target: 'http://localhost:3030',
           changeOrigin: true
         },
+        '^/getGenre': {
+          target: 'http://localhost:3030',
+          changeOrigin: true
+        },
+
       }
     }
   }
