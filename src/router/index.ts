@@ -26,10 +26,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Checkouts
   },
   {
-    path: '/collections/:genre',
+    path: '/collections/:category/:name',
     name: 'Collections',
     component: Collections,
-    // props: route => ({ genre: String(route.params.genre) }),
+    props: route => ({ category: String(route.params.category), name: String(route.params.name) }),
   },
   {
     path: '/category/:category',

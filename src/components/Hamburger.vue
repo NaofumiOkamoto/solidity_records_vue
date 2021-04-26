@@ -23,11 +23,11 @@ export default defineComponent({
 		return{
       categorys: [
         "genre", // ジャンル!!!
-        "label", // レーベル
-        "artist", // アーティスト
+        // "label", // レーベル
+        // "artist", // アーティスト
         "format", // フォーマット!!!
-        "year", // リリース年(10年単位)
-        "録音", // 録音年(10年単位)
+        // "year", // リリース年(10年単位)
+        // "recoding_dute", // 録音年(10年単位)
         "price", //価格(1000円単位)
         "condition", // 状態(新品or中古)!!!
         // 第二段階 ジャンル 全て or 小ジャンル

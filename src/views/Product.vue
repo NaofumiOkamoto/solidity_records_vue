@@ -5,7 +5,6 @@
       <Header/>
         <div class="image_box">
           {{ getProduct.products[0].condition }}
-          ^^^^^^^^^^^^^^^^^^
           {{ getProduct.products[0]["condition"] }}
           {{ getProduct.products[0]["condition"] == 'New'}}
           <img v-if="getProduct.products[0]['condition'] == 'New'" class="" v-bind:src="imgSrc + (id % 100000) + 'N.jpg' ">
@@ -21,7 +20,6 @@
           <p class="product_info">Year : {{ getProduct.products[0]["year"] }}</p>
           <p class="product_info">Recording Date : {{ getProduct.products[0]["recoding_date"] }}</p>
           <p class="product_info">Condition : {{ getProduct.products[0]["condition"] }}</p>
-          <h1>genre</h1>
           <!-- {{getGenre.genre}} -->
         </div>
       <Footer/>

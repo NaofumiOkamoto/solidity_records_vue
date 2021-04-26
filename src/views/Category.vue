@@ -3,7 +3,9 @@
     <Header/>
     <p>{{ category }}で絞る</p>
     <div v-for="cate in categorys" :key="cate" class="products_box">
-      <p @click="reload">{{cate[category]}}</p>
+      <router-link :to="{ name: 'Collections', params: { category: category, name: cate } }">
+        <p>{{cate}}</p>
+      </router-link>
     </div>
     <Footer/>
   </div>
@@ -12,53 +14,40 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
-// import { useStore } from 'vuex'
-// import { key } from '../store'
 
-interface Product {
-  title: string;
-  body: string;
-  images: Array<string>;
-  image: string;
-  cartCount: number;
-}
 export default defineComponent({
   name: 'Category',
   props: {
-    category: String
+    category: String,
   },
-  // watch:{
-  //   $route(to, from) {
-  //     console.log("route")
-  //     this.$router.push({ path: '/category/genre'})
-  //     this.getCategoryList
-  //   }
-  // },
   beforeRouteUpdate (to, from, next) {
-    console.log("to", to)
-    console.log("to.fullPath", to.fullPath)
-    console.log("from", from)
-    console.log("this.category", this.category)
-    console.log("this.categorys", this.categorys)
-    console.log("next", next)
-    // this.category = to.params.category
-      // this.$router.go({ name: 'Category'})
-      // this.categorys = ["a", "b"]
-      // console.log(this.categorys)
-      // this.categorys = ["a", "b"]
-      this.getCategoryList
-      next(this.getCategoryList)
+      next();
+      this.getCategoryList(String(to.params.category))
   },
   created: function(){
-    this.getCategoryList()
+    this.getCategoryList(String(this.category))
   },
   methods: {
-    getCategoryList() {
-      console.log("getCategoryList")
-      const url = '/getCategory?sql=' + this.category;
-      axios.get(url).then((response) => {
-        this.categorys = response.data
-      })
+    getCategoryList(cate: string) {
+      this.categorys = []
+      if( cate === "genre" ) {
+        const url = '/getGenre?sql=' + cate;
+        axios.get(url).then((response) => {
+          for ( const data in response.data) {
+            if ( !this.categorys.includes(response.data[data].main) ){
+              this.categorys.push(response.data[data].main)
+            }
+          }
+        })
+      } else {
+        const url = '/getCategory?sql=' + cate;
+        axios.get(url).then((response) => {
+          for ( let i = 0; i < response.data.length; i++ ) {
+            const cate = String(Object.values(response.data[i])[0])
+            this.categorys.push(cate)
+          }
+        })
+      }
     },
   },
   data(): {
@@ -84,10 +73,6 @@ img{
 }
 .image_box{
   text-align: center;
-}
-p {
-  font-weight: bold;
-  font-size: 150%;
 }
 .product iframe {
     position: absolute;

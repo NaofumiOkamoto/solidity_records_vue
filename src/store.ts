@@ -31,7 +31,9 @@ export const store = createStore<State>({
   mutations: {
     getProducts(state, sql){
       const producUrl = '/getApi?sql=' + sql;
+      console.log("store.getProducts.sql : ", producUrl)
       axios.get(producUrl).then((response) => {
+        console.log("gerProducts response : ", response)
         state.products = response.data
       });
     },
