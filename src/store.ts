@@ -30,7 +30,7 @@ export const store = createStore<State>({
   },
   mutations: {
     getProducts(state, sql){
-      const producUrl = '/getApi?sql=' + sql;
+      const producUrl = 'http://localhost:3030/getApi?sql=' + sql;
       console.log("store.getProducts.sql : ", producUrl)
       axios.get(producUrl).then((response) => {
         console.log("gerProducts response : ", response)
@@ -38,7 +38,7 @@ export const store = createStore<State>({
       });
     },
     getGenre(state, sql){
-      const url = '/getGenre?sql=' + sql;
+      const url = 'http://localhost:3030/getGenre?sql=' + sql;
       axios.get(url).then((response) => {
         console.log("store/getGenre")
           console.log("typeOf")
