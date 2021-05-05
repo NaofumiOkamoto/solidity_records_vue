@@ -3,47 +3,83 @@ import { createStore, Store } from 'vuex'
 import axios from 'axios';
 
 export interface State {
-products: object[];
-// title: string;
-// html: string;
-// images: Array<string>;
-// price: Array<string>;
+products: [
+  {
+    // id: number;
+    // imgCount: number;
+    // title: string;
+    // artist: string;
+    // label: string;
+    // country: string;
+    // genre: string;
+    // number: string;
+    // format: string;
+    // year: number;
+    // recodingDate: string;
+    // condition: string;
+    // price: number;
+    // youtube: string;
+    // inventory: number;
+    // discogsId: number;
+    // numsicalInstrument: string;
+  }
+];
 cartCount: number;
-// condition: string;
 genre: string[];
 }
 
 // define injection key
 export const key: InjectionKey<Store<State>> = Symbol()
-// export const cookieKey: InjectionKey<Store<State>> = Symbol('cookieKey')
 
 export const store = createStore<State>({
   state: {
-    // title: "",
-    // html: "",
-    // images: [],
-    // price: [],
     cartCount: 0,
-    products: [{}],
-    // condition: "",
+    products: [
+      {
+        // id: 0,
+        // imgCount: 0,
+        // title: "",
+        // artist: "",
+        // label: "",
+        // country: "",
+        // genre: "",
+        // number: "",
+        // format: "",
+        // year: 0,
+        // recodingDate: "",
+        // condition: "",
+        // price: 0,
+        // youtube: "",
+        // inventory: 0,
+        // discogsId: 0,
+        // numsicalInstrument: "",
+      }
+    ],
     genre: []
   },
   mutations: {
     getProducts(state, sql){
-      const producUrl = 'http://localhost:3030/getApi?sql=' + sql;
-      console.log("store.getProducts.sql : ", producUrl)
+      const producUrl = '/getApi?sql=' + sql;
+      console.log("getProducts url : ", producUrl)
       axios.get(producUrl).then((response) => {
-        console.log("gerProducts response : ", response)
         state.products = response.data
       });
     },
+    getProductsLike(state, sql) {
+      return new Promise(function(resolve, reject){
+        const producUrl = '/getProductsLike?sql=' + sql;
+        axios
+          .get(producUrl)
+          .then((response) => {
+            state.products = response.data
+            resolve(response);
+          })
+          .catch(error => reject(error));
+      })
+    },
     getGenre(state, sql){
-      const url = 'http://localhost:3030/getGenre?sql=' + sql;
+      const url = '/getGenre?sql=' + sql;
       axios.get(url).then((response) => {
-        console.log("store/getGenre")
-          console.log("typeOf")
-          console.log(response.data)
-          console.log(typeof(response.data))
         state.genre = response.data
       });
     },
@@ -79,26 +115,36 @@ export const store = createStore<State>({
       }
       alert('カートに商品を入れました。\nカートの中身は' + state.cartCount + "商品あります")
     },
-    getCartCount(context) {
-      console.log(document.cookie)
-    }
+    // getCartCount(context) {
+    //   console.log(document.cookie)
+    // }
   },
   actions: {
 		getProducts(context, sql) {
 			context.commit('getProducts', sql)
 		},
+		selectGenreProducts(context, sql) {
+			context.commit('selectGenreProducts', sql)
+		},
+		getProductsLike(context, { colmun, value }) {
+      const sql = colmun + '_' + value
+			context.commit('getProductsLike', sql)
+		},
 		getGenre(context, sql) {
 			context.commit('getGenre', sql)
 		},
+    // getProductsGenreLike(context, sql){
+		// 	context.commit('getProductsGenreLike', sql)
+    // },
 		// filterProdcut(context, sql) {
 		// 	context.commit('filterProdcut', sql)
 		// },
     setCartCount(context, addProductName) {
       context.commit('setCartCount', addProductName)
     },
-    getCartCount(context) {
-      context.commit('getCart')
-    }
+    // getCartCount(context) {
+    //   context.commit('getCart')
+    // }
 
   },
 })

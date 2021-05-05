@@ -44,7 +44,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .category_text {
   padding: 10px 20px;
   position: relative;

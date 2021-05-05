@@ -6,6 +6,7 @@ import Product from '../views/Product.vue'
 import Collections from '../views/Collections.vue'
 import Checkouts from '../views/Checkouts.vue'
 import Category from '../views/Category.vue'
+import Genres from '../views/Genres.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +37,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Category',
     component: Category,
     props: route => ({ category: String(route.params.category) })
+  },
+  {
+    path: '/category/genres/:genre',
+    name: 'Genres',
+    component: Genres,
+    props: route => ({ genre: String(route.params.genre) })
   },
   {
     path: '/Home',

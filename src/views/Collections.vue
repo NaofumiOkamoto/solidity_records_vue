@@ -3,7 +3,9 @@
   <div class="collections">
     <Header/>
     <h1>{{ category }}</h1>
-    <!-- <p>{{ getProduct.title.length }}件</p> -->
+    <h1 v-if="category === 'genre'">{{ getGenre.genre[0].sub }}</h1>
+    <h1>{{ getProduct.products.length }}件</h1>
+    <p></p>
     <div class="top_page clearfix">
       <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
         <router-link :to="{ name: 'Product', params: { id: product.id }}" >
@@ -32,18 +34,26 @@ export default defineComponent({
   },
   data(): {
     imgSrc: string;
+    isGenre: boolean;
   } {
 		return{
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
+      isGenre: false,
 		}
   },
   computed: {
     getProduct(){
-      console.log("this.category", this.category)
-      console.log("this.name", this.name)
       const store = useStore(key)
-      store.dispatch('getProducts', 'WHERE `' + this.category + '` = "' + this.name + '"')
-      console.log("store.state", store.state)
+      if ( this.category === "genre" && this.name !== undefined && this.name.length >= 3) {
+        store.dispatch('getProductsLike', { colmun: this.category, value: this.name})
+      } else {
+        store.dispatch('getProducts', 'where ' + this.category + ' = "' + this.name + '"')
+      }
+      return store.state
+    },
+    getGenre(){
+      const store = useStore(key)
+      store.dispatch('getGenre', 'where id = ' + this.name )
       return store.state
     }
   },

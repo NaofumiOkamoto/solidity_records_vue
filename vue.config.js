@@ -21,6 +21,11 @@ module.exports = {
           changeOrigin: true,
           pathRewrite: { "^/getGenre": "/getGenre" }
         },
+        '^/getProductsLike': {
+          target: 'http://localhost:3030',
+          changeOrigin: true,
+          pathRewrite: { "^/getProductsLike": "/getProductsLike" }
+        },
 
       }
     }

@@ -1,11 +1,16 @@
 <template>
   <div class="category" >
     <Header/>
-    <p>{{ category }}で絞る</p>
-    <div v-for="cate in categorys" :key="cate" class="products_box">
-      <router-link :to="{ name: 'Collections', params: { category: category, name: cate } }">
-        <p>{{cate}}</p>
+    <div  class="category_text">{{ category }}で絞る</div>
+    <hr>
+    <div v-for="cate in categorys" :key="cate" class="">
+      <router-link v-if="isGenre" :to="{ name: 'Genres', params: { genre: cate } }">
+        <div class="category_text">{{cate}}</div>
       </router-link>
+      <router-link v-else :to="{ name: 'Collections', params: { category: category, name: cate } }">
+        <div class="category_text">{{cate}}</div>
+      </router-link>
+    <hr>
     </div>
     <Footer/>
   </div>
@@ -30,6 +35,7 @@ export default defineComponent({
   methods: {
     getCategoryList(cate: string) {
       this.categorys = []
+      // genreはDBテーブル違うため処理分ける
       if( cate === "genre" ) {
         const url = '/getGenre?sql=' + cate;
         axios.get(url).then((response) => {
@@ -39,6 +45,9 @@ export default defineComponent({
             }
           }
         })
+        console.log("this.categorys", this.categorys)
+
+        this.isGenre = true
       } else {
         const url = '/getCategory?sql=' + cate;
         axios.get(url).then((response) => {
@@ -47,14 +56,17 @@ export default defineComponent({
             this.categorys.push(cate)
           }
         })
+        this.isGenre = false
       }
     },
   },
   data(): {
     categorys: string[];
+    isGenre: boolean;
   } {
 		return{
       categorys: [],
+      isGenre: false,
 		}
   },
 });
