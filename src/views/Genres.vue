@@ -1,16 +1,24 @@
 <template>
   <div class="category" >
     <Header/>
-    <router-link :to="{ name: 'Collections', params: { category: 'genre', name: genre + '_All' } }">
-      <div class="category_text">{{genre}}全て</div>
+    <router-link :to="{ name: 'Collections', params: { category: genre, name: 'All' } }">
+      <div class="category_text_box">
+        <div class="category_text">
+          {{genre}} 
+          all products
+          </div>
+      </div>
     </router-link>
-    <hr>
     <div v-for="(cate, i) in genresArray" :key="cate" class="">
       <router-link :to="{ name: 'Collections', params: { category: 'genre', name: genresNum[i] } }">
-        <div class="category_text">{{cate}}</div>
+        <div class="category_text_box">
+          <div class="category_text">
+            {{cate}}
+          </div>
+        </div>
       </router-link>
-      <hr>
     </div>
+    <hr>
     <Footer/>
   </div>
 </template>

@@ -1,17 +1,28 @@
 <template>
   <div class="category" >
     <Header/>
-    <div  class="category_text">{{ category }}で絞る</div>
-    <hr>
+    <div class="category_text_box header">
+      <div class="left-space">←</div>
+      <div class="category_text">{{ category }}で絞る</div>
+    </div>
     <div v-for="cate in categorys" :key="cate" class="">
       <router-link v-if="isGenre" :to="{ name: 'Genres', params: { genre: cate } }">
-        <div class="category_text">{{cate}}</div>
+        <div class="category_text_box">
+            <div class="category_text">
+              {{cate}}
+              <div style="float:right;">></div>
+            </div>
+        </div>
       </router-link>
       <router-link v-else :to="{ name: 'Collections', params: { category: category, name: cate } }">
-        <div class="category_text">{{cate}}</div>
+        <div class="category_text_box">
+          <div class="category_text">
+          {{cate}}
+          </div>
+        </div>
       </router-link>
-    <hr>
     </div>
+    <hr>
     <Footer/>
   </div>
 </template>
@@ -31,6 +42,8 @@ export default defineComponent({
   },
   created: function(){
     this.getCategoryList(String(this.category))
+    console.log("category")
+    console.log(this.category)
   },
   methods: {
     getCategoryList(cate: string) {
@@ -38,6 +51,7 @@ export default defineComponent({
       // genreはDBテーブル違うため処理分ける
       if( cate === "genre" ) {
         const url = '/getGenre?sql=' + cate;
+        console.log(url)
         axios.get(url).then((response) => {
           for ( const data in response.data) {
             if ( !this.categorys.includes(response.data[data].main) ){
@@ -45,8 +59,6 @@ export default defineComponent({
             }
           }
         })
-        console.log("this.categorys", this.categorys)
-
         this.isGenre = true
       } else {
         const url = '/getCategory?sql=' + cate;
@@ -76,6 +88,19 @@ export default defineComponent({
 .product {
   width: 90%;
   margin: 0 auto;
+}
+.header{
+  background-color: #ececec
+}
+.header:hover{
+  background-color: #ececec
+}
+.left-space {
+  float: left;
+  width: 30px;
+  height: 43px;
+  border-right: 1px solid #9e9d9d;
+  padding: 21px 0 0 15px;
 }
 img{
   width: 90%;

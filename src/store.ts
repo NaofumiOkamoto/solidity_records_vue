@@ -5,7 +5,7 @@ import axios from 'axios';
 export interface State {
 products: [
   {
-    // id: number;
+    // itemId: number;
     // imgCount: number;
     // title: string;
     // artist: string;
@@ -36,7 +36,7 @@ export const store = createStore<State>({
     cartCount: 0,
     products: [
       {
-        // id: 0,
+        // itemId: 0,
         // imgCount: 0,
         // title: "",
         // artist: "",
@@ -55,30 +55,59 @@ export const store = createStore<State>({
         // numsicalInstrument: "",
       }
     ],
-    genre: []
+    genre: [""]
   },
   mutations: {
     getProducts(state, sql){
       const producUrl = '/getApi?sql=' + sql;
+      let genreUrl = '';
       console.log("getProducts url : ", producUrl)
-      axios.get(producUrl).then((response) => {
+      Promise.resolve()
+      .then(() => axios.get(producUrl).then((response) => {
         state.products = response.data
-      });
+        genreUrl = '/getGenre?sql= where id = ' + response.data[0].genre
+        console.log(genreUrl)
+      }))
+      .then(() => axios.get(genreUrl).then((response) => {
+        console.log(response)
+        state.genre = response.data
+      }))
     },
+    // 小ジャンルidで商品を探し出す
     getProductsLike(state, sql) {
-      return new Promise(function(resolve, reject){
-        const producUrl = '/getProductsLike?sql=' + sql;
-        axios
-          .get(producUrl)
-          .then((response) => {
-            state.products = response.data
-            resolve(response);
-          })
-          .catch(error => reject(error));
-      })
+      const producUrl = '/getProductsLike?sql=' + sql;
+      Promise.resolve()
+      .then(() => axios.get(producUrl).then((response) => {
+        state.products = response.data
+      }))
+    },
+    // 大ジャンルから商品を探し出す
+    getProductsGenreLike(state, sql) {
+      let producUrl = '/getProductsGenreLike?sql=';
+      const genreUrl = '/getGenre?sql=' + sql;
+      console.log("大ジャンル")
+      console.log(genreUrl)
+      Promise.resolve()
+      // まず大ジャンルに対応する小ジャンルを取得
+      .then(() => axios.get(genreUrl).then((response) => {
+        state.genre = response.data
+        for (let i = 0; i < response.data.length; i++ ) {
+          producUrl += response.data[i]["id"]
+          if ( response.data.length !== (i + 1) ) {
+            producUrl += "_"
+          }
+          console.log("productUrl : ", producUrl)
+        }
+      }))
+      // 小ジャンル一覧(101_102_103....)で情報で対応する商品一覧を取得
+      .then(() => axios.get(producUrl).then((response) => {
+        console.log(response.data)
+        state.products = response.data
+      }))
     },
     getGenre(state, sql){
       const url = '/getGenre?sql=' + sql;
+      console.log(url)
       axios.get(url).then((response) => {
         state.genre = response.data
       });
@@ -129,6 +158,10 @@ export const store = createStore<State>({
 		getProductsLike(context, { colmun, value }) {
       const sql = colmun + '_' + value
 			context.commit('getProductsLike', sql)
+		},
+		getProductsGenreLike(context, colmun) {
+      const sql = colmun
+			context.commit('getProductsGenreLike', sql)
 		},
 		getGenre(context, sql) {
 			context.commit('getGenre', sql)

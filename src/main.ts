@@ -7,6 +7,7 @@ import Footer from '@/components/footer.vue'
 import AddCart from '@/components/addCart.vue'
 import Hamburger from '@/components/Hamburger.vue'
 import Search from '@/components/search.vue'
+import Loading from '@/components/loading.vue'
 import { VueCookieNext } from 'vue-cookie-next'
 
 import { FontAwesomeIcon } from "@/plugins/font-awesome";
@@ -28,6 +29,7 @@ app.component('Footer', Footer)
 app.component('AddCart', AddCart)
 app.component('Hamburger', Hamburger)
 app.component('Search', Search)
+app.component('Loading', Loading)
 app.component("fa", FontAwesomeIcon)
 app.mount('#app')
 

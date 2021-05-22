@@ -1,28 +1,19 @@
 <template>
   <div>
     <Header />
-    <div class="top_page clearfix">
+    <Loading v-show="loadingShow" />
+    <div v-show="!loadingShow" class="top_page clearfix">
       <h3 class="top_title">NEW ARRIVALS</h3>
-      <!-- <div v-for="(image, key) in getProduct.images" :key="key" class="products_box">
-        <router-link :to="{ name: 'Product', params: { handle: getProduct.handle[key] }}" >
-          <img class="products_img" v-bind:src=image>
-          <p class="title">{{ getProduct.title[key] }}</p>
+      <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
+        <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
+          <img @load="loaded" v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+          <img @load="loaded" v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+          <img @load="loaded" v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+          <p class="title">artist : {{ product.artist }}</p>
+          <p class="title">title : {{ product.title }}</p>
+          <p class="price">¥{{ product.price }}</p>
         </router-link>
-        <p class="price">¥{{ getProduct.price[key] }}</p>
       </div>
-      <div class="view_all_button">
-        <button class="view_button">VIEW ALL</button>
-        <h3>About Us</h3>
-        <p>We are based in Tokyo, Japan. Specialize in Jazz & Black Music vinyl records & etc. We can ship anywhere in the world.</p>
-      </div> -->
-    <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
-      <router-link :to="{ name: 'Product', params: { id: product.id }}" >
-        <img  v-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.id % 10000) + 'N.jpg' ">
-        <img  v-else class="products_img" v-bind:src="imgSrc + product.id + '_01.jpg' ">
-        <p class="title">{{ product.title }}</p>
-        <p class="price">¥{{ product.price }}</p>
-      </router-link>
-    </div>
     </div>
     <Footer/>
   </div>
@@ -35,15 +26,22 @@ import { key } from '../store'
 
 export default defineComponent({
   name: 'HelloWorld',
-  // created: function(){
-  //   this.getProduct()
   // },
   data(): {
     imgSrc: string;
+    loadingShow: boolean;
   } {
 		return{
-      imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/"
+      imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
+      loadingShow: true,
 		}
+  },
+  methods: {
+    loaded() {
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 200);
+    }
   },
   computed: {
     getProduct(){

@@ -1,14 +1,21 @@
 <template>
     <div class="sub_menu_main">
-      <div class="category_text">All Products （まだ）</div>
-      <hr>
+      <router-link :to="{ name: 'Collections', params: { category: 'All', name: 'product' } }">
+        <div class="category_text_box all">
+          <div class="category_text">All Products</div>
+        </div>
+      </router-link>
       <div :key="cate" v-for="cate in categorys"  class="">
         <router-link :to="{ name: 'Category', params: { category: cate } }">
-          <div class="category_text">Search by {{ cate }}</div>
+          <div class="category_text_box">
+            <div class="category_text">
+              Search by {{ cate }}
+              <div style="float: right">></div>
+            </div>
+          </div>
         </router-link>
-        <hr>
       </div>
-
+      <hr>
     </div>
 </template>
 
@@ -28,8 +35,8 @@ export default defineComponent({
         "format", // フォーマット!!!
         // "year", // リリース年(10年単位)
         // "recoding_dute", // 録音年(10年単位)
-        "price", //価格(1000円単位)
-        "condition", // 状態(新品or中古)!!!
+        // "price", //価格(1000円単位)
+        "item_condition", // 状態(新品or中古)!!!
         // 第二段階 ジャンル 全て or 小ジャンル
         // 表示される
         // チェック項目でさらに絞れる
@@ -46,14 +53,22 @@ export default defineComponent({
 
 <style>
 .category_text {
-  padding: 10px 20px;
-  position: relative;
+  padding: 20px 20px 20px 60px;
+}
+.category_text_box {
+  border-top: 1px solid #9e9d9d;
+}
+.category_text_box:hover{
+  background-color: #f9e9e9;
 }
 .next{
   position: absolute;
   right: 5%;
   top: 0;
   font-size: 180%;
+}
+hr {
+  margin: 0;
 }
 .sub_menu_jazz{
   width: 100%;

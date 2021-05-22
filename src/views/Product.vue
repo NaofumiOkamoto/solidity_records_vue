@@ -1,26 +1,58 @@
 <template>
-  <div class="product" >
+  <div class="" >
     <div @click="isShow = false " >
       <AddCart v-show="isShow" style="position:fixed"/>
       <Header/>
-        <div class="image_box">
-          {{ getProduct.products[0].condition }}
-          {{ getProduct.products[0]["condition"] }}
-          {{ getProduct.products[0]["condition"] == 'New'}}
-          <img v-if="getProduct.products[0]['condition'] == 'New'" class="" v-bind:src="imgSrc + (id % 100000) + 'N.jpg' ">
-          <img v-else class="" v-bind:src="imgSrc + id + '_01.jpg' ">
+      <Loading v-show="loadingShow" />
+        <div class="image_box" v-show="!loadingShow">
+          <img @load="loaded" v-if="getProduct.products[0].img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+          <img @load="loaded" v-else-if="getProduct.products[0].condition == 'New'" class="products_img" v-bind:src="imgSrc + (getProduct.products[0].item_id % 10000) + 'N.jpg' ">
+          <img @load="loaded" v-else class="products_img" v-bind:src="imgSrc + getProduct.products[0].item_id + '_01.jpg' ">
           <p>{{ getProduct.products[0].title }}</p>
           <div @click="addCart(product.title)" class="add_to_cart">ADD TO CART</div>
           <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
-          <p class="product_info">Artist : {{ getProduct.products[0]["artist"] }}</p>
-          <p class="product_info">Title : {{ getProduct.products[0]["title"] }}</p>
-          <p class="product_info">Label : {{ getProduct.products[0]["label"] }}</p>
-          <p class="product_info">Number : {{ getProduct.products[0]["number"] }}</p>
-          <p class="product_info">Format : {{ getProduct.products[0]["format"] }}</p>
-          <p class="product_info">Year : {{ getProduct.products[0]["year"] }}</p>
-          <p class="product_info">Recording Date : {{ getProduct.products[0]["recoding_date"] }}</p>
-          <p class="product_info">Condition : {{ getProduct.products[0]["condition"] }}</p>
-          <!-- {{getGenre.genre}} -->
+          <p class="product_info">Artist :
+            <router-link :to="{ name: 'Collections', params: { category: 'artist', name: getProduct.products[0]['artist'] } }">
+              {{ getProduct.products[0]["artist"] }}
+            </router-link>
+          </p>
+          <p class="product_info">Title : 
+            {{ getProduct.products[0]["title"] }}
+          </p>
+          <p class="product_info">Label : 
+            <router-link :to="{ name: 'Collections', params: { category: 'label', name: getProduct.products[0]['label'] } }">
+              {{ getProduct.products[0]["label"] }}
+            </router-link>
+          </p>
+          <p class="product_info">Number : 
+            {{ getProduct.products[0]["number"] }}
+          </p>
+          <p class="product_info">Format : 
+            <router-link :to="{ name: 'Collections', params: { category: 'format', name: getProduct.products[0]['format'] } }">
+              {{ getProduct.products[0]["format"] }}
+            </router-link>
+          </p>
+          <p class="product_info">Release Year : 
+            <router-link :to="{ name: 'Collections', params: { category: 'release_year', name: getProduct.products[0]['release_year'] } }">
+              {{ getProduct.products[0]["release_year"] }}
+            </router-link>
+          </p>
+          <p class="product_info">Recording Date : 
+            {{ getProduct.products[0]["recoding_date"] }}
+          </p>
+          <p class="product_info">Condition : 
+            <router-link :to="{ name: 'Collections', params: { category: 'format', name: getProduct.products[0]['format'] } }">
+              {{ getProduct.products[0]["item_condition"] }}
+            </router-link>
+          </p>
+          <p class="product_info">Genre : 
+          <span v-for="(genre, key) in getProduct.genre" :key="key">
+            <router-link :to="{ name: 'Collections', params: { category: 'genre', name: genre['id'] } }">
+            {{ genre.sub }}
+            </router-link>
+            <span v-if="(key + 1) !== getProduct.genre.length"> / </span>
+          </span>
+          </p>
         </div>
       <Footer/>
     </div>
@@ -29,7 +61,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import axios from 'axios';
+// import axios from 'axios';
 import { useStore } from 'vuex'
 import { key } from '../store'
 
@@ -42,78 +74,38 @@ interface Product {
 }
 export default defineComponent({
   name: 'Product',
-  // setup() {
-  //   const store = useStore(key)
-  //   return {
-  //     // addCart:(title: string) => store.dispatch('setCartCount', title)
-  //   }
-  // },
   props: {
-    id: Number
+    itemId: Number
   },
   methods: {
     closeCart(){
       this.isShow = false;
     },
-    // getTitle(handle = null){
-      // console.log("getTitle")
-      // let url = '/api?sql=where `Handle` = "' + this.handle + '"';
-      // if (handle !== null) {
-      //   url = '/api?sql=where `Handle` = "' + handle + '"';
-      // }
-      // axios.get(url).then((response) => {
-      //   this.product.image = response.data[0]['Image Src']
-      //   this.product.title = response.data[0]['Title']
-      //   this.product.body = response.data[0]['Body']
-
-      //   const length = response.data.length;
-      //   this.product.images = []
-      //   if ( 0 < length ) {
-      //     for ( let i = 1; i < length; i++ ){
-      //       this.product.images.push(response.data[i]['Image Src'])
-      //     }
-      //   }
-      // });
-    // },
+    loaded() {
+      console.log("loadddddddd")
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 200);
+    }
   },
   computed: {
     getProduct(){
       const store = useStore(key)
-      store.dispatch('getProducts', 'where id = ' + this.id)
+      store.dispatch('getProducts', 'where item_id = ' + this.itemId)
       return store.state
     },
-    // getGenre(){
-    //   const store = useStore(key)
-    //   store.dispatch('getGenre', 'where id = ' + this.getProduct.genre)
-    //   return store.state.genre
-    // },
   },
-  // created: function(){
-  //   // this.getTitle();
-  // },
-  // watch:{
-  //   $route() {
-  //   }
-  // },
-  // data() {
-  //   return {
-  //     product: {
-  //       image: "",
-  //       title: "",
-  //       body: "",
-  //       images: [],
-  //       cartCount: 0
-  //     } as Product,
-  //     isShow: false
-  //   }
-  // },
   data(): {
     imgSrc: string;
     isShow: boolean;
+    products: object;
+    loadingShow: boolean;
   } {
 		return{
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
-      isShow: false
+      isShow: false,
+      products: {},
+      loadingShow: true,
 		}
   },
 });
@@ -150,7 +142,8 @@ p {
 }
 .product_info{
   text-align: left;
-  font-size: 60%;
+  font-size: 80%;
+  padding: 10px;
 }
 .add_to_cart{
   border: solid 1px #000;
@@ -164,6 +157,10 @@ p {
   text-align: center;
   padding: 10px 0;
   margin: 5px 0;
+}
+a {
+  text-decoration: underline;
+  text-decoration-color: #838383;
 }
 </style>
 

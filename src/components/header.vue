@@ -2,7 +2,7 @@
 	<div>
 		<Search v-if="isSearch" @back="search"/>
 		<div class="header">
-			<div class="progress">進捗状況 : 10％くらい</div>
+			<div class="progress">進捗状況 : 12％くらい</div>
 			<router-link to="/"><img class="top_logo" src="../assets/top_logo.jpg"></router-link>
 			<div class="header_icon_box">
 				<fa @click.stop="search" class="header_icon" icon="search" />
@@ -12,7 +12,6 @@
 				<fa @click="hamburger" class="header_icon" icon="bars" />
 			</div>
 		</div>
-		<hr>
 		<transition name="hamburgerMenu" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
 			<Hamburger class="hamburgerComponent" v-if="isHamburger" @click="hamburger" />
 		</transition>

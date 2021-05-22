@@ -15,10 +15,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Top
   },
   {
-    path: '/product/:id',
+    path: '/product/:itemId',
     name: 'Product',
     component: Product,
-    props: route => ({ id: Number(route.params.id) }),
+    props: route => ({ itemId: Number(route.params.itemId) }),
     meta: { title: 'ページタイトル', desc: 'ディスクリプションを記述' }
   },
   {
