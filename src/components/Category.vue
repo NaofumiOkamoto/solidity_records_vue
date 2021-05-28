@@ -1,29 +1,27 @@
 <template>
   <div class="category" >
-    <Header/>
     <div class="category_text_box header">
       <div class="left-space">←</div>
-      <div class="category_text">{{ category }}で絞る</div>
+      <div class="category_text">genre で絞る</div>
     </div>
     <div v-for="cate in categorys" :key="cate" class="">
-      <router-link v-if="isGenre" :to="{ name: 'Genres', params: { genre: cate } }">
+      <!-- <router-link v-if="isGenre" :to="{ name: 'Genres', params: { genre: cate } }"> -->
         <div class="category_text_box">
             <div class="category_text">
               {{cate}}
               <div style="float:right;">></div>
             </div>
         </div>
-      </router-link>
-      <router-link v-else :to="{ name: 'Collections', params: { category: category, name: cate } }">
-        <div class="category_text_box">
+      <!-- </router-link> -->
+      <!-- <router-link v-else :to="{ name: 'Collections', params: { category: category, name: cate } }"> -->
+        <!-- <div class="category_text_box">
           <div class="category_text">
           {{cate}}
           </div>
-        </div>
-      </router-link>
+        </div> -->
+      <!-- </router-link> -->
     </div>
     <hr>
-    <Footer/>
   </div>
 </template>
 
@@ -38,19 +36,19 @@ export default defineComponent({
   },
   beforeRouteUpdate (to, from, next) {
       next();
-      this.getCategoryList(String(to.params.category))
+      this.getCategoryList()
   },
   created: function(){
-    this.getCategoryList(String(this.category))
-    console.log("category")
-    console.log(this.category)
+    // this.getCategoryList(String(this.category))
+    this.getCategoryList()
   },
   methods: {
-    getCategoryList(cate: string) {
+    // getCategoryList(cate: string) {
+    getCategoryList() {
       this.categorys = []
       // genreはDBテーブル違うため処理分ける
-      if( cate === "genre" ) {
-        const url = '/getGenre?sql=' + cate;
+      // if( cate === "genre" ) {
+        const url = '/getGenre?sql=' + 'genre';
         console.log(url)
         axios.get(url).then((response) => {
           for ( const data in response.data) {
@@ -60,16 +58,16 @@ export default defineComponent({
           }
         })
         this.isGenre = true
-      } else {
-        const url = '/getCategory?sql=' + cate;
-        axios.get(url).then((response) => {
-          for ( let i = 0; i < response.data.length; i++ ) {
-            const cate = String(Object.values(response.data[i])[0])
-            this.categorys.push(cate)
-          }
-        })
-        this.isGenre = false
-      }
+      // } else {
+        // const url = '/getCategory?sql=' + cate;
+        // axios.get(url).then((response) => {
+        //   for ( let i = 0; i < response.data.length; i++ ) {
+        //     const cate = String(Object.values(response.data[i])[0])
+        //     this.categorys.push(cate)
+        //   }
+        // })
+        // this.isGenre = false
+      // }
     },
   },
   data(): {

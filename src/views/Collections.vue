@@ -10,9 +10,9 @@
     <div class="top_page clearfix">
       <div  v-for="(product, key) in getProduct.products" :key="key" class="products_box">
         <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
-          <img @load="loaded" v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
-          <img @load="loaded" v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
-          <img @load="loaded" v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+          <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+          <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+          <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
           <p class="title">{{ product.artist }}</p>
           <p class="title">{{ product.title }}</p>
           <p class="price">{{ product.price }}</p>
@@ -47,11 +47,6 @@ export default defineComponent({
 		}
   },
   methods: {
-    loaded() {
-      setTimeout(() => {
-        this.loadingShow = false
-      }, 200);
-    }
   },
   computed: {
     getGenre(){
@@ -77,6 +72,11 @@ export default defineComponent({
       return store.state
     },
   },
+  updated: function(){
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 200);
+  }
 });
 </script>
 

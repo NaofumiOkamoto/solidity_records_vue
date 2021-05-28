@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div style="position: relative;">
 		<Search v-if="isSearch" @back="search"/>
 		<div class="header">
-			<div class="progress">進捗状況 : 12％くらい</div>
-			<router-link to="/"><img class="top_logo" src="../assets/top_logo.jpg"></router-link>
+			<div class="progress">進捗状況 : 15％くらい</div>
+			<router-link to="/"><img @click="isNotHamburger" class="top_logo" src="../assets/top_logo.jpg"></router-link>
 			<div class="header_icon_box">
 				<fa @click.stop="search" class="header_icon" icon="search" />
 				<router-link to="/about"><fa class="header_icon" icon="user" /></router-link>
@@ -12,9 +12,11 @@
 				<fa @click="hamburger" class="header_icon" icon="bars" />
 			</div>
 		</div>
+		<div style="width: 100%; position: absolute;">
 		<transition name="hamburgerMenu" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-			<Hamburger class="hamburgerComponent" v-if="isHamburger" @click="hamburger" />
+			<Hamburger ref="wrapper" class="hamburgerComponent" v-if="isHamburger" v-on:isNotHamburger="isNotHamburger"/>
 		</transition>
+		</div>
 	</div>
 </template>
 
@@ -47,6 +49,9 @@ export default defineComponent({
 	hamburger(){
 		this.isHamburger = !this.isHamburger
 	},
+	isNotHamburger(){
+		this.isHamburger = false
+	},
 	search(){
 		this.isSearch = !this.isSearch
 	},
@@ -54,14 +59,17 @@ export default defineComponent({
 		el.style.height = '0';
 	},
 	enter: function(el: { style: { height: string }; scrollHeight: string }) {
-		el.style.height = el.scrollHeight + 'px';
+		// el.style.height = el.scrollHeight + 'px';
+		el.style.height = 'auto'
 	},
 	beforeLeave: function(el: { style: { height: string }; scrollHeight: string }) {
 		el.style.height = el.scrollHeight + 'px';
+		// el.style.height = 'auto'
 	},
 	leave: function(el: { style: { height: string } }) {
 		el.style.height = '0';
 	},
+
 }
 });
 </script>
@@ -88,15 +96,16 @@ svg{
 	color: #000;
 }
 .hamburgerComponent{
-	overflow: hidden;
+	/* overflow: hidden; */
 	transition: height 0.5s;
+	background-color: #fff;
 }
 .hamburgerMenu-enter-active{
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 	animation-name: hamburger_opend;
 }
 .hamburgerMenu-leave-active{
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 	animation-name: hamburger_closed;
 }
 @keyframes hamburger_opend {

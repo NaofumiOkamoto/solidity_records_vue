@@ -41,7 +41,7 @@
             {{ getProduct.products[0]["recoding_date"] }}
           </p>
           <p class="product_info">Condition : 
-            <router-link :to="{ name: 'Collections', params: { category: 'format', name: getProduct.products[0]['format'] } }">
+            <router-link :to="{ name: 'Collections', params: { category: 'item_condition', name: getProduct.products[0]['item_condition'] } }">
               {{ getProduct.products[0]["item_condition"] }}
             </router-link>
           </p>
@@ -50,7 +50,7 @@
             <router-link :to="{ name: 'Collections', params: { category: 'genre', name: genre['id'] } }">
             {{ genre.sub }}
             </router-link>
-            <span v-if="(key + 1) !== getProduct.genre.length"> / </span>
+            <span v-if="(key + 1) !== getProduct.genre.length"> , </span>
           </span>
           </p>
         </div>
@@ -82,10 +82,7 @@ export default defineComponent({
       this.isShow = false;
     },
     loaded() {
-      console.log("loadddddddd")
-      setTimeout(() => {
-        this.loadingShow = false
-      }, 200);
+      console.log("load")
     }
   },
   computed: {
@@ -108,6 +105,11 @@ export default defineComponent({
       loadingShow: true,
 		}
   },
+  updated: function(){
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 200);
+  }
 });
 </script>
 

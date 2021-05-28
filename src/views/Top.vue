@@ -6,9 +6,9 @@
       <h3 class="top_title">NEW ARRIVALS</h3>
       <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
         <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
-          <img @load="loaded" v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
-          <img @load="loaded" v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
-          <img @load="loaded" v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+          <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+          <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+          <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
           <p class="title">artist : {{ product.artist }}</p>
           <p class="title">title : {{ product.title }}</p>
           <p class="price">¥{{ product.price }}</p>
@@ -37,11 +37,6 @@ export default defineComponent({
 		}
   },
   methods: {
-    loaded() {
-      setTimeout(() => {
-        this.loadingShow = false
-      }, 200);
-    }
   },
   computed: {
     getProduct(){
@@ -54,6 +49,11 @@ export default defineComponent({
       console.log(this.imgSrc)
       return store.state
     }
+  },
+  updated: function(){
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 200);
   }
 });
 </script>

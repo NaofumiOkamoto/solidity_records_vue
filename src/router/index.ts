@@ -32,12 +32,12 @@ const routes: Array<RouteRecordRaw> = [
     component: Collections,
     props: route => ({ category: String(route.params.category), name: String(route.params.name) }),
   },
-  {
-    path: '/category/:category',
-    name: 'Category',
-    component: Category,
-    props: route => ({ category: String(route.params.category) })
-  },
+  // {
+  //   path: '/category/:category',
+  //   name: 'Category',
+  //   component: Category,
+  //   props: route => ({ category: String(route.params.category) })
+  // },
   {
     path: '/category/genres/:genre',
     name: 'Genres',
