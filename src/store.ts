@@ -26,6 +26,7 @@ products: [
 ];
 cartCount: number;
 genre: string[];
+title: string[];
 }
 
 // define injection key
@@ -55,7 +56,8 @@ export const store = createStore<State>({
         // numsicalInstrument: "",
       }
     ],
-    genre: [""]
+    genre: [""],
+    title: [""]
   },
   mutations: {
     getProducts(state, sql){
@@ -115,35 +117,38 @@ export const store = createStore<State>({
 		// filterProdcut(state, sql){
     //   const url = '/api?sql=' + sql;
     //   console.log("filterProduct", url)
-    //   state.images = []
-    //   state.price = []
     //   axios.get(url).then((response) => {
     //     for(let i = 0; i < response.data.length; i++ ){
-    //       if ( response.data[i]['Title'] !== '' ){
-    //       state.title.push(response.data[i]['Title']);
-    //       state.images.push(response.data[i]['Image Src']);
-    //       state.price.push(response.data[i]['Variant Price']);
+    //       if ( response.data[i]['title'] !== '' ){
+    //       state.title.push(response.data[i]['title']);
     //       }
     //     }
     //   });
 		// },
-		setCartCount(state, addProductName){
-      const cookies = document.cookie
-      const cookiesArray = cookies.split(';'); // ;で分割し配列に
-      let cartProducts = ""
-      state.cartCount = 1
-      document.cookie = "cart-products=" + addProductName
-      for(const c of cookiesArray){
-        const cArray = c.split('='); //さらに=で分割して配列に
-        if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
-          cartProducts = cArray[1] + "__" + addProductName
-          const count = cartProducts.split('__').length
-          state.cartCount = count
-          document.cookie = "cart-products=" + cartProducts
-        }
-      }
-      alert('カートに商品を入れました。\nカートの中身は' + state.cartCount + "商品あります")
-    },
+    // ヘッダー検索部分
+		searchProducts(state, sql){
+      const url = '/searchProducts?sql=' + sql;
+      axios.get(url).then((response) => {
+        state.products = response.data
+      });
+		},
+		// setCartCount(state, addProductName){
+    //   const cookies = document.cookie
+    //   const cookiesArray = cookies.split(';'); // ;で分割し配列に
+    //   let cartProducts = ""
+    //   state.cartCount = 1
+    //   document.cookie = "cart-products=" + addProductName
+    //   for(const c of cookiesArray){
+    //     const cArray = c.split('='); //さらに=で分割して配列に
+    //     if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
+    //       cartProducts = cArray[1] + "__" + addProductName
+    //       const count = cartProducts.split('__').length
+    //       state.cartCount = count
+    //       document.cookie = "cart-products=" + cartProducts
+    //     }
+    //   }
+    //   alert('カートに商品を入れました。\nカートの中身は' + state.cartCount + "商品あります")
+    // },
     // getCartCount(context) {
     //   console.log(document.cookie)
     // }
@@ -166,18 +171,19 @@ export const store = createStore<State>({
 		getGenre(context, sql) {
 			context.commit('getGenre', sql)
 		},
-    // getProductsGenreLike(context, sql){
-		// 	context.commit('getProductsGenreLike', sql)
+    setCartCount(context, addProductName) {
+      console.log("setCartcount!!!!")
+      context.commit('setCartCount', addProductName)
+    },
+    searchProducts(context, sql) {
+      context.commit('searchProducts', sql)
+    }
+    // getCartCount(context) {
+    //   context.commit('getCart')
     // },
 		// filterProdcut(context, sql) {
 		// 	context.commit('filterProdcut', sql)
 		// },
-    setCartCount(context, addProductName) {
-      context.commit('setCartCount', addProductName)
-    },
-    // getCartCount(context) {
-    //   context.commit('getCart')
-    // }
 
   },
 })

@@ -9,8 +9,12 @@
           <img @load="loaded" v-else-if="getProduct.products[0].condition == 'New'" class="products_img" v-bind:src="imgSrc + (getProduct.products[0].item_id % 10000) + 'N.jpg' ">
           <img @load="loaded" v-else class="products_img" v-bind:src="imgSrc + getProduct.products[0].item_id + '_01.jpg' ">
           <p>{{ getProduct.products[0].title }}</p>
-          <div @click="addCart(product.title)" class="add_to_cart">ADD TO CART</div>
-          <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
+
+          <div style="margin:0 3%;">
+            <div @click="addCart(getProduct.products[0].item_id)" class="add_to_cart">ADD TO CART</div>
+            <router-link to="/checkouts"><div class="buy_in_now">BUY IN NOW</div></router-link>
+          </div>
+
           <p class="product_info">Artist :
             <router-link :to="{ name: 'Collections', params: { category: 'artist', name: getProduct.products[0]['artist'] } }">
               {{ getProduct.products[0]["artist"] }}
@@ -81,13 +85,27 @@ export default defineComponent({
     closeCart(){
       this.isShow = false;
     },
-    loaded() {
-      console.log("load")
-    }
+    addCart(id: number){
+      const cookies = document.cookie
+      const cookiesArray = cookies.split(';'); // ;で分割し配列に
+      let cartProducts = ""
+      document.cookie = "cart-products=" + id
+      let count = 1
+      for(const c of cookiesArray){
+        const cArray = c.split('='); //さらに=で分割して配列に
+        if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
+          cartProducts = cArray[1] + "_" + id
+          count = cartProducts.split('_').length
+          document.cookie = "cart-products=" + cartProducts
+        }
+      }
+      alert('カートに商品を入れました。\nカートの中身は' + count +  "商品あります")
+    },
   },
   computed: {
     getProduct(){
       const store = useStore(key)
+      console.log("getProduct", store)
       store.dispatch('getProducts', 'where item_id = ' + this.itemId)
       return store.state
     },

@@ -2,12 +2,18 @@
   <div class="search">
     <div class="form_box clearfix">
       <button @click="back">←</button>
-      <input class="search_form" type="text" v-model="keyword">
+      <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
     </div>
-    <div style="margin-top:16%;">
-      <div class="search_result" v-for="(data,key) in filteredProducts" :key="key">
-        <router-link :to="{ name: 'Product', params: { handle: data.split('__')[1] }}" >
-          <p @click="back" v-text="data.split('__')[0]"></p>
+    <div style="margin-top:20%;">
+      <div style="background-color:#fff; padding: 5px;">検索結果 : {{ searchProducts['products'].length }}件</div>
+      <div class="search_result" v-for="(product,key) in searchProducts['products']" :key="key">
+        <router-link :to="{ name: 'Product', params: { itemId: product['item_id'] }}">
+          <div style="float:left; margin:5px 5px 0 0;">
+            <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+            <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+            <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+          </div>
+          <p style="" @click="back">{{ product['artist'] }} <br> {{ product['title']}}</p>
         </router-link>
       </div>
     </div>
@@ -17,11 +23,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import axios from 'axios';
+import { useStore } from 'vuex'
+import { key } from '../store'
 
 interface Searches {
   title: Array<string>;
-  handle: string[];
+  artist: string[];
 }
 
 export default defineComponent({
@@ -30,9 +37,10 @@ export default defineComponent({
     return {
       search: {
         title: [],
-        handle: [],
+        artist: [],
       } as Searches,
       keyword: '',
+      imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
     }
   },
   methods: {
@@ -40,30 +48,15 @@ export default defineComponent({
       this.$emit("back")
     },
   },
-  created :function() {
-    console.log("search")
-      const url = '/api';
-      axios.get(url).then((response) => {
-        for(let i = 0; i < response.data.length; i++ ){
-          if ( response.data[i]['Title'] !== '' ){
-          this.search.title.push(response.data[i]['Title']);
-          this.search.handle.push(response.data[i]['Handle']);
-          }
-        }
-      });
-  },
   computed: {
-    filteredProducts: function(): string[]{
-      const data = [];
-      for(let i = 0; i < this.search.title.length; i++) {
-        const product = this.search.title[i];
-        const handle = this.search.handle[i];
-        // if(product.indexOf(this.keyword) !== -1) {
-        if(product.toLowerCase().includes(this.keyword.toLowerCase()) && this.keyword !== "") {
-          data.push(product + '__' + handle);
-        }
+    searchProducts() {
+      console.log("filter")
+      const store = useStore(key)
+      console.log("keyword", this.keyword)
+      if (this.keyword) {
+        store.dispatch('searchProducts', this.keyword)
       }
-      return data;
+      return store.state
     }
   }
 });
@@ -74,6 +67,9 @@ export default defineComponent({
    content: "";
    display: block;
    clear: both;
+}
+img {
+  width:65px;
 }
 .search{
   position: absolute;
@@ -106,10 +102,14 @@ button {
 .search_result{
   background-color: #fff;
   margin: 0;
+  font-size: 80%;
+  height: 80px;
+  border-top: solid 1px #999;
+  border-bottom: solid 1px #999;
 }
-p {
+/* p {
   margin: 0;
   padding: 2%;
   border: solid 1px #999;
-}
+} */
 </style>
