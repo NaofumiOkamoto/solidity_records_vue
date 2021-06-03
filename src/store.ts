@@ -152,6 +152,20 @@ export const store = createStore<State>({
     // getCartCount(context) {
     //   console.log(document.cookie)
     // }
+    setCartCount(state, count) {
+      state.cartCount = count
+    },
+    getCartCount(state) {
+      const cookiesArray = document.cookie.split(';'); // ;で分割し配列に
+      let cartCount = 0
+      for(const c of cookiesArray){
+        const cArray = c.split('='); //さらに=で分割して配列に
+        if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
+          cartCount = cArray[1].split('_').length
+        }
+      }
+      state.cartCount = cartCount
+    }
   },
   actions: {
 		getProducts(context, sql) {
@@ -171,9 +185,11 @@ export const store = createStore<State>({
 		getGenre(context, sql) {
 			context.commit('getGenre', sql)
 		},
-    setCartCount(context, addProductName) {
-      console.log("setCartcount!!!!")
-      context.commit('setCartCount', addProductName)
+    setCartCount(context, count) {
+      context.commit('setCartCount', count)
+    },
+    getCartCount(context) {
+      context.commit('getCartCount')
     },
     searchProducts(context, sql) {
       context.commit('searchProducts', sql)

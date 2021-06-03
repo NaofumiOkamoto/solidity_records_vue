@@ -2,7 +2,7 @@
   <div class="" >
     <div @click="isShow = false " >
       <AddCart v-show="isShow" style="position:fixed"/>
-      <Header/>
+      <Header />
       <Loading v-show="loadingShow" />
         <div class="image_box" v-show="!loadingShow">
           <img @load="loaded" v-if="getProduct.products[0].img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
@@ -69,13 +69,13 @@ import { defineComponent } from 'vue';
 import { useStore } from 'vuex'
 import { key } from '../store'
 
-interface Product {
-  title: string;
-  body: string;
-  images: Array<string>;
-  image: string;
-  cartCount: number;
-}
+// interface Product {
+//   title: string;
+//   body: string;
+//   images: Array<string>;
+//   image: string;
+//   cartCount: number;
+// }
 export default defineComponent({
   name: 'Product',
   props: {
@@ -90,22 +90,21 @@ export default defineComponent({
       const cookiesArray = cookies.split(';'); // ;で分割し配列に
       let cartProducts = ""
       document.cookie = "cart-products=" + id
-      let count = 1
       for(const c of cookiesArray){
         const cArray = c.split('='); //さらに=で分割して配列に
         if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
           cartProducts = cArray[1] + "_" + id
-          count = cartProducts.split('_').length
+          this.cartCount = cartProducts.split('_').length
           document.cookie = "cart-products=" + cartProducts
         }
       }
-      alert('カートに商品を入れました。\nカートの中身は' + count +  "商品あります")
+      this.$store.dispatch('setCartCount', this.cartCount)
+      alert('カートに商品を入れました。\nカートの中身は' + this.cartCount +  "商品あります")
     },
   },
   computed: {
     getProduct(){
       const store = useStore(key)
-      console.log("getProduct", store)
       store.dispatch('getProducts', 'where item_id = ' + this.itemId)
       return store.state
     },
@@ -115,12 +114,14 @@ export default defineComponent({
     isShow: boolean;
     products: object;
     loadingShow: boolean;
+    cartCount: number;
   } {
 		return{
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
       isShow: false,
       products: {},
       loadingShow: true,
+      cartCount: 1,
 		}
   },
   updated: function(){
