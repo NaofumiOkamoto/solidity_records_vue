@@ -232,6 +232,9 @@ export default defineComponent({
 .category_text_box {
   border-top: 1px solid #9e9d9d;
 }
+#firstHamburger, #secondHamburger {
+  border-bottom: 1px solid #9e9d9d;
+}
 .category_text_box:hover{
   background-color: #f9e9e9;
 }

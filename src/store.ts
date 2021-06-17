@@ -68,12 +68,12 @@ export const store = createStore<State>({
       .then(() => axios.get(producUrl).then((response) => {
         state.products = response.data
         genreUrl = '/getGenre?sql= where id = ' + response.data[0].genre
-        console.log(genreUrl)
       }))
       .then(() => axios.get(genreUrl).then((response) => {
-        console.log(response)
         state.genre = response.data
-      }))
+      })).catch(function() {
+        console.log('error:', 'Not Found')
+      })
     },
     // 小ジャンルidで商品を探し出す
     getProductsLike(state, sql) {
@@ -174,8 +174,8 @@ export const store = createStore<State>({
 		selectGenreProducts(context, sql) {
 			context.commit('selectGenreProducts', sql)
 		},
-		getProductsLike(context, { colmun, value }) {
-      const sql = colmun + '_' + value
+		getProductsLike(context, { colmun, value, addSql }) {
+      const sql = colmun + '__' + value + '__' + addSql
 			context.commit('getProductsLike', sql)
 		},
 		getProductsGenreLike(context, colmun) {

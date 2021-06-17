@@ -5,10 +5,19 @@
       <Header />
       <Loading v-show="loadingShow" />
         <div class="image_box" v-show="!loadingShow">
-          <img @load="loaded" v-if="getProduct.products[0].img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
-          <img @load="loaded" v-else-if="getProduct.products[0].condition == 'New'" class="products_img" v-bind:src="imgSrc + (getProduct.products[0].item_id % 10000) + 'N.jpg' ">
-          <img @load="loaded" v-else class="products_img" v-bind:src="imgSrc + getProduct.products[0].item_id + '_01.jpg' ">
-          <p>{{ getProduct.products[0].title }}</p>
+          <img v-if="getProduct.products[0].img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 画像なしの場合の仮画像 -->
+          <img v-else-if="getProduct.products[0].condition == 'New'" class="products_img" v-bind:src="imgSrc + (getProduct.products[0].item_id % 10000) + 'N.jpg' ">
+          <img v-else class="products_img" v-bind:src="imgSrc + getProduct.products[0].item_id + '_0' + imgNum +'.jpg' ">
+
+          <div class="sub_img_box">
+            <div v-for="i of getProduct.products[0]['img_count']" :key='i' class="sub_img" @click="imgNum = i; selectImg(i)">
+              <img v-if="getProduct.products[0].img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 画像なしの場合の仮画像 -->
+              <img v-else-if="getProduct.products[0].condition == 'New'" class="products_img" v-bind:src="imgSrc + (getProduct.products[0].item_id % 10000) + 'N.jpg' ">
+              <img v-else class="products_img" v-bind:src="imgSrc + getProduct.products[0]['item_id'] + '_' + ('0' + i ).slice(-2) + '.jpg' ">
+            </div>
+          </div>
+
+          <p style="margin-top: 30%;">{{ getProduct.products[0].title }}</p>
 
           <div style="margin:0 3%;">
             <div @click="addCart(getProduct.products[0].item_id)" class="add_to_cart">ADD TO CART</div>
@@ -81,6 +90,9 @@ export default defineComponent({
   props: {
     itemId: Number
   },
+  created() {
+    this.setImg();
+  },
   methods: {
     closeCart(){
       this.isShow = false;
@@ -101,6 +113,19 @@ export default defineComponent({
       this.$store.dispatch('setCartCount', this.cartCount)
       alert('カートに商品を入れました。\nカートの中身は' + this.cartCount +  "商品あります")
     },
+    setImg(){
+      setTimeout(() => {
+        const subImgClass = document.getElementsByClassName('sub_img')
+        subImgClass[0].classList.add("select_img")
+      }, 200);
+    },
+    selectImg(i: number){
+      const subImgClass = document.getElementsByClassName('sub_img')
+      for ( let i = 0; i < subImgClass.length; i++ ) {
+        subImgClass[i].classList.remove("select_img")
+      }
+      subImgClass[i - 1].classList.add("select_img")
+    }
   },
   computed: {
     getProduct(){
@@ -111,6 +136,7 @@ export default defineComponent({
   },
   data(): {
     imgSrc: string;
+    imgNum: number;
     isShow: boolean;
     products: object;
     loadingShow: boolean;
@@ -118,6 +144,7 @@ export default defineComponent({
   } {
 		return{
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
+      imgNum: 1,
       isShow: false,
       products: {},
       loadingShow: true,
@@ -182,6 +209,21 @@ p {
 a {
   text-decoration: underline;
   text-decoration-color: #838383;
+}
+.sub_img_box{
+  display:flex;
+  overflow-x:scroll;
+  width: 80%;
+  margin: 0 auto;
+  padding: 3%;
+}
+.sub_img img{
+  width: 74px;
+  margin: 3% 1%;
+  border: 4px solid #fff;
+}
+.select_img img{
+  border: 4px solid #000;
 }
 </style>
 

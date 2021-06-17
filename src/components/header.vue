@@ -2,7 +2,7 @@
 	<div style="position: relative;">
 		<Search v-if="isSearch" @back="search"/>
 		<div class="header">
-			<div class="progress">進捗状況 : 19％くらい</div>
+			<div class="progress">進捗状況 : 21％くらい</div>
 			<router-link to="/"><img @click="isNotHamburger" class="top_logo" src="../assets/top_logo.jpg"></router-link>
 			<div class="header_icon_box">
 				<fa @click.stop="search" class="header_icon" icon="search" />
@@ -22,8 +22,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useStore } from 'vuex'
-import { key } from '../store'
 
 export default defineComponent({
   name: 'Header',
