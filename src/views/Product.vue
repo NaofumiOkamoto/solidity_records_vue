@@ -17,7 +17,7 @@
             </div>
           </div>
 
-          <p style="margin-top: 30%;">{{ getProduct.products[0].title }}</p>
+          <p style="margin-top: 10%;">{{ getProduct.products[0].title }}</p>
 
           <div style="margin:0 3%;">
             <div @click="addCart(getProduct.products[0].item_id)" class="add_to_cart">ADD TO CART</div>

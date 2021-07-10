@@ -15,6 +15,9 @@
         </router-link>
       </div>
     </div>
+    <router-link :to="{ name: 'Collections', params: { category: 'All', name: 'product' } }">
+      <div class="view_all_button">VIEW ALL</div>
+    </router-link>
     <Footer/>
   </div>
 </template>
@@ -41,8 +44,8 @@ export default defineComponent({
   computed: {
     getProduct(){
       const store = useStore(key)
-      // store.dispatch('getProducts', 'ORDER BY title DESC LIMIT 10;')
-      store.dispatch('getProducts', '')
+      store.dispatch('getProducts', 'ORDER BY title DESC LIMIT 10;')
+      // store.dispatch('getProducts', '')
       // store.dispatch('filterProdcut', 'ORDER BY Title DESC LIMIT 10;')
       // store.dispatch('filterProdcut', 'WHERE `Body` LIKE "%25Japanese Jazz%25"')
       console.log(store.state)
@@ -80,7 +83,7 @@ body{
 }
 .products_box{
   width: 50%;
-  margin: 0 0 20px 0
+  /* padding: 0 0 20px 0 */
 }
 .products_img {
   width: 80%;
@@ -115,5 +118,12 @@ a:hover{
   border-radius: 3px;
   font-size: 110%;
   margin-bottom: 40px;
+}
+.view_all_button{
+  margin: 10% auto;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  width: 30%;
 }
 </style>

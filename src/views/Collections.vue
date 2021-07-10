@@ -5,8 +5,11 @@
     <Loading v-show="loadingShow" />
     <h1 v-if="category === 'genre'">genre - {{ getGenre["genre"][0]["sub"] }}</h1>
     <h1 v-else>{{ category }} - {{ name }}</h1>
+    <select v-model="sort">
+      <option v-for="item in Object.keys(sortItem)" v-bind:value="item" :key="item">{{ item }}</option>
+    </select>
     <h2 @click="isFilter = !isFilter" class="filter_title">Filtter</h2>
-    <p>{{ getProduct.products.length }}件</p>
+    <p>{{ paginateMinNum }}~{{ paginateMaxNum }}/{{ getProduct.products.length }}件</p>
     <div class="filter_box" v-if="isFilter">
       <!-- -->
       <h3 @click="isItemCondition = !isItemCondition">item condition</h3>
@@ -134,16 +137,26 @@
     </div>
     <p></p>
     <div class="top_page clearfix">
-      <div  v-for="(product, key) in getProduct.products" :key="key" class="products_box">
-        <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
-          <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
-          <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
-          <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
-          <p class="title">{{ product.artist }}</p>
-          <p class="title">{{ product.title }}</p>
-          <p class="price">{{ product.price }}</p>
-        </router-link>
+      <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
+        <div v-if="paginateMinNum <= key && key < paginateMaxNum">
+          <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
+            <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+            <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+            <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+            <p class="title">【item_id】: <br>{{ product.item_id }}</p>
+            <p class="title">【artist】: <br>{{ product.artist }}</p>
+            <p class="title">【title】: <br>{{ product.title }}</p>
+            <p class="title">【registration_date】: <br>{{ product.registration_date }}</p>
+            <p class="price">【price】: <br>{{ product.price }}</p>
+            <p class="price" style="background-color: yellow;">{{ key }}</p>
+          </router-link>
+        </div>
       </div>
+    </div>
+    <div style="text-align: center;">
+      <button @click="paginateDown()"> ＜ </button>
+      Page {{ paginateMinNum / paginateBaseNum + 1 }} of {{ Math.ceil( productsCount / paginateBaseNum ) }}
+      <button @click="paginateUp()"> ＞ </button>
     </div>
     <Footer/>
   </div>
@@ -163,6 +176,11 @@ export default defineComponent({
   },
   data(): {
     imgSrc: string;
+    productsCount: number;
+    sortItem: {[key: string]: string};
+    paginateBaseNum: number;
+    paginateMinNum: number;
+    paginateMaxNum: number;
     isGenre: boolean;
     genreHeight: string;
     loadingShow: boolean;
@@ -210,9 +228,16 @@ export default defineComponent({
     filterArtistItem: string[];
     filterReleaseYearItem: number[];
     filterRecordingDateItem: number[];
+
+    sort: string;
   } {
 		return{
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
+      productsCount: 0,
+      sortItem: {'Date, new to old': 'ORDER BY registration_date DESC', 'Date, old to new': 'ORDER BY registration_date ASC', 'Alphabetically,A-Z': 'ORDER BY artist ASC', 'Alphabetically,Z-A': 'ORDER BY artist DESC', 'Price, low to high': 'ORDER BY price ASC', 'Price, high to low': 'ORDER BY price DESC'},
+      paginateBaseNum: 10,
+      paginateMinNum: 0,
+      paginateMaxNum: 10,
       isGenre: false,
       loadingShow: true,
       isFilter: false, // 大元のfilter
@@ -261,6 +286,9 @@ export default defineComponent({
       filterArtistItem: [],
       filterReleaseYearItem: [],
       filterRecordingDateItem: [],
+
+      sort: 'Date, new to old',//デフォルト値
+      
 		}
   },
   created() {
@@ -344,6 +372,44 @@ export default defineComponent({
       setTimeout(() => {
         document.getElementById('main_genre_open')!.style.height = this.genreHeight + 'px'
       }, 0);
+    },
+    paginateDown() {
+      this.paginateMinNum -= (this.paginateMinNum !== 0)? this.paginateBaseNum : 0
+      if ( this.paginateMaxNum === this.productsCount ){
+        this.paginateMaxNum -= ( this.productsCount % 10 )
+      } else if ( this.paginateMaxNum !== 10) {
+        this.paginateMaxNum -= this.paginateBaseNum
+      }
+      const duration = 300;  // 移動速度（1秒で終了）
+      const interval = 5;    // 0.025秒ごとに移動
+      const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
+      const timer = setInterval(() => {
+          window.scrollBy(0, step);   // スクロール位置を移動
+          if(window.scrollY <= 0) {
+              clearInterval(timer);
+          }
+      }, interval);
+    },
+    paginateUp() {
+      this.paginateMinNum += (this.paginateMaxNum < this.productsCount) ? this.paginateBaseNum : 0
+      if ( this.paginateMaxNum < this.productsCount) {
+        this.paginateMaxNum += this.paginateBaseNum
+        this.paginateMaxNum = ( this.paginateMaxNum > this.productsCount ) ? this.productsCount : this.paginateMaxNum
+      }
+      const duration = 300;  // 移動速度（1秒で終了）
+      const interval = 5;    // 0.025秒ごとに移動
+      const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
+      const timer = setInterval(() => {
+          window.scrollBy(0, step);   // スクロール位置を移動
+          if(window.scrollY <= 0) {
+              clearInterval(timer);
+          }
+      }, interval);
+    },
+    filterOpen() {
+      this.isFilter = !this.isFilter
+      this.paginateMinNum = 0
+      this.paginateMaxNum = (this.productsCount < 10)? this.productsCount : 10
     }
   },
   computed: {
@@ -441,31 +507,34 @@ export default defineComponent({
       }
       addSql = addItemConditionSql + addSleeveConditionSql + addMusicalSql + addCountrySql + addVinylConditionSql + addLabelSql + addArtistSql + addReleaseYearSql + addRecordingDateSql
 
+      this.paginateMaxNum = 10
+      this.paginateMinNum = 0
       if ( this.category === "genre" && this.name !== undefined && this.name.length >= 3 ) {
         console.log("collection.vue : genre id で商品検索")
-        store.dispatch('getProductsLike', { colmun: this.category, value: this.name, addSql: addSql })
+        store.dispatch('getProductsLike', { colmun: this.category, value: this.name, addSql: addSql, sort: this.sortItem[this.sort] })
       } else if ( this.category === "All" ) {
         if (addSql === '' && addGenreSql === '') {
           console.log("collection.vue : 全商品検索")
-          store.dispatch('getProducts', '')
+          store.dispatch('getProducts', this.sortItem[this.sort])
         } else {
           console.log("collection.vue : 全商品検索 に フィルタ")
-          store.dispatch('getProducts', 'where not item_id = 0' + addSql + addGenreSql)
+          store.dispatch('getProducts', 'where not item_id = 0' + addSql + addGenreSql + "___" + this.sortItem[this.sort])
         }
       } else if ( this.name === "All" ) {
         console.log("collection.vue : genre : " + this.category +  " で全て検索")
-        store.dispatch('getProductsGenreLike', 'where main = "' + this.category + '"')
+        store.dispatch('getProductsGenreLike', { genre: 'where main = "' + this.category + '"', sort: this.sortItem[this.sort] } )
       } else {
         console.log("collection.vue : genre以外の条件で商品検索")
-        store.dispatch('getProducts', 'where `' + this.category + '` = "' + this.name + '"' + addSql + addGenreSql)
+        store.dispatch('getProducts', 'where `' + this.category + '` = "' + this.name + '"' + addSql + addGenreSql + this.sortItem[this.sort])
       }
       return store.state
     },
   },
   updated: function(){
-      setTimeout(() => {
-        this.loadingShow = false
-      }, 200);
+    setTimeout(() => {
+      this.loadingShow = false
+    }, 200);
+    this.productsCount = this.getProduct.products.length
   }
 });
 </script>

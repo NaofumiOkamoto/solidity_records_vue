@@ -86,8 +86,7 @@ export const store = createStore<State>({
     // 大ジャンルから商品を探し出す
     getProductsGenreLike(state, sql) {
       let producUrl = '/getProductsGenreLike?sql=';
-      const genreUrl = '/getGenre?sql=' + sql;
-      console.log("大ジャンル")
+      const genreUrl = '/getGenre?sql=' + sql.genre;
       console.log(genreUrl)
       Promise.resolve()
       // まず大ジャンルに対応する小ジャンルを取得
@@ -98,8 +97,9 @@ export const store = createStore<State>({
           if ( response.data.length !== (i + 1) ) {
             producUrl += "_"
           }
-          console.log("productUrl : ", producUrl)
         }
+        console.log("productUrl : ", producUrl)
+        producUrl += "__" + sql.sort
       }))
       // 小ジャンル一覧(101_102_103....)で情報で対応する商品一覧を取得
       .then(() => axios.get(producUrl).then((response) => {
@@ -165,6 +165,11 @@ export const store = createStore<State>({
         }
       }
       state.cartCount = cartCount
+    },
+    sortProducts(state, sql) {
+      console.log("store sortProducts")
+      console.log(state.products)
+      // state.products.sort()
     }
   },
   actions: {
@@ -174,12 +179,12 @@ export const store = createStore<State>({
 		selectGenreProducts(context, sql) {
 			context.commit('selectGenreProducts', sql)
 		},
-		getProductsLike(context, { colmun, value, addSql }) {
-      const sql = colmun + '__' + value + '__' + addSql
+		getProductsLike(context, { colmun, value, addSql, sort }) {
+      const sql = colmun + '__' + value + '__' + addSql + '__' + sort
 			context.commit('getProductsLike', sql)
 		},
-		getProductsGenreLike(context, colmun) {
-      const sql = colmun
+		getProductsGenreLike(context, { genre, sort } ) {
+      const sql = { genre, sort }
 			context.commit('getProductsGenreLike', sql)
 		},
 		getGenre(context, sql) {
@@ -193,6 +198,9 @@ export const store = createStore<State>({
     },
     searchProducts(context, sql) {
       context.commit('searchProducts', sql)
+    },
+    sortProducts(context, sql) {
+      context.commit('sortProducts', sql)
     }
     // getCartCount(context) {
     //   context.commit('getCart')
