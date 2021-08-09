@@ -44,7 +44,7 @@ export default defineComponent({
   computed: {
     getProduct(){
       const store = useStore(key)
-      store.dispatch('getProducts', 'ORDER BY title DESC LIMIT 10;')
+      store.dispatch('getProducts', 'ORDER BY registration_date DESC LIMIT 10;')
       // store.dispatch('getProducts', '')
       // store.dispatch('filterProdcut', 'ORDER BY Title DESC LIMIT 10;')
       // store.dispatch('filterProdcut', 'WHERE `Body` LIKE "%25Japanese Jazz%25"')

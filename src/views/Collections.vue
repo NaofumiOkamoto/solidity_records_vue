@@ -5,7 +5,7 @@
     <Loading v-show="loadingShow" />
     <h1 v-if="category === 'genre'">genre - {{ getGenre["genre"][0]["sub"] }}</h1>
     <h1 v-else>{{ category }} - {{ name }}</h1>
-    <select v-model="sort">
+    <select v-model="sort" class="select">
       <option v-for="item in Object.keys(sortItem)" v-bind:value="item" :key="item">{{ item }}</option>
     </select>
     <h2 @click="isFilter = !isFilter" class="filter_title">Filtter</h2>
@@ -507,8 +507,8 @@ export default defineComponent({
       }
       addSql = addItemConditionSql + addSleeveConditionSql + addMusicalSql + addCountrySql + addVinylConditionSql + addLabelSql + addArtistSql + addReleaseYearSql + addRecordingDateSql
 
-      this.paginateMaxNum = 10
-      this.paginateMinNum = 0
+      // this.paginateMaxNum = 10
+      // this.paginateMinNum = 0
       if ( this.category === "genre" && this.name !== undefined && this.name.length >= 3 ) {
         console.log("collection.vue : genre id で商品検索")
         store.dispatch('getProductsLike', { colmun: this.category, value: this.name, addSql: addSql, sort: this.sortItem[this.sort] })
@@ -525,7 +525,7 @@ export default defineComponent({
         store.dispatch('getProductsGenreLike', { genre: 'where main = "' + this.category + '"', sort: this.sortItem[this.sort] } )
       } else {
         console.log("collection.vue : genre以外の条件で商品検索")
-        store.dispatch('getProducts', 'where `' + this.category + '` = "' + this.name + '"' + addSql + addGenreSql + this.sortItem[this.sort])
+        store.dispatch('getProducts', 'where `' + this.category + '` = "' + this.name + '"' + addSql + addGenreSql + ' ' +  this.sortItem[this.sort])
       }
       return store.state
     },
@@ -576,5 +576,8 @@ h3 {
 }
 #main_genre_open {
   border-bottom: solid 8px #fff;
+}
+.select {
+  font-size: 16px;
 }
 </style>

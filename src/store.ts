@@ -68,9 +68,11 @@ export const store = createStore<State>({
       .then(() => axios.get(producUrl).then((response) => {
         state.products = response.data
         genreUrl = '/getGenre?sql= where id = ' + response.data[0].genre
+        console.log('genreUrl', genreUrl)
       }))
       .then(() => axios.get(genreUrl).then((response) => {
         state.genre = response.data
+        console.log('state.genre', state.genre)
       })).catch(function() {
         console.log('error:', 'Not Found')
       })
