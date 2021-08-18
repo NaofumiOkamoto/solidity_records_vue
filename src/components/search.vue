@@ -1,10 +1,15 @@
 <template>
   <div class="search">
     <div class="form_box clearfix">
+      <div>
+        <select v-model="searchSelected" class="search_select">
+          <option v-for="item in searchItem" v-bind:value="item" :key="item">{{ item }}</option>
+        </select>
+      </div>
       <button @click="back">←</button>
       <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
     </div>
-    <div style="margin-top:20%;">
+    <div style="margin-top:33%;">
       <div style="background-color:#fff; padding: 5px;">検索結果 : {{ searchProducts['products'].length }}件</div>
       <div class="search_result" v-for="(product,key) in searchProducts['products']" :key="key">
         <router-link :to="{ name: 'Product', params: { itemId: product['item_id'] }}">
@@ -13,7 +18,13 @@
             <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
             <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
           </div>
-          <p style="" @click="back">{{ product['artist'] }} <br> {{ product['title']}}</p>
+          <p style="" @click="back">
+            artist: {{ product['artist'] }} <br>
+            title: {{ product['title']}} <br>
+            label: {{ product['label']}} <br>
+            number: {{ product['number']}} <br>
+            genre: {{ product['genre']}} <br>
+          </p>
         </router-link>
       </div>
     </div>
@@ -41,6 +52,8 @@ export default defineComponent({
       } as Searches,
       keyword: '',
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
+      searchItem: ['all field', 'artist', 'title', 'label', 'number'],
+      searchSelected: 'all field',
     }
   },
   methods: {
@@ -54,7 +67,7 @@ export default defineComponent({
       const store = useStore(key)
       console.log("keyword", this.keyword)
       if (this.keyword) {
-        store.dispatch('searchProducts', this.keyword)
+        store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword})
       }
       return store.state
     }
@@ -103,13 +116,14 @@ button {
   background-color: #fff;
   margin: 0;
   font-size: 80%;
-  height: 80px;
+  height: 130px;
   border-top: solid 1px #999;
   border-bottom: solid 1px #999;
 }
-/* p {
-  margin: 0;
-  padding: 2%;
-  border: solid 1px #999;
-} */
+.search_select {
+  font-size: 100%;
+  padding: 7px;
+  margin: 20px 0 0 45px;
+  width: 80%;
+}
 </style>

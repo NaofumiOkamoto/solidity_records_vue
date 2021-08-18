@@ -148,7 +148,7 @@
             <p class="title">【title】: <br>{{ product.title }}</p>
             <p class="title">【registration_date】: <br>{{ product.registration_date }}</p>
             <p class="price">【price】: <br>{{ product.price }}</p>
-            <p class="price" style="background-color: yellow;">{{ key }}</p>
+            <p v-if="product.quantity === null" class="title sold_out">sold out</p>
           </router-link>
         </div>
       </div>
@@ -579,5 +579,12 @@ h3 {
 }
 .select {
   font-size: 16px;
+}
+.sold_out{
+  border: solid 1px #000;
+  text-align: center;
+  padding: 2%;
+  width: 50%;
+
 }
 </style>

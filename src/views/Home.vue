@@ -12,6 +12,7 @@
             <p>artist : {{ product.artist }}</p>
             <p>title : {{ product.title }}</p>
             <p>price : ¥{{ product.price }}</p>
+            <p>quantity: {{ productCount[product.item_id] }}</p>
           </div>
           <button @click="removeCart(product)">remove</button>
         </div>
@@ -31,10 +32,12 @@ export default defineComponent({
   data(): {
     imgSrc: string;
     cartProducts: { [key: string]: string | number }[];
+    productCount: { [key: string]: number};
   }{
     return {
       cartProducts: [],
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
+      productCount: {},
     }
   },
   mounted() {
@@ -47,9 +50,9 @@ export default defineComponent({
       let ids = ""
       for(let i = 0; i < this.cartProducts.length; i++) {
         if ( i < this.cartProducts.length -1 ) {
-          ids += this.cartProducts[i]['id'] + "_"
+          ids += this.cartProducts[i]['item_id'] + "_"
         } else {
-          ids += this.cartProducts[i]['id']
+          ids += this.cartProducts[i]['item_id']
         }
       }
       if ( ids === "" ) {
@@ -69,12 +72,20 @@ export default defineComponent({
           cartProduct = cArray[1].split('_') // valueがわを取り出す
         }
       }
+      // 商品毎に数量をカウント
+      for(let j = 0; j < cartProduct.length; j++){
+        const elm = cartProduct[j]
+        this.productCount[elm] = (this.productCount[elm] || 0) + 1
+      }
+      // 重複を削除
+      cartProduct = cartProduct.filter((element, index, self) => 
+                    self.findIndex(product => product === element ) === index
+                    );
+      // item_id から商品情報を取得
       for(let i = 0; i < cartProduct.length; i++){
         const url = '/getApi?sql=where item_id = ' + cartProduct[i];
         axios.get(url).then((response) => {
-          // const hash = {'title': response['data'][0]['title'], id : response['data'][0]['item_id']}
           const hash = response['data'][0]
-          console.log("response", response['data'][0])
           this.cartProducts.push(hash)
         })
       }
@@ -89,11 +100,12 @@ export default defineComponent({
 }
 .img_box {
   position: relative;
-  height: 150px;
+  height: 170px;
 }
 img {
   position: absolute;
   width: 30%;
+  margin-top: 4%;
 }
 .info_box {
   position: absolute;

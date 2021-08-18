@@ -128,8 +128,10 @@ export const store = createStore<State>({
     //   });
 		// },
     // ヘッダー検索部分
-		searchProducts(state, sql){
-      const url = '/searchProducts?sql=' + sql;
+		searchProducts(state, arg){
+      const selected = arg.selected
+      const keyword = arg.keyword
+      const url = '/searchProducts?sql=' + selected + '_' + keyword;
       axios.get(url).then((response) => {
         state.products = response.data
       });
@@ -198,8 +200,8 @@ export const store = createStore<State>({
     getCartCount(context) {
       context.commit('getCartCount')
     },
-    searchProducts(context, sql) {
-      context.commit('searchProducts', sql)
+    searchProducts(context, { selected, keyword } ) {
+      context.commit('searchProducts', { selected, keyword })
     },
     sortProducts(context, sql) {
       context.commit('sortProducts', sql)
