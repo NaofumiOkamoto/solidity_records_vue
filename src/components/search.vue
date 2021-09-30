@@ -14,17 +14,19 @@
       <div class="search_result" v-for="(product,key) in searchProducts['products']" :key="key">
         <router-link :to="{ name: 'Product', params: { itemId: product['item_id'] }}">
           <div style="float:left; margin:5px 5px 0 0;">
-            <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
+            <img v-if="product.img_count == null" class="products_img" src="https://t202001.jgt.jp/records/no_image.png"><!-- 一旦仮画像 -->
             <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
             <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
           </div>
-          <p style="" @click="back">
-            artist: {{ product['artist'] }} <br>
-            title: {{ product['title']}} <br>
-            label: {{ product['label']}} <br>
-            number: {{ product['number']}} <br>
-            genre: {{ product['genre']}} <br>
-          </p>
+          <div style="" @click="back">
+            <p>artist: {{ product['artist'] }} </p>
+            <p>title: {{ product['title']}} </p>
+            <p>label: {{ product['label']}} </p>
+            <p>genre: {{ product['genre']}} </p>
+            <p v-if="searchSelected == 'number'">number: {{ product['number']}} </p>
+            <p v-if="searchSelected == 'track_list'">track_list: {{ product['track_list']}} </p>
+            <p v-if="searchSelected == 'personnel'">personnel: {{ product['personnel']}} </p>
+          </div>
         </router-link>
       </div>
     </div>
@@ -52,7 +54,7 @@ export default defineComponent({
       } as Searches,
       keyword: '',
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
-      searchItem: ['all field', 'artist', 'title', 'label', 'number'],
+      searchItem: ['all field', 'artist', 'title', 'label', 'number', 'genre', 'track_list', 'personnel'],
       searchSelected: 'all field',
     }
   },
@@ -65,9 +67,10 @@ export default defineComponent({
     searchProducts() {
       console.log("filter")
       const store = useStore(key)
-      console.log("keyword", this.keyword)
-      if (this.keyword) {
+      if (this.keyword && this.searchSelected != 'genre') {
         store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword})
+      } else {
+        store.dispatch('getGenreBySearch', this.keyword)
       }
       return store.state
     }
@@ -116,7 +119,7 @@ button {
   background-color: #fff;
   margin: 0;
   font-size: 80%;
-  height: 130px;
+  height: auto;
   border-top: solid 1px #999;
   border-bottom: solid 1px #999;
 }

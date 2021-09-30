@@ -61,11 +61,12 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL+ "records/dist"),
   routes,
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      // return savedPosition
+      return { left: 0, top: 0 }
     } else {
       return { left: 0, top: 0 }
     }

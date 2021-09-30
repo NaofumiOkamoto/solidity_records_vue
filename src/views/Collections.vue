@@ -2,154 +2,167 @@
 <template>
   <div class="collections">
     <Header/>
-    <Loading v-show="loadingShow" />
-    <h1 v-if="category === 'genre'">genre - {{ getGenre["genre"][0]["sub"] }}</h1>
-    <h1 v-else>{{ category }} - {{ name }}</h1>
-    <select v-model="sort" class="select">
-      <option v-for="item in Object.keys(sortItem)" v-bind:value="item" :key="item">{{ item }}</option>
-    </select>
-    <h2 @click="isFilter = !isFilter" class="filter_title">Filtter</h2>
-    <p>{{ paginateMinNum }}~{{ paginateMaxNum }}/{{ getProduct.products.length }}件</p>
-    <div class="filter_box" v-if="isFilter">
-      <!-- -->
-      <h3 @click="isItemCondition = !isItemCondition">item condition</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isItemCondition">
-          <div  v-for="item_condition in itemConditions" :key="item_condition">
-            <input v-model="filterItemConditionItem" type="checkbox" :id=item_condition :value=item_condition><label :for=item_condition>{{item_condition}}</label>
-          </div>
-        </div>
-      </transition>
-      <!-- -->
-      <h3 @click="isSleeveCondition = !isSleeveCondition; isVinylCondition = false">sleeve condition</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isSleeveCondition">
-          <div  v-for="sleeve_condition in sleeveConditions" :key="sleeve_condition">
-            <input v-model="filterSleeveConditionItem" type="checkbox" :id=sleeve_condition :value=sleeve_condition><label :for=sleeve_condition>{{sleeve_condition}}</label>
-          </div>
-        </div>
-      </transition>
-      <!-- -->
-      <h3 @click="isVinylCondition = !isVinylCondition; isSleeveCondition = false">vinyl condition</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isVinylCondition">
-          <div  v-for="vinyl_condition in sleeveConditions" :key="vinyl_condition">
-            <input v-model="filterVinylConditionItem" type="checkbox" :id=vinyl_condition :value=vinyl_condition><label :for=vinyl_condition>{{vinyl_condition}}</label>
-          </div>
-        </div>
-      </transition>
-      <!-- -->
-      <h3 @click="isMusical = !isMusical">musical instruments</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isMusical">
-          <div v-for="musical_instrument in musicalInstruments" :key="musical_instrument">
-            <input v-model="filterMusicalItem" type="checkbox" :id=musical_instrument :value=musical_instrument><label :for=musical_instrument>{{musical_instrument}}</label>
-          </div>
-        </div>
-      </transition>
-      <!-- -->
-      <h3 @click="isCountry = !isCountry">country</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isCountry">
-          <div v-for="country in countries" :key="country">
-            <input v-model="filterCountryItem" type="checkbox" :id=country :value=country><label :for=country>{{country}}</label>
-          </div>
-        </div>
-      </transition>
-      <!-- genre -->
-      <h3 @click="isMainGenreFilter = !isMainGenreFilter; setGenreHeight()">genre</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div id="main_genre_open" v-show="isMainGenreFilter">
-          <div v-for="main in mainGenres" :key="main">
-            <p class="a_to_z" v-if="isGenreFilter !== main" @click="isGenreFilter = main; ">{{main}}</p>
-            <p class="a_to_z" v-if="isGenreFilter === main" @click="isGenreFilter = ''; closeMainGenre() ">{{main}}</p>
-            <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-              <div id="sub_genre_open" v-if="isGenreFilter === main" :height="openMainGenre()">
-                <div v-for="genre in genres" :key="genre">
-                  <span v-if="genre.main === main"><input v-model="filterGenreItem" type="checkbox" :id=genre.id :value=genre.id><label :for=genre.id>{{genre.sub}}</label></span>
-                </div>
-              </div>
-            </transition>
-          </div>
-        </div>
-      </transition>
-      <!-- -->
-      <h3 @click="isAtoZlabel = !isAtoZlabel">label</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isAtoZlabel">
-          <div v-for="az in AtoZlabelInitial" :key="az">
-            <p class="a_to_z" v-if="labelAtoZ !== az" @click="labelAtoZ = az">{{az}}</p>
-            <p class="a_to_z" v-if="labelAtoZ === az" @click="labelAtoZ = ''">{{az}}</p>
-            <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-              <div class="filterOpen" v-if="labelAtoZ == az">
-                <div v-for="label in labels" :key="label">
-                  <span v-if="label.slice(0,1) == az"><input v-model="filterLabelItem" type="checkbox" :id=label :value=label><label :for=label>{{label}}</label></span>
-                </div>
-              </div>
-            </transition>
-          </div>
-        </div>
-      </transition>
-      <!-- artist -->
-      <h3 @click="isAtoZartist = !isAtoZartist">artist</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isAtoZartist">
-          <div v-for="az in AtoZartistInitial" :key="az">
-            <p class="a_to_z" v-if="artistAtoZ !== az" @click="artistAtoZ = az">{{az}}</p>
-            <p class="a_to_z" v-if="artistAtoZ === az" @click="artistAtoZ = ''">{{az}}</p>
-            <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-              <div class="filterOpen" v-if="artistAtoZ == az">
-                <div v-for="artist in artists" :key="artist">
-                  <span v-if="artist.slice(0,1) == az"><input v-model="filterArtistItem" type="checkbox" :id=artist :value=artist><label :for=artist>{{artist}}</label></span>
-                </div>
-              </div>
-            </transition>
-          </div>
-        </div>
-      </transition>
-      <!-- release year -->
-      <h3 @click="isReleaseYear = !isReleaseYear">release year</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isReleaseYear">
-          <div  v-for="ry in releaseYears" :key="ry">
-            <input v-model="filterReleaseYearItem" type="checkbox" :id=ry :value=ry><label :for=ry>{{ry}}'s</label>
-          </div>
-        </div>
-      </transition>
-      <!-- recording date -->
-      <h3 @click="isRecordingDate = !isRecordingDate">recording date</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isRecordingDate">
-          <div  v-for="rd in recordingDates" :key="rd">
-            <input v-model="filterRecordingDateItem" type="checkbox" :id=rd :value=rd><label :for=rd>{{rd}}'s</label>
-          </div>
-        </div>
-      </transition>
-      <!-- stock -->
-      <h3 @click="isStock = !isStock">stock</h3>
-      <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
-        <div class="filterOpen" v-if="isStock">
-          <div  v-for="stock in stocks" :key="stock">
-            <input v-model="filterItem" type="checkbox" :id=stock :value=stock><label :for=stock>{{stock}}</label>
-          </div>
-        </div>
-      </transition>
+    <h1 class="collection_title" v-if="category === 'genre'">genre - {{ getGenre["genre"][0]["sub"] }}</h1>
+    <h1 class="collection_title" v-else>{{ category }} - {{ name }}</h1>
+    <div class="flex_sub">
+      <div class="sort_select">
+        <p>
+          <span class="sort_by">sort by</span>
+          <select v-model="sort" v-on:change="selectSort" class="select">
+            <option v-for="item in Object.keys(sortItem)" v-bind:value="item" :key="item">{{ item }}</option>
+          </select>
+        </p>
+      </div>
+      <div class="number_count">
+        <p class="" v-if="0 === getProduct.products.length">{{ 0 }}~{{ 0 }}/{{ getProduct.products.length }}件</p>
+        <p class="" v-if="paginateMaxNum < getProduct.products.length && 0 < getProduct.products.length">{{ paginateMinNum + 1 }}~{{ paginateMaxNum }}/{{ getProduct.products.length }}件</p>
+        <p class="" v-if="paginateMaxNum >= getProduct.products.length && 0 < getProduct.products.length">{{ paginateMinNum + 1 }}~{{ getProduct.products.length }}/{{ getProduct.products.length }}件</p>
+      </div>
     </div>
-    <p></p>
-    <div class="top_page clearfix">
-      <div v-for="(product, key) in getProduct.products" :key="key" class="products_box">
-        <div v-if="paginateMinNum <= key && key < paginateMaxNum">
-          <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
-            <img v-if="product.img_count == null" class="products_img" src="@/assets/no_image.png"><!-- 一旦仮画像 -->
-            <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
-            <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
-            <p class="title">【item_id】: <br>{{ product.item_id }}</p>
-            <p class="title">【artist】: <br>{{ product.artist }}</p>
-            <p class="title">【title】: <br>{{ product.title }}</p>
-            <p class="title">【registration_date】: <br>{{ product.registration_date }}</p>
-            <p class="price">【price】: <br>{{ product.price }}</p>
-            <p v-if="product.quantity === null" class="title sold_out">sold out</p>
-          </router-link>
+    <h2 @click="isFilter = !isFilter" v-if="!isPC" class="filter_title">Filtter</h2>
+    <div :class="{ flex_box: isPC }">
+      <div class="filter_box" v-if="isFilter" v-bind:class="{ filter_box_pc: isPC }">
+        <!-- -->
+        <h3 @click="isItemCondition = !isItemCondition">item condition <span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isItemCondition">
+            <div  v-for="item_condition in itemConditions" :key="item_condition">
+              <input v-model="filterItemConditionItem" type="checkbox" :id=item_condition :value=item_condition><label :for=item_condition>{{item_condition}}</label>
+            </div>
+          </div>
+        </transition>
+        <!-- -->
+        <h3 @click="isSleeveCondition = !isSleeveCondition; isVinylCondition = false">sleeve condition<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isSleeveCondition">
+            <div  v-for="sleeve_condition in sleeveConditions" :key="sleeve_condition">
+              <input v-model="filterSleeveConditionItem" type="checkbox" :id=sleeve_condition :value=sleeve_condition><label :for=sleeve_condition>{{sleeve_condition}}</label>
+            </div>
+          </div>
+        </transition>
+        <!-- -->
+        <h3 @click="isVinylCondition = !isVinylCondition; isSleeveCondition = false">vinyl condition<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isVinylCondition">
+            <div  v-for="vinyl_condition in sleeveConditions" :key="vinyl_condition">
+              <input v-model="filterVinylConditionItem" type="checkbox" :id=vinyl_condition :value=vinyl_condition><label :for=vinyl_condition>{{vinyl_condition}}</label>
+            </div>
+          </div>
+        </transition>
+        <!-- -->
+        <h3 @click="isMusical = !isMusical">musical instruments<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isMusical">
+            <div v-for="musical_instrument in musicalInstruments" :key="musical_instrument">
+              <input v-model="filterMusicalItem" type="checkbox" :id=musical_instrument :value=musical_instrument><label :for=musical_instrument>{{musical_instrument}}</label>
+            </div>
+          </div>
+        </transition>
+        <!-- -->
+        <h3 @click="isCountry = !isCountry">country<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isCountry">
+            <div v-for="country in countries" :key="country">
+              <input v-model="filterCountryItem" type="checkbox" :id=country :value=country><label :for=country>{{country}}</label>
+            </div>
+          </div>
+        </transition>
+        <!-- genre -->
+        <h3 @click="isMainGenreFilter = !isMainGenreFilter; setGenreHeight()">genre<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div id="main_genre_open" v-show="isMainGenreFilter">
+            <div v-for="main in mainGenres" :key="main">
+              <p class="a_to_z" v-if="isGenreFilter !== main" @click="isGenreFilter = main; ">{{main}}</p>
+              <p class="a_to_z" v-if="isGenreFilter === main" @click="isGenreFilter = ''; closeMainGenre() ">{{main}}</p>
+              <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+                <div id="sub_genre_open" v-if="isGenreFilter === main" :height="openMainGenre()">
+                  <div v-for="genre in genres" :key="genre">
+                    <span v-if="genre.main === main"><input v-model="filterGenreItem" type="checkbox" :id=genre.id :value=genre.id><label :for=genre.id>{{genre.sub}}</label></span>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
+        </transition>
+        <!-- -->
+        <h3 @click="isAtoZlabel = !isAtoZlabel">label<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isAtoZlabel">
+            <div v-for="az in AtoZlabelInitial" :key="az">
+              <p class="a_to_z" v-if="labelAtoZ !== az" @click="labelAtoZ = az">{{az}}</p>
+              <p class="a_to_z" v-if="labelAtoZ === az" @click="labelAtoZ = ''">{{az}}</p>
+              <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+                <div class="filterOpen" v-if="labelAtoZ == az">
+                  <div v-for="label in labels" :key="label">
+                    <span v-if="label.slice(0,1) == az"><input v-model="filterLabelItem" type="checkbox" :id=label :value=label><label :for=label>{{label}}</label></span>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
+        </transition>
+        <!-- artist -->
+        <h3 @click="isAtoZartist = !isAtoZartist">artist<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isAtoZartist">
+            <div v-for="az in AtoZartistInitial" :key="az">
+              <p class="a_to_z" v-if="artistAtoZ !== az" @click="artistAtoZ = az">{{az}}</p>
+              <p class="a_to_z" v-if="artistAtoZ === az" @click="artistAtoZ = ''">{{az}}</p>
+              <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+                <div class="filterOpen" v-if="artistAtoZ == az">
+                  <div v-for="artist in artists" :key="artist">
+                    <span v-if="artist.slice(0,1) == az"><input v-model="filterArtistItem" type="checkbox" :id=artist :value=artist><label :for=artist>{{artist}}</label></span>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
+        </transition>
+        <!-- release year -->
+        <h3 @click="isReleaseYear = !isReleaseYear">release year<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isReleaseYear">
+            <div  v-for="ry in releaseYears" :key="ry">
+              <input v-model="filterReleaseYearItem" type="checkbox" :id=ry :value=ry><label :for=ry>{{ry}}'s</label>
+            </div>
+          </div>
+        </transition>
+        <!-- recording date -->
+        <h3 @click="isRecordingDate = !isRecordingDate">recording date<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isRecordingDate">
+            <div  v-for="rd in recordingDates" :key="rd">
+              <input v-model="filterRecordingDateItem" type="checkbox" :id=rd :value=rd><label :for=rd>{{rd}}'s</label>
+            </div>
+          </div>
+        </transition>
+        <!-- stock -->
+        <h3 @click="isStock = !isStock">stock<span class="icon_down">∨</span></h3>
+        <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
+          <div class="filterOpen" v-if="isStock">
+            <div  v-for="stock in stocks" :key="stock">
+              <input v-model="filterItem" type="checkbox" :id=stock :value=stock><label :for=stock>{{stock}}</label>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <p></p>
+      <div class="top_page clearfix" v-bind:class="{ collection_items_pc: isPC }">
+      <Loading v-if="loadingShow" />
+        <div v-for="(product, key) in getProduct.products" :key="key" class="products_box" v-bind:class="{ products_box_collection_pc: isPC}">
+          <div v-if="paginateMinNum <= key && key < paginateMaxNum">
+            <router-link :to="{ name: 'Product', params: { itemId: product.item_id }}" >
+              <img v-if="product.img_count == null" class="products_img" src="https://t202001.jgt.jp/records/no_image.png"><!-- 一旦仮画像 -->
+              <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+              <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+              <p class="title">【item_id】: <br>{{ product.item_id }}</p>
+              <p class="title">【artist】: <br>{{ product.artist }}</p>
+              <p class="title">【title】: <br>{{ product.title }}</p>
+              <p class="title">【registration_date】: <br>{{ product.registration_date }}</p>
+              <p class="price">【price】: <br>{{ product.price }}</p>
+              <p v-if="product.quantity === null" class="title sold_out">sold out</p>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -166,6 +179,7 @@
 import { defineComponent } from 'vue';
 import { useStore } from 'vuex'
 import { key } from '../store'
+import { config } from '../const'
 import axios from 'axios';
 
 export default defineComponent({
@@ -230,6 +244,8 @@ export default defineComponent({
     filterRecordingDateItem: number[];
 
     sort: string;
+    width: number;
+    isPC: boolean;
   } {
 		return{
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
@@ -288,14 +304,23 @@ export default defineComponent({
       filterRecordingDateItem: [],
 
       sort: 'Date, new to old',//デフォルト値
+      width: window.innerWidth,
+      isPC: true,
       
 		}
   },
   created() {
     this.getAllGenre()
     this.getAllProduct()
+    this.handleResize()
+    
   },
   methods: {
+    handleResize() {
+      this.width = window.innerWidth;
+      this.isPC = config.VALUE < this.width
+      this.isFilter = config.VALUE < this.width
+    },
     getAllGenre() {
       const url = '/getGenre?sql=' + 'genre';
       axios.get(url).then((response) => {
@@ -364,7 +389,6 @@ export default defineComponent({
       setTimeout(() => {
         const subGenreHeight: number = document.getElementById('sub_genre_open')!.offsetHeight
         const genreHeight = parseInt(this.genreHeight) + subGenreHeight
-        console.log("openMainGenre", genreHeight)
         document.getElementById('main_genre_open')!.style.height = String(genreHeight) + 'px'
       }, 30);
     },
@@ -374,6 +398,10 @@ export default defineComponent({
       }, 0);
     },
     paginateDown() {
+      this.loadingShow = true
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 200);
       this.paginateMinNum -= (this.paginateMinNum !== 0)? this.paginateBaseNum : 0
       if ( this.paginateMaxNum === this.productsCount ){
         this.paginateMaxNum -= ( this.productsCount % 10 )
@@ -381,7 +409,7 @@ export default defineComponent({
         this.paginateMaxNum -= this.paginateBaseNum
       }
       const duration = 300;  // 移動速度（1秒で終了）
-      const interval = 5;    // 0.025秒ごとに移動
+      const interval = 3;    // 0.025秒ごとに移動
       const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
       const timer = setInterval(() => {
           window.scrollBy(0, step);   // スクロール位置を移動
@@ -391,13 +419,14 @@ export default defineComponent({
       }, interval);
     },
     paginateUp() {
+      this.loadingShow = true
       this.paginateMinNum += (this.paginateMaxNum < this.productsCount) ? this.paginateBaseNum : 0
       if ( this.paginateMaxNum < this.productsCount) {
         this.paginateMaxNum += this.paginateBaseNum
         this.paginateMaxNum = ( this.paginateMaxNum > this.productsCount ) ? this.productsCount : this.paginateMaxNum
       }
-      const duration = 300;  // 移動速度（1秒で終了）
-      const interval = 5;    // 0.025秒ごとに移動
+      const duration = 1;  // 移動速度（1秒で終了）
+      const interval = 1;    // 0.025秒ごとに移動
       const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
       const timer = setInterval(() => {
           window.scrollBy(0, step);   // スクロール位置を移動
@@ -410,6 +439,14 @@ export default defineComponent({
       this.isFilter = !this.isFilter
       this.paginateMinNum = 0
       this.paginateMaxNum = (this.productsCount < 10)? this.productsCount : 10
+    },
+    selectSort(){
+      this.loadingShow = true
+      this.paginateMinNum = 0
+      this.paginateMaxNum = (this.productsCount < 10)? this.productsCount : 10
+      setTimeout(() => {
+        this.loadingShow = false
+      }, 300);
     }
   },
   computed: {
@@ -507,8 +544,6 @@ export default defineComponent({
       }
       addSql = addItemConditionSql + addSleeveConditionSql + addMusicalSql + addCountrySql + addVinylConditionSql + addLabelSql + addArtistSql + addReleaseYearSql + addRecordingDateSql
 
-      // this.paginateMaxNum = 10
-      // this.paginateMinNum = 0
       if ( this.category === "genre" && this.name !== undefined && this.name.length >= 3 ) {
         console.log("collection.vue : genre id で商品検索")
         store.dispatch('getProductsLike', { colmun: this.category, value: this.name, addSql: addSql, sort: this.sortItem[this.sort] })
@@ -530,11 +565,20 @@ export default defineComponent({
       return store.state
     },
   },
+  mounted: function () {
+    window.addEventListener('load', this.handleResize)
+    window.addEventListener('resize', this.handleResize)
+  },
   updated: function(){
     setTimeout(() => {
       this.loadingShow = false
-    }, 200);
+    }, 300);
     this.productsCount = this.getProduct.products.length
+  },
+  watch: {
+    productsCount: function(newVal, oldVal){
+      this.loadingShow = true
+    }
   }
 });
 </script>
@@ -542,6 +586,14 @@ export default defineComponent({
 <style scoped>
 img{
   width: 90%;
+}
+.flex_box, .flex_sub {
+  display: flex;
+  margin: 2% 5% 5% 3%;
+}
+.flex_sub {
+  border-top: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
 }
 .filter_title {
   text-align: center;
@@ -559,14 +611,15 @@ img{
   /* background-color: #f8f7f7; */
 }
 .filterOpen, #main_genre_open {
-  /* background-color: #f8f7f7; */
   padding: 4% 5%;
 }
 h3 {
-  background-color: #f8f7f7;
+  /* background-color: #f8f7f7; */
+  background-color: #fff;
   border-bottom: solid 1px #d4d4d4;
   margin: 0;
   padding: 4% 8%;
+  font-size: 90%;
 }
 .a_to_z {
   margin: 1% 0;
@@ -579,12 +632,36 @@ h3 {
 }
 .select {
   font-size: 16px;
+  border: none
 }
-.sold_out{
-  border: solid 1px #000;
+.products_box_collection_pc {
+  width: 20%;
+}
+.filter_box_pc {
+  width: 30%;
+  overflow: auto;
+  height: auto;
+}
+.icon_down {
+  color: #9e9d9d;
+  float: right;
+}
+.collection_title {
   text-align: center;
-  padding: 2%;
+  margin: 4% 0 7% 0;
+}
+.sort_select {
   width: 50%;
-
+}
+.number_count {
+  width: 50%;
+  text-align: right;
+}
+.sort_by {
+  font-size: 90%;
+  margin-right: 15px;
+}
+.collection_items_pc {
+  width: 70%;
 }
 </style>

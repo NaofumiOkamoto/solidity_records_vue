@@ -63,16 +63,13 @@ export const store = createStore<State>({
     getProducts(state, sql){
       const producUrl = '/getApi?sql=' + sql;
       let genreUrl = '';
-      console.log("getProducts url : ", producUrl)
       Promise.resolve()
       .then(() => axios.get(producUrl).then((response) => {
         state.products = response.data
         genreUrl = '/getGenre?sql= where id = ' + response.data[0].genre
-        console.log('genreUrl', genreUrl)
       }))
       .then(() => axios.get(genreUrl).then((response) => {
         state.genre = response.data
-        console.log('state.genre', state.genre)
       })).catch(function() {
         console.log('error:', 'Not Found')
       })
@@ -109,12 +106,27 @@ export const store = createStore<State>({
         state.products = response.data
       }))
     },
+    // products テーブルのgenreカラム(id_id_id....)からジャンル名を取得
     getGenre(state, sql){
       const url = '/getGenre?sql=' + sql;
       console.log(url)
       axios.get(url).then((response) => {
         state.genre = response.data
       });
+    },
+
+    // フリー検索枠でジャンルを検索した時
+    getGenreBySearch(state, sql){
+      console.log('state.genre: ', state.genre)
+      // console.log(sql)
+      const url = '/getGenreIdBySearchText?sql=' + sql; // sqlは検索枠で入力した文字
+      axios.get(url).then((response) => {
+         console.log('responce: ', response.data)
+      });
+      // 検索入力した文字列を含むgenreのidをgenreテーブルから取得（sqlのLIKEを使用）
+      // [101,102]などで取得
+      // ↑の配列を使って１つずつproductのgenreカラムに当てはまる商品を抽出
+
     },
 		// filterProdcut(state, sql){
     //   const url = '/api?sql=' + sql;
@@ -205,6 +217,9 @@ export const store = createStore<State>({
     },
     sortProducts(context, sql) {
       context.commit('sortProducts', sql)
+    },
+    getGenreBySearch(context, sql){
+      context.commit('getGenreBySearch', sql)
     }
     // getCartCount(context) {
     //   context.commit('getCart')

@@ -119,7 +119,6 @@ export default defineComponent({
       }, 500);
     },
     fadeInLeft(idName: string){
-      console.log(idName)
       const el = document.getElementById(idName)
       if (el) {
         el.classList.remove("fadeOutLeft")
@@ -168,8 +167,6 @@ export default defineComponent({
               this.secondCategorys.push(response.data[data].main)
             }
           }
-        }).then(() => {
-          console.log(this.secondCategorys.length)
         });
       } else {
         this.isShowSecondLink = true
@@ -179,12 +176,8 @@ export default defineComponent({
             const cate = String(Object.values(response.data[i])[0])
             this.secondCategorys.push(cate)
           }
-        }).then(() => {
-          console.log(this.secondCategorys.length)
         });
       }
-
-      // this.isShowCate = false
     },
     showThirdGenre(genre: string) {
       this.isShowThirdGenre = true
@@ -200,7 +193,6 @@ export default defineComponent({
           }
         }
       })
-      // this.isShowSecondGenre = false
     },
   }
 });
@@ -235,8 +227,11 @@ export default defineComponent({
 #firstHamburger, #secondHamburger {
   border-bottom: 1px solid #9e9d9d;
 }
+#firstHamburger, #secondHamburger, #thirdHamburger {
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .25);
+}
 .category_text_box:hover{
-  background-color: #f9e9e9;
+  text-decoration: underline;
 }
 .next{
   position: absolute;
@@ -252,12 +247,12 @@ hr {
 }
 .fadeInLeft{
     animation-name: fadeInLeft;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
     animation-fill-mode:forwards;
 }
 @keyframes fadeInLeft {
   from {
-      transform: translateX(400px);
+      transform: translateX(calc(100%));
   }
   to {
       transform: translateX(0);
@@ -265,26 +260,26 @@ hr {
 }
 .fadeOutLeft{
     animation-name: fadeOutLeft;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
     animation-fill-mode:forwards;
 }
 @keyframes fadeOutLeft {
   from {
       transform: translateX(0);
+      opacity: 1;
   }
   to {
-      transform: translateX(-400px);
+      transform: translateX(calc(-100%));
   }
 }
-
 .fadeInRight{
     animation-name: fadeInRight;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
     animation-fill-mode:forwards;
 }
 @keyframes fadeInRight {
   from {
-      transform: translateX(-400px);
+      transform: translateX(calc(-100%));
   }
   to {
       transform: translateX(0);
@@ -292,7 +287,7 @@ hr {
 }
 .fadeOutRight{
     animation-name: fadeOutRight;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
     animation-fill-mode:forwards;
 }
 @keyframes fadeOutRight {
@@ -300,8 +295,11 @@ hr {
       transform: translateX(0);
   }
   to {
-      transform: translateX(400px);
+      transform: translateX(calc(100%));
   }
+}
+.header:hover{
+  text-decoration: none;
 }
 
 </style>

@@ -11,9 +11,9 @@
 		<hr>
 		<div class="footer_box">
 			<div class="footer_icon_box">
-				<router-link to="/home"> <fa class="footer_icon" icon="facebook" type="fab" /></router-link>
-				<router-link to="/home"> <fa class="footer_icon" icon="twitter" type="fab" /></router-link>
-				<router-link to="/home"> <fa class="footer_icon" icon="instagram" type="fab" /></router-link>
+				<a href="https://www.facebook.com/solidityrecords"> <fa class="footer_icon" icon="facebook" type="fab" /></a>
+				<a href="https://twitter.com/solidityrecords"> <fa class="footer_icon" icon="twitter" type="fab" /></a>
+				<a href="https://www.instagram.com/solidityrecords/"> <fa class="footer_icon" icon="instagram" type="fab" /></a>
 			</div>
 		</div>
 		<p class="c">© 2021, Solidity Records</p>

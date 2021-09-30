@@ -6,6 +6,7 @@ import Header from '@/components/header.vue'
 import Footer from '@/components/footer.vue'
 import AddCart from '@/components/addCart.vue'
 import Hamburger from '@/components/Hamburger.vue'
+import HamburgerPc from '@/components/HamburgerPc.vue'
 import Search from '@/components/search.vue'
 import Loading from '@/components/loading.vue'
 import Category from '@/components/Category.vue'
@@ -30,6 +31,7 @@ app.component('Category', Category)
 app.component('Footer', Footer)
 app.component('AddCart', AddCart)
 app.component('Hamburger', Hamburger)
+app.component('HamburgerPc', HamburgerPc)
 app.component('Search', Search)
 app.component('Loading', Loading)
 app.component("fa", FontAwesomeIcon)
