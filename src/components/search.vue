@@ -52,7 +52,7 @@ export default defineComponent({
         title: [],
         artist: [],
       } as Searches,
-      keyword: '',
+      keyword: ' ',
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
       searchItem: ['all field', 'artist', 'title', 'label', 'number', 'genre', 'track_list', 'personnel'],
       searchSelected: 'all field',

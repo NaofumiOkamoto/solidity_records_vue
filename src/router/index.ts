@@ -7,12 +7,45 @@ import Collections from '../views/Collections.vue'
 import Checkouts from '../views/Checkouts.vue'
 import Category from '../views/Category.vue'
 import Genres from '../views/Genres.vue'
+// import Admin from '../views/Admin.vue'
+import AdminProduct from '../components/admin/Product.vue'
+import AdminProducts from '../components/admin/Products.vue'
+import AdminStock from '../components/admin/Stock.vue'
+import AdminCustomer from '../components/admin/Customer.vue'
+import AdminOrder from '../components/admin/Order.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Top',
     component: Top
+  },
+  {
+    path: '/admin/products',
+    name: 'AdminProducts',
+    component: AdminProducts,
+    props: route => ({ category: String(route.params.category), name: String(route.params.name) }),
+  },
+  {
+    path: '/admin/product/:itemId',
+    name: 'AdminProduct',
+    component: AdminProduct,
+    props: route => ({ pageName: String(route.params.pageName), itemId: String(route.params.itemId) }),
+  },
+  {
+    path: '/admin/stock',
+    name: 'AdminStock',
+    component: AdminStock,
+  },
+  {
+    path: '/admin/order',
+    name: 'AdminOrder',
+    component: AdminOrder,
+  },
+  {
+    path: '/admin/customer',
+    name: 'AdminCustomer',
+    component: AdminCustomer,
   },
   {
     path: '/product/:itemId',

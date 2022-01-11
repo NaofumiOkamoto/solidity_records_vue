@@ -10,9 +10,35 @@ import HamburgerPc from '@/components/HamburgerPc.vue'
 import Search from '@/components/search.vue'
 import Loading from '@/components/loading.vue'
 import Category from '@/components/Category.vue'
+import Admin from '@/components/admin/Admin.vue'
+import AdminProducts from '@/components/admin/Products.vue'
+import AdminProduct from '@/components/admin/Product.vue'
+import AdminStock from '@/components/admin/Stock.vue'
+import AdminOrder from '@/components/admin/Order.vue'
+import AdminCustomer from '@/components/admin/Customer.vue'
+import AdminProductsTable from '@/components/admin/ProductsTable.vue'
 import { VueCookieNext } from 'vue-cookie-next'
+import "bootstrap/dist/css/bootstrap.min.css"
 
 import { FontAwesomeIcon } from "@/plugins/font-awesome";
+import { ElementPlus } from '@/plugins/element'
+
+import { initializeApp } from "firebase/app";
+// import './lib/firebase';
+// import { getAnalytics } from "firebase/analytics";
+// import firebase from 'firebase';
+
+ 
+const firebaseConfig = {
+  apiKey: "AIzaSyA2-GRIZqr95Mbtw4SL7HRG7wkfKmZNtFc",
+  authDomain: "solidityrecord.firebaseapp.com",
+  projectId: "solidityrecord",
+  storageBucket: "solidityrecord.appspot.com",
+  messagingSenderId: "738240681855",
+  appId: "1:738240681855:web:0bb3797080c480d6d7ec4a",
+  measurementId: "G-6BJHM5268J"
+};
+initializeApp(firebaseConfig);
 
 VueCookieNext.config({
     expire: '1d',
@@ -26,6 +52,7 @@ const app = createApp(App)
 app.use(router)
 app.use(store, key)
 app.use(VueCookieNext)
+app.use(ElementPlus)
 app.component('Header', Header)
 app.component('Category', Category)
 app.component('Footer', Footer)
@@ -34,6 +61,13 @@ app.component('Hamburger', Hamburger)
 app.component('HamburgerPc', HamburgerPc)
 app.component('Search', Search)
 app.component('Loading', Loading)
+app.component('Admin', Admin)
+app.component('AdminProducts', AdminProducts)
+app.component('AdminProduct', AdminProduct)
+app.component('AdminStock', AdminStock)
+app.component('AdminOrder', AdminOrder)
+app.component('AdminCustomer', AdminCustomer)
+app.component('AdminProductsTable', AdminProductsTable)
 app.component("fa", FontAwesomeIcon)
 app.mount('#app')
 

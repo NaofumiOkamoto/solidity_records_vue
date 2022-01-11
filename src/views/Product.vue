@@ -89,7 +89,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-// import axios from 'axios';
 import { useStore } from 'vuex'
 import { key } from '../store'
 import { config } from '../const'

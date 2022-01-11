@@ -5,6 +5,7 @@
 			<div class="progress">進捗状況 : 30％くらい</div>
 			<router-link to="/"><img @click="isNotHamburger" class="top_logo" src="https://t202001.jgt.jp/records/top_logo.jpg"></router-link>
 			<div class="header_icon_box">
+				<router-link to="/admin/products"><fa class="header_icon" icon="user-cog" /></router-link>
 				<fa @click.stop="search" class="header_icon" icon="search" />
 				<router-link to="/about"><fa class="header_icon" icon="user" /></router-link>
 				<span>{{ $store.state.cartCount }}</span>
