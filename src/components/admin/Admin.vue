@@ -17,7 +17,7 @@
           </router-link>
           <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
             <div class="filterOpen" v-if="isManagementProductTab">
-              <router-link :to="{ name: 'AdminProducts', params: {pageName: 'admin'}}">
+              <router-link :to="{ name: 'AdminProducts', params: {status: ''}}">
                 <div class="sub_list" @click="handleChange('products')">全ての商品</div>
               </router-link>
               <router-link :to="{ name: 'AdminStock'}">
@@ -97,7 +97,6 @@ export default defineComponent({
     // if (this.pageName !== "" || this.pageName !== undefined) {
     //   this.activeNames = this.pageName
     // }
-    console.log(this.pageName)
   },
   methods: {
     handleChange(val: string){

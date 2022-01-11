@@ -1,6 +1,6 @@
 <template>
 	<div style="">
-    {{active}}
+    {{status}}
     <input class="search_form" type="text" v-model="productKeyword" placeholder="商品を絞り込む">
     <table class="">
       <tr>
@@ -43,37 +43,32 @@ interface Searches {
 export default defineComponent({
   name: 'AdminProductsTable',
   props: {
-    active: String,
+    status: String,
   },
   data() {
     return {
-      search: {
-        title: [],
-        artist: [],
-      } as Searches,
+      // search: {
+      //   title: [],
+      //   artist: [],
+      // } as Searches,
       keyword: ' ',
       productKeyword: '',
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
-      searchItem: ['all field', 'artist', 'title', 'label', 'number', 'genre', 'track_list', 'personnel'],
+      // searchItem: ['all field', 'artist', 'title', 'label', 'number', 'genre', 'track_list', 'personnel'],
       searchSelected: 'all field',
       activeName: 'all',
     }
   },
   methods: {
-    back() {
-      this.$emit("back")
-    },
+    // back() {
+    //   this.$emit("back")
+    // },
   },
   computed: {
     searchProducts() {
       const store = useStore(key)
-      if  (this.productKeyword && this.searchSelected != 'genre') {
-        store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.productKeyword})
-      } else if (this.keyword && this.searchSelected != 'genre') {
-        store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword})
-      } else {
-        store.dispatch('getGenreBySearch', this.keyword)
-      }
+      console.log('computed', this.status)
+      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.productKeyword, status: this.status})
       return store.state
     }
   }

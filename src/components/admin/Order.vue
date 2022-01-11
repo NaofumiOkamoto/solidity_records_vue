@@ -15,7 +15,7 @@
 						<table class="">
 							<tr>
 								<th></th>
-								<th>order</th>
+								<th>{{status}}</th>
 							</tr>
 						</table>
 					</el-tab-pane>
@@ -48,6 +48,9 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'AdminOrder',
+  props: {
+    status: String,
+  },
   data() {
     return {
       // search: {

@@ -21,10 +21,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Top
   },
   {
-    path: '/admin/products',
+    path: '/admin/products/',
     name: 'AdminProducts',
     component: AdminProducts,
-    props: route => ({ category: String(route.params.category), name: String(route.params.name) }),
+    props: route => ({ status: String(route.params.status)}),
   },
   {
     path: '/admin/product/:itemId',
@@ -41,6 +41,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/order',
     name: 'AdminOrder',
     component: AdminOrder,
+    props: route => ({ status: String(route.params.status)}),
   },
   {
     path: '/admin/customer',
