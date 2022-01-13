@@ -21,18 +21,23 @@
             下書き
           </el-tab-pane>
         </el-tabs> -->
-        <div style="display:flex">
+        <div @click="label" style="display:flex">
           <router-link :to="{ name: 'AdminProducts', params: { status: '' }}">
-            <div class="status_tab">全て</div>
+            <div class="status_tab" :class="{ select_status_tab: productStatus == 'undefined' || productStatus == ''}">全て</div>
           </router-link>
           <router-link :to="{ name: 'AdminProducts', params: { status: 'Active' }}">
-            <div class="status_tab">アクティブ</div>
+            <div class="status_tab" :class="{ select_status_tab: productStatus == 'Active'}">アクティブ</div>
           </router-link>
           <router-link :to="{ name: 'AdminProducts', params: { status: 'Draft' }}">
-            <div class="status_tab">下書き</div>
+            <div class="status_tab" :class="{ select_status_tab: productStatus == 'Draft'}">下書き</div>
           </router-link>
         </div>
-        {{productStatus}}
+        <div v-for="(label,key) in productStatus" :key="key">
+          <button v-if="label != ''" class="label">
+            {{label}}
+            <span class="label_cancel">×</span>
+          </button>
+        </div>
         <table class="">
           <tr>
             <th></th>
@@ -90,16 +95,26 @@ export default defineComponent({
       searchItem: ['all field', 'artist', 'title', 'label', 'number', 'genre', 'track_list', 'personnel'],
       searchSelected: 'all field',
       // activeName: 'all',
-      productStatus: ''
+      productStatus: [''],
+      labels: ['']
     }
   },
   updated() {
-    this.productStatus = String(this.status)
+    // this.productStatus = String(this.status) == 'undefined' ? [''] : [String(this.status)]
+    // console.log("upupupupuupuppuu")
+    // console.log([String(this.status)])
+    // this.productStatus = [String(this.status)]
+    // this.labels = this.productStatus
+  },
+  methods: {
+    label(){
+      this.productStatus = [String(this.status)]
+    }
   },
   computed: {
     searchProducts() {
       const store = useStore(key)
-      const status = this.productStatus
+      const status = this.productStatus[0]
       store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.productKeyword, status: status})
       return store.state
     }
@@ -135,7 +150,6 @@ a {
   color: #000;
 }
 a:hover{
-  text-decoration: underline;
   color: #000;
 }
 .add_button {
@@ -143,6 +157,22 @@ a:hover{
   color: #fff;
 }
 .status_tab {
-  border: 1px solid #000;
+  padding: 0 5px;
+  border-bottom: solid 1px #cbcbcb;
+  margin-bottom: 10px;
+}
+.select_status_tab {
+  border-bottom: solid 3px cadetblue;
+}
+.label {
+  border: solid 1px #cbcbcb;
+  background-color: #eaeaea;
+  padding: 3px;
+  border-radius: 10%;
+}
+.label_cancel {
+  color: rgb(156, 156, 156);
+  padding: 0 0 0 5px;
+
 }
 </style>
