@@ -35,7 +35,7 @@
         <div v-for="(label,key) in productStatus" :key="key">
           <button v-if="label != ''" class="label">
             {{label}}
-            <span class="label_cancel">×</span>
+            <span @click="removeLabel(label)" class="label_cancel"> × </span>
           </button>
         </div>
         <table class="">
@@ -109,6 +109,10 @@ export default defineComponent({
   methods: {
     label(){
       this.productStatus = [String(this.status)]
+    },
+    removeLabel(label: string){
+      console.log(label)
+      this.productStatus = []
     }
   },
   computed: {
