@@ -8,7 +8,7 @@
       <div class="admin_main_box">
         <h1>商品管理</h1>
         <span>import（まだ）</span>
-        <span>export（まだ）</span>
+        <button v-on:click="downloadCSV">export</button>
         <el-button class="add_button" style="">add product（まだ）</el-button>
         <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="全て" name="all">
@@ -96,7 +96,12 @@ export default defineComponent({
       searchSelected: 'all field',
       // activeName: 'all',
       productStatus: [''],
-      labels: ['']
+      labels: [''],
+      items: [
+        { name: 'りんご', price: '100' },
+        { name: 'みかん', price: '50' },
+        { name: 'マンゴー', price: '3000' }
+      ]
     }
   },
   updated() {
@@ -113,6 +118,20 @@ export default defineComponent({
     removeLabel(label: string){
       console.log(label)
       this.productStatus = []
+    },
+    downloadCSV(){
+      const products = this.$store.getters.getProducts
+      let csv = '\ufeff' + '品名,価格\n' // ここをカラムにするか、stateのkeyにする
+      for (let i = 0; i < products.length; i++){
+        // 全ての情報をDB通りに出力する
+        const line = products[i]['artist'] + ',' + products[i]['title'] + '\n'
+        csv += line
+      }
+      const blob = new Blob([csv], { type: 'text/csv' })
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = 'Result.csv'
+      link.click()
     }
   },
   computed: {
