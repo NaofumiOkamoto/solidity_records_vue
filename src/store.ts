@@ -232,4 +232,9 @@ export const store = createStore<State>({
 		// },
 
   },
+  getters: {
+    getProducts: state => {
+      return state.products
+    }
+  }
 })
