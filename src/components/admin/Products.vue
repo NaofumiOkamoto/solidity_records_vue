@@ -121,16 +121,20 @@ export default defineComponent({
     },
     downloadCSV(){
       const products = this.$store.getters.getProducts
-      let csv = '\ufeff' + '品名,価格\n' // ここをカラムにするか、stateのkeyにする
+      const label = Object.keys(products[0])
+      let csv = '\ufeff' + label.join() + '\n' // ここをカラムにするか、stateのkeyにする
       for (let i = 0; i < products.length; i++){
-        // 全ての情報をDB通りに出力する
-        const line = products[i]['artist'] + ',' + products[i]['title'] + '\n'
+        let line = ''
+        for (let j = 0; j < label.length; j++) {
+          line += '"' + String(products[i][label[j]]) + '"' + ','
+        }
+        line += '\n'
         csv += line
       }
       const blob = new Blob([csv], { type: 'text/csv' })
       const link = document.createElement('a')
       link.href = window.URL.createObjectURL(blob)
-      link.download = 'Result.csv'
+      link.download = 'products.csv'
       link.click()
     }
   },
