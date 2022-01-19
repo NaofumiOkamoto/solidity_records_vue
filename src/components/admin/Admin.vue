@@ -178,4 +178,55 @@ h1 {
   width: 80%;
   padding: 50px;
 }
+#overlay{
+  z-index:1;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.mordal{
+  z-index:2;
+  width:50%;
+  padding: 1em;
+  background:#fff;
+}
+.mordal_close{
+  float: right;
+}
+.batsu {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #fff;
+}
+.batsu:hover {
+  background-color: #e5e5e5;
+}
+.batsu::before, .batsu::after { /* 共通設定 */
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px; /* 棒の幅（太さ） */
+  height: 30px; /* 棒の高さ */
+  background: #333;
+}
+.batsu::before {
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+.batsu::after {
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+.mordal_title {
+  font-size: 150%;
+}
 </style>

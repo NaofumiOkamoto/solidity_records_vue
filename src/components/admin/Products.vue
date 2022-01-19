@@ -7,20 +7,40 @@
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_main_box">
         <h1>商品管理</h1>
-        <span>import（まだ）</span>
-        <button v-on:click="downloadCSV">export</button>
+        <button v-on:click="exportMordal = true">export</button>
+        <button v-on:click="importMordal = true">import</button>
         <el-button class="add_button" style="">add product（まだ）</el-button>
-        <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="全て" name="all">
-            <AdminProductsTable :status="''" />
-          </el-tab-pane>
-          <el-tab-pane label="アクティブ" name="active">
-            <AdminProductsTable :status="'Active'" />
-          </el-tab-pane>
-          <el-tab-pane label="下書き" name="draft">
-            下書き
-          </el-tab-pane>
-        </el-tabs> -->
+
+        <!-- export モーダル -->
+        <div v-if="exportMordal" id="overlay">
+          <div class="mordal">
+            <button class="mordal_close batsu" v-on:click="exportMordal = false"></button>
+            <p class="mordal_title">Export products</p>
+            <hr>
+            <p>Export</p>
+            <input type="radio" id="all" value="all" v-model="picked" />
+            <label for="all">All products</label>
+            <br>
+            <input type="radio" id="select" value="select" v-model="picked" />
+            <label for="select">selected:  products</label>
+            <br>
+            <input type="radio" id="match" value="match" v-model="picked" />
+            <label for="match">x produts matching your search</label>
+            <br>
+            <div style="float: right">
+              <el-button class="cancel" v-on:click="exportMordal = false">cancel</el-button>
+              <el-button class="add_button" v-on:click="downloadCSV">export</el-button>
+            </div>
+          </div>
+        </div>
+        <!-- import モーダル -->
+        <div v-if="importMordal" id="overlay" v-on:click="importMordal = false">
+          <div class="mordal">
+            <input @change="fileChange" type="file" id="file_input_expense" name="file_input_expense">
+            <p><button v-on:click="importMordal = false">close</button></p>
+          </div>
+        </div>
+        <!-- タブ -->
         <div @click="label" style="display:flex">
           <router-link :to="{ name: 'AdminProducts', params: { status: '' }}">
             <div class="status_tab" :class="{ select_status_tab: productStatus == 'undefined' || productStatus == ''}">全て</div>
@@ -97,19 +117,10 @@ export default defineComponent({
       // activeName: 'all',
       productStatus: [''],
       labels: [''],
-      items: [
-        { name: 'りんご', price: '100' },
-        { name: 'みかん', price: '50' },
-        { name: 'マンゴー', price: '3000' }
-      ]
+      importMordal: false,
+      exportMordal: false,
+      picked: 'all'
     }
-  },
-  updated() {
-    // this.productStatus = String(this.status) == 'undefined' ? [''] : [String(this.status)]
-    // console.log("upupupupuupuppuu")
-    // console.log([String(this.status)])
-    // this.productStatus = [String(this.status)]
-    // this.labels = this.productStatus
   },
   methods: {
     label(){
