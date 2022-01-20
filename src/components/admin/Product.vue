@@ -38,7 +38,7 @@ interface Searches {
 export default defineComponent({
   name: 'AdminProduct',
   props: {
-    itemId: Number
+    itemId: String
   },
   data() {
     return {
@@ -65,17 +65,18 @@ export default defineComponent({
   // },
   methods: {
     getProduct() {
-      const url = '/getApi?sql= where item_id = ' + this.itemId;
-      axios.get(url).then((response) => {
-        console.log("response", response.data[0])
-        this.artist = response.data[0]["artist"]
-        this.title = response.data[0]["title"]
-        this.label = response.data[0]["label"]
-        this.number = response.data[0]["number"]
-        this.format = response.data[0]["format"]
-        this.releaseYear = response.data[0]["release_year"]
-        this.recodingDate = response.data[0]["recoding_date"]
-      })
+      if(this.itemId !== 'new'){
+        const url = '/getApi?sql= where item_id = ' + this.itemId;
+        axios.get(url).then((response) => {
+          this.artist = response.data[0]["artist"]
+          this.title = response.data[0]["title"]
+          this.label = response.data[0]["label"]
+          this.number = response.data[0]["number"]
+          this.format = response.data[0]["format"]
+          this.releaseYear = response.data[0]["release_year"]
+          this.recodingDate = response.data[0]["recoding_date"]
+        })
+      }
     }
   }
 });
