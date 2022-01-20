@@ -6,10 +6,12 @@
     <div style="display:flex;">
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_main_box">
+        <div class="header_right">
+          <button class="no_button" v-on:click="exportMordal = true">export</button>
+          <button class="no_button" v-on:click="importMordal = true">import</button>
+          <el-button class="add_button" style="">add product（まだ）</el-button>
+        </div>
         <h1>商品管理</h1>
-        <button v-on:click="exportMordal = true">export</button>
-        <button v-on:click="importMordal = true">import</button>
-        <el-button class="add_button" style="">add product（まだ）</el-button>
 
         <!-- export モーダル -->
         <div v-if="exportMordal" id="overlay">
@@ -19,13 +21,13 @@
             <hr>
             <p>Export</p>
             <input type="radio" id="all" value="all" v-model="picked" />
-            <label for="all">All products</label>
+            <label for="all">All products（まだ）</label>
             <br>
             <input type="radio" id="select" value="select" v-model="picked" />
-            <label for="select">selected:  products</label>
+            <label for="select">selected:  products（まだ）</label>
             <br>
             <input type="radio" id="match" value="match" v-model="picked" />
-            <label for="match">x produts matching your search</label>
+            <label for="match">{{searchProducts.products.length}} produts matching your search</label>
             <br>
             <div style="float: right">
               <el-button class="cancel" v-on:click="exportMordal = false">cancel</el-button>
@@ -34,10 +36,16 @@
           </div>
         </div>
         <!-- import モーダル -->
-        <div v-if="importMordal" id="overlay" v-on:click="importMordal = false">
+        <div v-if="importMordal" id="overlay">
           <div class="mordal">
+            <button class="mordal_close batsu" v-on:click="importMordal = false"></button>
+            <p class="mordal_title">Import products by csv</p>
+            <hr>
             <input @change="fileChange" type="file" id="file_input_expense" name="file_input_expense">
-            <p><button v-on:click="importMordal = false">close</button></p>
+            <div style="float: right">
+              <el-button class="cancel" v-on:click="importMordal = false">cancel</el-button>
+              <el-button class="add_button" v-on:click="importCSV">importまだ</el-button>
+            </div>
           </div>
         </div>
         <!-- タブ -->
@@ -212,5 +220,12 @@ a:hover{
   color: rgb(156, 156, 156);
   padding: 0 0 0 5px;
 
+}
+.header_right {
+  float: right;
+}
+.no_button {
+  background-color: #fff;
+  border: none;
 }
 </style>
