@@ -9,7 +9,9 @@
         <div class="header_right">
           <button class="no_button" v-on:click="exportMordal = true">export</button>
           <button class="no_button" v-on:click="importMordal = true">import</button>
-          <el-button class="add_button" style="">add product（まだ）</el-button>
+          <router-link :to="{ name: 'AdminProduct', params: { itemId: 'new' }}">
+            <el-button class="add_button" style="">add product（まだ）</el-button>
+          </router-link>
         </div>
         <h1>商品管理</h1>
 

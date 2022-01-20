@@ -7,7 +7,9 @@
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_product_page_box">
         <!-- {{ getProduct.products[0]["artist"] }} -->
-        <h3>{{ artist}} - {{title}}</h3>
+        <el-icon><arrow-left /></el-icon>
+        <h3 v-if="itemId !== 'new'">{{ artist}} - {{title}}</h3>
+        <h3 v-if="itemId === 'new'">add product</h3>
         <div class="admin_product_edit_box">
           <p>artist        <br> <input class="" type="text" v-model="artist" placeholder=""></p>
           <p>title         <br> <input class="" type="text" v-model="title" placeholder=""></p>
