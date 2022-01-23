@@ -27,10 +27,10 @@ const routes: Array<RouteRecordRaw> = [
     props: route => ({ status: String(route.params.status)}),
   },
   {
-    path: '/admin/product/:itemId',
+    path: '/admin/product/:paramsItemId',
     name: 'AdminProduct',
     component: AdminProduct,
-    props: route => ({ pageName: String(route.params.pageName), itemId: String(route.params.itemId) }),
+    props: route => ({  paramsItemId: String(route.params.paramsItemId) }),
   },
   {
     path: '/admin/stock',
