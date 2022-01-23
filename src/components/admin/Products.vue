@@ -9,7 +9,7 @@
         <div class="header_right">
           <button class="no_button" v-on:click="exportMordal = true">export</button>
           <button class="no_button" v-on:click="importMordal = true">import</button>
-          <router-link :to="{ name: 'AdminProduct', params: { itemId: 'new' }}">
+          <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: 'new' }}">
             <el-button class="add_button" style="">add product（まだ）</el-button>
           </router-link>
         </div>
@@ -68,6 +68,9 @@
             <span @click="removeLabel(label)" class="label_cancel"> × </span>
           </button>
         </div>
+        <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
+        <el-button plain>More fillters</el-button>
+        <el-button plain>Sort</el-button>
         <table class="">
           <tr>
             <th></th>
@@ -78,14 +81,14 @@
           </tr>
           <tr class="search_result" v-for="(product,key) in searchProducts['products']" :key="key">
             <td style="float:left; margin:5px 5px 0 0;">
-              <router-link :to="{ name: 'AdminProduct', params: { itemId: product['item_id'] }}">
+              <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}">
                 <img v-if="product.img_count == null" class="products_img" src="https://t202001.jgt.jp/records/no_image.png">
                 <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
                 <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
               </router-link>
             </td>
             <td style="text-align: left">
-              <router-link :to="{ name: 'AdminProduct', params: { itemId: product['item_id'] }}">
+              <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}">
                 {{ product['artist'] }} - {{ product['title']}}
               </router-link>
             </td>
@@ -163,7 +166,7 @@ export default defineComponent({
     searchProducts() {
       const store = useStore(key)
       const status = this.productStatus[0]
-      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.productKeyword, status: status})
+      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status})
       return store.state
     }
   }

@@ -8,9 +8,13 @@
       <div class="admin_product_page_box">
         <!-- {{ getProduct.products[0]["artist"] }} -->
         <el-icon><arrow-left /></el-icon>
-        <h3 v-if="itemId !== 'new'">{{ artist}} - {{title}}</h3>
-        <h3 v-if="itemId === 'new'">add product</h3>
+        <h3 v-if="paramsItemId !== 'new'">{{ artist}} - {{title}}</h3>
+        <h3 v-if="paramsItemId === 'new'">add product</h3>
         <div class="admin_product_edit_box">
+          <p v-if="paramsItemId === 'new'">item_id <br> <input class="" type="text" v-model="itemId" placeholder=""></p>
+          <p v-else>item_id<br> <span class="" >{{paramsItemId}}</span></p>
+          <p v-if="paramsItemId === 'new'">master_id <br> <input class="" type="text" v-model="master_id" placeholder=""></p>
+          <p v-else>master_id<br> <span class="" >{{masterId}}</span></p>
           <p>artist        <br> <input class="" type="text" v-model="artist" placeholder=""></p>
           <p>title         <br> <input class="" type="text" v-model="title" placeholder=""></p>
           <p>label         <br> <input class="" type="text" v-model="label" placeholder=""></p>
@@ -21,7 +25,7 @@
         <div class="admin_product_edit_box">
           media
         </div>
-        <el-button type="success">save</el-button>
+        <el-button @click="updateProduct()" type="success">save</el-button>
       </div>
 		</div>
 	</div>
@@ -40,10 +44,12 @@ interface Searches {
 export default defineComponent({
   name: 'AdminProduct',
   props: {
-    itemId: String
+    paramsItemId: String
   },
   data() {
     return {
+      itemId: '',
+      masterId: '',
       artist: '',
       title: '',
       label: '',
@@ -56,6 +62,7 @@ export default defineComponent({
   },
   created() {
     this.getProduct()
+    console.log(this.paramsItemId)
   },
   // computed: {
   //   getProduct(){
@@ -67,9 +74,11 @@ export default defineComponent({
   // },
   methods: {
     getProduct() {
-      if(this.itemId !== 'new'){
-        const url = '/getApi?sql= where item_id = ' + this.itemId;
+      if(this.paramsItemId !== 'new'){
+        const url = '/getApi?sql= where item_id = ' + this.paramsItemId;
+        console.log('getApi url', url)
         axios.get(url).then((response) => {
+          this.masterId = response.data[0]["master_id"]
           this.artist = response.data[0]["artist"]
           this.title = response.data[0]["title"]
           this.label = response.data[0]["label"]
@@ -77,6 +86,46 @@ export default defineComponent({
           this.format = response.data[0]["format"]
           this.releaseYear = response.data[0]["release_year"]
           this.recodingDate = response.data[0]["recoding_date"]
+        })
+      }
+    },
+    updateProduct() {
+      if(this.paramsItemId !== 'new'){
+        let url = '/updateProduct?sql= '
+        url += 'artist = "' + this.artist + '", '
+        url += 'title = "' + this.title + '", '
+        url += 'label = "' + this.label + '", '
+        url += 'number = "' + this.number + '", '
+        url += 'format = "' + this.format + '", '
+        url += 'release_year = "' + this.releaseYear + '", '
+        url += 'recoding_date = "' + this.recodingDate 
+        url += '" where item_id = ' + this.paramsItemId;
+        console.log('url', url)
+        axios.get(url).then((response) => {
+          console.log(response.status)
+          if (response.status === 200) {
+            alert("success!!")
+          }
+        })
+      }
+    },
+    createProduct() {
+      if(this.paramsItemId === 'new'){
+        let url = '/updateProduct?sql= '
+        url += 'artist = "' + this.artist + '", '
+        url += 'title = "' + this.title + '", '
+        url += 'label = "' + this.label + '", '
+        url += 'number = "' + this.number + '", '
+        url += 'format = "' + this.format + '", '
+        url += 'release_year = "' + this.releaseYear + '", '
+        url += 'recoding_date = "' + this.recodingDate 
+        url += '" where item_id = ' + this.paramsItemId;
+        console.log('url', url)
+        axios.get(url).then((response) => {
+          console.log(response.status)
+          if (response.status === 200) {
+            alert("success!!")
+          }
         })
       }
     }

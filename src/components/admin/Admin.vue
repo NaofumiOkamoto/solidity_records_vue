@@ -39,7 +39,8 @@
           </router-link>
           <transition name="filter" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave" >
             <div class="filterOpen" v-if="isOrderTab">
-              <div class="sub_list" @click="handleChange('order')">注文管理</div>
+              <div class="sub_list" @click="handleChange('order')">All orders</div>
+              <div class="sub_list" @click="handleChange('order')">Abandoned checkouts</div>
             </div>
           </transition>
 
