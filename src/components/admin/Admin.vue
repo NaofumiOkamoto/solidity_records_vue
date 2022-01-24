@@ -167,7 +167,7 @@ h1 {
   float: right;
   width: 10%;
 }
-.aside_b a {
+.aside_b a, .admin_product_page_box a{
   text-decoration: none;
   color: #000;
 }
