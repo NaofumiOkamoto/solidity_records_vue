@@ -10,7 +10,7 @@
           <button class="no_button" v-on:click="exportMordal = true">export</button>
           <button class="no_button" v-on:click="importMordal = true">import</button>
           <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: 'new' }}">
-            <el-button class="add_button" style="">add product（まだ）</el-button>
+            <el-button class="add_button" style="">add product</el-button>
           </router-link>
         </div>
         <h1>商品管理</h1>
@@ -105,6 +105,7 @@
 import { defineComponent } from 'vue';
 import { useStore } from 'vuex'
 import { key } from '../../store'
+import axios from 'axios';
 
 interface Searches {
   title: Array<string>;
@@ -132,7 +133,8 @@ export default defineComponent({
       labels: [''],
       importMordal: false,
       exportMordal: false,
-      picked: 'all'
+      picked: 'all',
+      workers: [{}]
     }
   },
   methods: {
@@ -160,6 +162,40 @@ export default defineComponent({
       link.href = window.URL.createObjectURL(blob)
       link.download = 'products.csv'
       link.click()
+    },
+    fileChange: function(e: any) {
+      const url = '/getApi?sql='
+      axios.get(url).then((response) => {
+        console.log('response', response.data.map((obj: any): obj is any => obj['item_id']))
+      })
+      const file = e.target.files[0];
+      const reader = new FileReader();
+
+      const loadFunc = () => {
+        const result = reader.result;
+        let lines = ['']
+        if(typeof result === 'string') {
+          lines = result.split('\n')
+        }
+        const workersArray: object[] = [];
+        if(0 < lines.length) {
+          lines.forEach(element => {
+            const workerData = element.split(",");
+            const worker = {
+              itemId: workerData[0],
+              masterId: workerData[1],
+              artist: workerData[2]
+              // カラム情報追加
+            };
+            workersArray.push(worker);
+          });
+        }
+        this.workers = workersArray;
+        console.log('this.workers', this.workers)
+        // ここにupdateかcreate処理をかく
+      };
+      reader.onload = loadFunc;
+      reader.readAsBinaryString(file);
     }
   },
   computed: {
