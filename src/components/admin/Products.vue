@@ -182,10 +182,41 @@ export default defineComponent({
           lines.forEach(element => {
             const workerData = element.split(",");
             const worker = {
+              // カラム情報追加
               itemId: workerData[0],
               masterId: workerData[1],
-              artist: workerData[2]
-              // カラム情報追加
+              artist: workerData[2],
+              title: workerData[3],
+              label: workerData[4],
+              country: workerData[5],
+              number: workerData[6],
+              barcode: workerData[7],
+              format: workerData[8],
+              releaseYear: workerData[9],
+              recodingDate: workerData[10],
+              genre: workerData[11],
+              trackList: workerData[12],
+              personnel: workerData[13],
+              itemCondition: workerData[14],
+              sleeveCondition: workerData[15],
+              sleeveDescription: workerData[16],
+              vinylCondition: workerData[17],
+              vinylDescription: workerData[18],
+              quantity: workerData[19],
+              weight: workerData[21],
+              price: workerData[22],
+              discogsPrice: workerData[23],
+              discogsId: workerData[24],
+              ebayPrice: workerData[25],
+              ebayId: workerData[26],
+              musicalInstrument: workerData[27],
+              youtube: workerData[28],
+              imgCount: workerData[29],
+              registrationDate: workerData[30],
+              soldDate: workerData[31],
+              soldPrice: workerData[32],
+              productStatus: workerData[33],
+              salesStatus: workerData[34],
             };
             workersArray.push(worker);
           });

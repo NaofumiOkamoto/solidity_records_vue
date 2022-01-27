@@ -116,7 +116,6 @@ export default defineComponent({
   },
   created() {
     this.getProduct()
-    console.log(this.paramsItemId)
   },
   methods: {
     getProduct() {
@@ -137,7 +136,6 @@ export default defineComponent({
           this.recodingDate = response.data[0]["recoding_date"]
           this.country = response.data[0]["country"]
           this.barcode = response.data[0]["barcode"]
-          this.releaseYear = response.data[0]["releaseYear"]
           this.trackList = response.data[0]["trackList"]
           this.personnel = response.data[0]["personnel"]
           this.itemCondition = response.data[0]["itemCondition"]
