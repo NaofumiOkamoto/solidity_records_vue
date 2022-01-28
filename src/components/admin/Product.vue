@@ -21,20 +21,35 @@
           <p>title             <br><input class="" type="text" v-model="title" placeholder=""></p>
           <p>label             <br><input class="" type="text" v-model="label" placeholder=""></p>
           <p>number            <br><input class="" type="text" v-model="number" placeholder=""></p>
-          <p>format            <br><input class="" type="text" v-model="format" placeholder=""></p>
+          format            <br>
+          <el-select v-model="format" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
           <p>release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
           <p>recodingDate      <br><input class="" type="text" v-model="recodingDate" placeholder=""></p>
           <p>genre             <br><input class="" type="text" v-model="genre" placeholder=""></p>
           <p>recodingDate      <br><input class="" type="test" v-model="recoding_date" placeholder=""></p>
-          <p>country           <br><input class="" type="test" v-model="country" placeholder=""></p>
+          country           <br>
+          <el-select v-model="country" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in country" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
           <p>barcode           <br><input class="" type="test" v-model="barcode" placeholder=""></p>
           <p>releaseYear       <br><input class="" type="test" v-model="releaseYear" placeholder=""></p>
           <p>trackList         <br><input class="" type="test" v-model="trackList" placeholder=""></p>
           <p>personnel         <br><input class="" type="test" v-model="personnel" placeholder=""></p>
           <p>itemCondition     <br><input class="" type="test" v-model="itemCondition" placeholder=""></p>
+          <el-select v-model="itemCondition" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
           <p>sleeveCondition   <br><input class="" type="test" v-model="sleeveCondition" placeholder=""></p>
+          <el-select v-model="sleeveCondition" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
           <p>sleeveDescription <br><input class="" type="test" v-model="sleeveDescription" placeholder=""></p>
           <p>vinylCondition    <br><input class="" type="test" v-model="vinylCondition" placeholder=""></p>
+          <el-select v-model="vinylCondition" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
           <p>vinylDescription  <br><input class="" type="test" v-model="vinylDescription" placeholder=""></p>
           <p>quantity          <br><input class="" type="test" v-model="quantity" placeholder=""></p>
           <p>weight            <br><input class="" type="test" v-model="weight" placeholder=""></p>
@@ -49,8 +64,15 @@
           <p>registrationDate  <br><input class="" type="test" v-model="registrationDate" placeholder=""></p>
           <p>soldDate          <br><input class="" type="test" v-model="soldDate" placeholder=""></p>
           <p>soldPrice         <br><input class="" type="test" v-model="soldPrice" placeholder=""></p>
-          <p>productStatus     <br><input class="" type="test" v-model="productStatus" placeholder=""></p>
-          <p>salesStatus       <br><input class="" type="test" v-model="salesStatus" placeholder=""></p>
+          productStatus     <br>
+          <el-select v-model="productStatus" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <br>
+          salesStatus       <br>
+          <el-select v-model="salesStatus" class="m-2" placeholder="Select" size="large">
+            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
         </div>
         <div class="admin_product_edit_box">
           media
@@ -112,6 +134,20 @@ export default defineComponent({
       soldPrice: '',
       productStatus: '',
       salesStatus: '',
+      selectTests: [
+        {
+          value: 'LP',
+          label: 'LP',
+        },
+        {
+          value: '2LP',
+          label: '2LP',
+        },
+        {
+          value: 'Gatefold LP',
+          label: 'Gatefold LP',
+        },
+]
     }
   },
   created() {
