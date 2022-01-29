@@ -46,6 +46,11 @@ module.exports = {
           changeOrigin: true,
           pathRewrite: { "^/createProduct": "/createProduct" }
         },
+        '^/getNotDuplicateData': {
+          target: 'http://localhost:3030',
+          changeOrigin: true,
+          pathRewrite: { "^/getNotDuplicateData": "/getNotDuplicateData" }
+        },
 
       }
     }
