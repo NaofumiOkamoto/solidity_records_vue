@@ -250,7 +250,7 @@ export default defineComponent({
         const url = '/getNotDuplicateData?sql= ' + 'format'
         axios.get(url).then((response) => {
           if (response.status === 200) {
-            this.selectForat = response.data
+            this.selectFormat = response.data
             // for (const key of iterator) {
             //   console.log(key);
             //   this.selectForat = 
