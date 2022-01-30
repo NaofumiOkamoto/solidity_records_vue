@@ -25,7 +25,7 @@
           <p>number            <br><input class="" type="text" v-model="number" placeholder=""></p>
           format            <br>
           <el-select v-model="format" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectFormat" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <p>release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
           <p>recodingDate      <br><input class="" type="text" v-model="recodingDate" placeholder=""></p>
@@ -150,12 +150,12 @@ export default defineComponent({
           label: 'Gatefold LP',
         },
       ],
-      selectFormat: []
-
+      selectFormat: [{}]
     }
   },
   created() {
     this.getProduct()
+    this.getNotDuplicateData()
   },
   methods: {
     getProduct() {
@@ -250,16 +250,14 @@ export default defineComponent({
         const url = '/getNotDuplicateData?sql= ' + 'format'
         axios.get(url).then((response) => {
           if (response.status === 200) {
-            this.selectFormat = response.data
-            // for (const key of iterator) {
-            //   console.log(key);
-            //   this.selectForat = 
-            // }
+            this.selectFormat = [{}]
+            for (const format of response.data) {
+              const fo: string = Object.values(format).join()
+              if (fo !== '') { this.selectFormat.push({value: fo, label: fo}) }
+            }
           }
         })
     }
-    
-
   }
 });
 </script>
