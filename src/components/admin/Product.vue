@@ -11,8 +11,6 @@
             <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
           </svg>
         </router-link>
-        <el-button @click="getNotDuplicateData()" class="add_button" style="">check data</el-button>
-        {{selectFormat}}
         <h3 v-if="paramsItemId !== 'new'">{{ artist}} - {{title}}</h3>
         <h3 v-if="paramsItemId === 'new'">add product</h3>
         <div class="admin_product_edit_box">
@@ -28,29 +26,29 @@
             <el-option v-for="item in selectFormat" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <p>release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
-          <p>recodingDate      <br><input class="" type="text" v-model="recodingDate" placeholder=""></p>
           <p>genre             <br><input class="" type="text" v-model="genre" placeholder=""></p>
-          <p>recodingDate      <br><input class="" type="test" v-model="recoding_date" placeholder=""></p>
+          <p>recodingDate      <br><input class="" type="test" v-model="recodingDate" placeholder=""></p>
           country           <br>
           <el-select v-model="country" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in country" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectCountry" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <p>barcode           <br><input class="" type="test" v-model="barcode" placeholder=""></p>
           <p>releaseYear       <br><input class="" type="test" v-model="releaseYear" placeholder=""></p>
           <p>trackList         <br><input class="" type="test" v-model="trackList" placeholder=""></p>
           <p>personnel         <br><input class="" type="test" v-model="personnel" placeholder=""></p>
-          <p>itemCondition     <br><input class="" type="test" v-model="itemCondition" placeholder=""></p>
+          itemCondition     <br>
           <el-select v-model="itemCondition" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectItemCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <p>sleeveCondition   <br><input class="" type="test" v-model="sleeveCondition" placeholder=""></p>
+          <br>
+          sleeveCondition   <br>
           <el-select v-model="sleeveCondition" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectSleeveCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <p>sleeveDescription <br><input class="" type="test" v-model="sleeveDescription" placeholder=""></p>
-          <p>vinylCondition    <br><input class="" type="test" v-model="vinylCondition" placeholder=""></p>
+          vinylCondition    <br>
           <el-select v-model="vinylCondition" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectVinylCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <p>vinylDescription  <br><input class="" type="test" v-model="vinylDescription" placeholder=""></p>
           <p>quantity          <br><input class="" type="test" v-model="quantity" placeholder=""></p>
@@ -68,12 +66,12 @@
           <p>soldPrice         <br><input class="" type="test" v-model="soldPrice" placeholder=""></p>
           productStatus     <br>
           <el-select v-model="productStatus" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectProductStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <br>
           salesStatus       <br>
           <el-select v-model="salesStatus" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectTests" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in selectSalesStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
         <div class="admin_product_edit_box">
@@ -150,7 +148,13 @@ export default defineComponent({
           label: 'Gatefold LP',
         },
       ],
-      selectFormat: [{}]
+      selectFormat: [{}],
+      selectCountry: [{}],
+      selectItemCondition: [{}],
+      selectSleeveCondition: [{}],
+      selectVinylCondition: [{}],
+      selectProductStatus: [{}],
+      selectSalesStatus: [{}],
     }
   },
   created() {
@@ -173,31 +177,30 @@ export default defineComponent({
           this.releaseYear = response.data[0]["release_year"]
           this.recodingDate = response.data[0]["recoding_date"]
           this.genre = response.data[0]["genre"]
-          this.recodingDate = response.data[0]["recoding_date"]
           this.country = response.data[0]["country"]
           this.barcode = response.data[0]["barcode"]
-          this.trackList = response.data[0]["trackList"]
+          this.trackList = response.data[0]["track_list"]
           this.personnel = response.data[0]["personnel"]
-          this.itemCondition = response.data[0]["itemCondition"]
-          this.sleeveCondition = response.data[0]["sleeveCondition"]
-          this.sleeveDescription = response.data[0]["sleeveDescription"]
-          this.vinylCondition = response.data[0]["vinylCondition"]
-          this.vinylDescription = response.data[0]["vinylDescription"]
+          this.itemCondition = response.data[0]["item_condition"]
+          this.sleeveCondition = response.data[0]["sleeve_condition"]
+          this.sleeveDescription = response.data[0]["sleeve_description"]
+          this.vinylCondition = response.data[0]["vinyl_condition"]
+          this.vinylDescription = response.data[0]["vinyl_description"]
           this.quantity = response.data[0]["quantity"]
           this.weight = response.data[0]["weight"]
           this.price = response.data[0]["price"]
-          this.discogsPrice = response.data[0]["discogsPrice"]
-          this.discogsId = response.data[0]["discogsId"]
-          this.ebayPrice = response.data[0]["ebayPrice"]
-          this.ebayId = response.data[0]["ebayId"]
-          this.musicalInstrument = response.data[0]["musicalInstrument"]
+          this.discogsPrice = response.data[0]["discogs_price"]
+          this.discogsId = response.data[0]["discogs_id"]
+          this.ebayPrice = response.data[0]["ebay_price"]
+          this.ebayId = response.data[0]["ebay_id"]
+          this.musicalInstrument = response.data[0]["musical_instrument"]
           this.youtube = response.data[0]["youtube"]
           this.imgCount = response.data[0]["imgCount"]
-          this.registrationDate = response.data[0]["registrationDate"]
-          this.soldDate = response.data[0]["soldDate"]
-          this.soldPrice = response.data[0]["soldPrice"]
-          this.productStatus = response.data[0]["productStatus"]
-          this.salesStatus = response.data[0]["salesStatus"]
+          this.registrationDate = response.data[0]["registration_date"]
+          this.soldDate = response.data[0]["sold_date"]
+          this.soldPrice = response.data[0]["sold_price"]
+          this.productStatus = response.data[0]["product_status"]
+          this.salesStatus = response.data[0]["sales_status"]
         })
       }
     },
@@ -247,16 +250,20 @@ export default defineComponent({
       return url
     },
     getNotDuplicateData() {
-        const url = '/getNotDuplicateData?sql= ' + 'format'
-        axios.get(url).then((response) => {
-          if (response.status === 200) {
-            this.selectFormat = [{}]
-            for (const format of response.data) {
-              const fo: string = Object.values(format).join()
-              if (fo !== '') { this.selectFormat.push({value: fo, label: fo}) }
+        const colum = ['format', 'country', 'item_condition', 'sleeve_condition', 'vinyl_condition', 'product_status', 'sales_status']
+        const data = [this.selectFormat, this.selectCountry, this.selectItemCondition, this.selectSleeveCondition, this.selectVinylCondition, this.selectProductStatus, this.selectSalesStatus]
+        for( let i = 0; i < colum.length; i++ ) {
+
+          const url = '/getNotDuplicateData?sql= ' + colum[i]
+          axios.get(url).then((response) => {
+            if (response.status === 200) {
+              for (const format of response.data) {
+                const fo: string = Object.values(format).join()
+                if (fo !== '') { data[i].push({value: fo, label: fo}) }
+              }
             }
-          }
-        })
+          })
+        }
     }
   }
 });
