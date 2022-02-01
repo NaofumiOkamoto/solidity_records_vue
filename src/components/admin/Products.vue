@@ -14,6 +14,9 @@
           </router-link>
         </div>
         <h1>商品管理</h1>
+          <el-pagination background layout="prev, pager, next" :total="100" @current-change="setPage">
+          </el-pagination>
+          {{page}}
 
         <!-- export モーダル -->
         <div v-if="exportMordal" id="overlay">
@@ -69,7 +72,7 @@
           </button>
         </div>
         <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
-        <el-button plain>More fillters</el-button>
+        <el-button plain @click="openFillter = true">More fillters</el-button>
         <el-button plain>Sort</el-button>
         <table class="">
           <tr>
@@ -97,6 +100,13 @@
             <td style="">{{ product['format'] }} </td>
           </tr>
         </table>
+      </div>
+      <div v-if="openFillter" id="fillter_overlay">
+        <div class="fillter_mordal">
+          <button class="mordal_close batsu" @click="openFillter = false"></button>
+          どの項目でフィルターする？<br>
+          本家がよくわからなかったので一旦保留
+        </div>
       </div>
     </div>
 	</div>
@@ -134,7 +144,9 @@ export default defineComponent({
       importMordal: false,
       exportMordal: false,
       picked: 'all',
-      workers: [{}]
+      workers: [{}],
+      openFillter: false,
+      page: 1,
     }
   },
   methods: {
@@ -227,6 +239,9 @@ export default defineComponent({
       };
       reader.onload = loadFunc;
       reader.readAsBinaryString(file);
+    },
+    setPage (val: number) {
+      this.page = val
     }
   },
   computed: {
@@ -299,5 +314,25 @@ a:hover{
 .no_button {
   background-color: #fff;
   border: none;
+}
+#fillter_overlay{
+  z-index:1;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: right;
+
+}
+.fillter_mordal{
+  z-index: 2;
+  width: 40%;
+  height: 100%;
+  padding: 1em;
+  background:#fff;
 }
 </style>
