@@ -25,15 +25,19 @@
           <el-select v-model="format" class="m-2" placeholder="Select" size="large">
             <el-option v-for="item in selectFormat" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <p>release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
+        </div>
+        <div class="admin_product_edit_box" style="display: flex;">
+          <p class="divided3">release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
+          <p class="divided3">recodingDate      <br><input class="" type="test" v-model="recodingDate" placeholder=""></p>
+          <p class="divided3">releaseYear       <br><input class="" type="test" v-model="releaseYear" placeholder=""></p>
+        </div>
+        <div class="admin_product_edit_box">
           <p>genre             <br><input class="" type="text" v-model="genre" placeholder=""></p>
-          <p>recodingDate      <br><input class="" type="test" v-model="recodingDate" placeholder=""></p>
           country           <br>
           <el-select v-model="country" class="m-2" placeholder="Select" size="large">
             <el-option v-for="item in selectCountry" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <p>barcode           <br><input class="" type="test" v-model="barcode" placeholder=""></p>
-          <p>releaseYear       <br><input class="" type="test" v-model="releaseYear" placeholder=""></p>
           <p>trackList         <br><input class="" type="test" v-model="trackList" placeholder=""></p>
           <p>personnel         <br><input class="" type="test" v-model="personnel" placeholder=""></p>
           itemCondition     <br>
@@ -289,5 +293,9 @@ export default defineComponent({
 .bi-arrow-left-square {
   float: left;
   margin-right: 10px;
+}
+.divided3 {
+  width: 30%;
+  margin: 1%;
 }
 </style>
