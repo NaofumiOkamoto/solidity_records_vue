@@ -14,10 +14,6 @@
           </router-link>
         </div>
         <h1>商品管理</h1>
-          <el-pagination background layout="prev, pager, next" :total="100" @current-change="setPage">
-          </el-pagination>
-          {{page}}
-
         <!-- export モーダル -->
         <div v-if="exportMordal" id="overlay">
           <div class="mordal">
@@ -90,6 +86,7 @@
                 <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
               </router-link>
             </td>
+            <td>{{product['item_id']}}</td>
             <td style="text-align: left">
               <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}">
                 {{ product['artist'] }} - {{ product['title']}}
@@ -100,6 +97,11 @@
             <td style="">{{ product['format'] }} </td>
           </tr>
         </table>
+      <!-- ページネーション -->
+        <div class="pagenate_box">
+          <el-pagination background layout="prev, pager, next" :total="pagesTotal" @current-change="setPage">
+          </el-pagination>
+        </div>
       </div>
       <div v-if="openFillter" id="fillter_overlay">
         <div class="fillter_mordal">
@@ -147,7 +149,12 @@ export default defineComponent({
       workers: [{}],
       openFillter: false,
       page: 1,
+      limit: 10, // 何件ずつ取得するか
+      pagesTotal: 0
     }
+  },
+  created() {
+    this.getPagesTotal()
   },
   methods: {
     label(){
@@ -242,15 +249,33 @@ export default defineComponent({
     },
     setPage (val: number) {
       this.page = val
+      this.scrollTop()
+    },
+    getPagesTotal(){
+      const url = '/getApi?sql=';
+      axios.get(url).then((response) => {
+        const length = response.data.length
+        this.pagesTotal = length / this.limit * 10
+      })
+    },
+    scrollTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "auto" // smooth,unstant,auto
+      })
     }
   },
   computed: {
     searchProducts() {
       const store = useStore(key)
+      console.log(this.page)
+      const pageNum = this.page
+      const limit = this.limit // 何件とるか
+      const ofset = (pageNum - 1) * limit  // 何件目からとるか
       const status = this.productStatus[0]
-      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status})
+      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset})
       return store.state
-    }
+    },
   }
 });
 </script>
@@ -334,5 +359,9 @@ a:hover{
   height: 100%;
   padding: 1em;
   background:#fff;
+}
+.pagenate_box {
+  text-align: center;
+  margin-top: 30px;
 }
 </style>
