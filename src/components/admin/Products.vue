@@ -69,7 +69,9 @@
         </div>
         <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
         <el-button plain @click="openFillter = true">More fillters</el-button>
-        <el-button plain>Sort</el-button>
+        <el-select v-model="value" class="m-2" placeholder="sort" size="large">
+          <el-option v-for="item in sortItem" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
         <table class="">
           <tr>
             <th></th>
@@ -86,7 +88,6 @@
                 <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
               </router-link>
             </td>
-            <td>{{product['item_id']}}</td>
             <td style="text-align: left">
               <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}">
                 {{ product['artist'] }} - {{ product['title']}}
@@ -150,7 +151,15 @@ export default defineComponent({
       openFillter: false,
       page: 1,
       limit: 10, // 何件ずつ取得するか
-      pagesTotal: 0
+      pagesTotal: 0,
+      sortItem: [
+        {label: 'Date, new to old', value: 'ORDER BY registration_date DESC'},
+        {label: 'Date, old to new', value: 'ORDER BY registration_date ASC'},
+        {label: 'Alphabetically,A-Z', value: 'ORDER BY artist ASC'},
+        {label: 'Alphabetically,Z-A', value: 'ORDER BY artist DESC'},
+        {label: 'Price, low to high', value: 'ORDER BY price ASC'},
+        {label: 'Price, high to low', value: 'ORDER BY price DESC'}
+      ],
     }
   },
   created() {

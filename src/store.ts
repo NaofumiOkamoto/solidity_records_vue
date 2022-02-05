@@ -144,8 +144,10 @@ export const store = createStore<State>({
       const selected = arg.selected
       const keyword = arg.keyword
       const status = arg.status
+      const limit = arg.limit
+      const ofset = arg.ofset
       console.log('arg', arg)
-      const url = '/searchProducts?sql=' + selected + '_' + keyword + '_' + status;
+      const url = '/searchProducts?sql=' + selected + '_' + keyword + '_' + status + '_' + limit + '_' + ofset;
       console.log('search', url)
       axios.get(url).then((response) => {
         state.products = response.data
@@ -215,8 +217,8 @@ export const store = createStore<State>({
     getCartCount(context) {
       context.commit('getCartCount')
     },
-    searchProducts(context, { selected, keyword, status, admin } ) {
-      context.commit('searchProducts', { selected, keyword, status, admin })
+    searchProducts(context, { selected, keyword, status, limit, ofset } ) {
+      context.commit('searchProducts', { selected, keyword, status, limit, ofset })
     },
     sortProducts(context, sql) {
       context.commit('sortProducts', sql)
