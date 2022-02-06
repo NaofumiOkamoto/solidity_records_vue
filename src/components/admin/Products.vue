@@ -61,17 +61,21 @@
             <div class="status_tab" :class="{ select_status_tab: productStatus == 'Draft'}">下書き</div>
           </router-link>
         </div>
+        <!-- fillter label -->
         <div v-for="(label,key) in productStatus" :key="key">
           <button v-if="label != ''" class="label">
             {{label}}
             <span @click="removeLabel(label)" class="label_cancel"> × </span>
           </button>
+          sort: {{sortSql}}
         </div>
+        <!-- fillter button など -->
         <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
         <el-button plain @click="openFillter = true">More fillters</el-button>
-        <el-select v-model="value" class="m-2" placeholder="sort" size="large">
+        <el-select v-model="sortSql" class="m-2" placeholder="sort" size="large">
           <el-option v-for="item in sortItem" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
+        <!-- table -->
         <table class="">
           <tr>
             <th></th>
@@ -104,6 +108,7 @@
           </el-pagination>
         </div>
       </div>
+      <!-- fillterの右側 -->
       <div v-if="openFillter" id="fillter_overlay">
         <div class="fillter_mordal">
           <button class="mordal_close batsu" @click="openFillter = false"></button>
@@ -153,13 +158,14 @@ export default defineComponent({
       limit: 10, // 何件ずつ取得するか
       pagesTotal: 0,
       sortItem: [
-        {label: 'Date, new to old', value: 'ORDER BY registration_date DESC'},
-        {label: 'Date, old to new', value: 'ORDER BY registration_date ASC'},
-        {label: 'Alphabetically,A-Z', value: 'ORDER BY artist ASC'},
-        {label: 'Alphabetically,Z-A', value: 'ORDER BY artist DESC'},
-        {label: 'Price, low to high', value: 'ORDER BY price ASC'},
-        {label: 'Price, high to low', value: 'ORDER BY price DESC'}
+        {label: 'Date, new to old', value: ' ORDER BY registration_date DESC'},
+        {label: 'Date, old to new', value: ' ORDER BY registration_date ASC'},
+        {label: 'Alphabetically,A-Z', value: ' ORDER BY artist ASC'},
+        {label: 'Alphabetically,Z-A', value: ' ORDER BY artist DESC'},
+        {label: 'Price, low to high', value: ' ORDER BY price ASC'},
+        {label: 'Price, high to low', value: ' ORDER BY price DESC'}
       ],
+      sortSql: ' ORDER BY registration_date DESC'
     }
   },
   created() {
@@ -277,12 +283,11 @@ export default defineComponent({
   computed: {
     searchProducts() {
       const store = useStore(key)
-      console.log(this.page)
       const pageNum = this.page
       const limit = this.limit // 何件とるか
       const ofset = (pageNum - 1) * limit  // 何件目からとるか
       const status = this.productStatus[0]
-      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset})
+      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
       return store.state
     },
   }
