@@ -14,25 +14,20 @@
         <h3 v-if="paramsItemId !== 'new'">{{ artist}} - {{title}}</h3>
         <h3 v-if="paramsItemId === 'new'">add product</h3>
         <div class="admin_product_edit_box">
-          <p v-if="paramsItemId !== 'new'">item_id    <br> <span class="" >{{paramsItemId}}</span></p>
-          <p v-else>item_id    <br><input class="" type="text" v-model="itemId" placeholder=""></p>
-          <p>master_id         <br><input class="" type="text" v-model="masterId" placeholder=""></p>
+          <div style="display:flex;">
+            <p class="divided2" v-if="paramsItemId !== 'new'">item_id    <br> <span class="" >{{paramsItemId}}</span></p>
+            <p class="divided2" v-else>item_id    <br><input class="" type="text" v-model="itemId" placeholder=""></p>
+            <p class="divided2">master_id         <br><input class="" type="text" v-model="masterId" placeholder=""></p>
+          </div>
           <p>artist            <br><input class="" type="text" v-model="artist" placeholder=""></p>
           <p>title             <br><input class="" type="text" v-model="title" placeholder=""></p>
           <p>label             <br><input class="" type="text" v-model="label" placeholder=""></p>
           <p>number            <br><input class="" type="text" v-model="number" placeholder=""></p>
+          <p>genre             <br><input class="" type="text" v-model="genre" placeholder=""></p>
           format            <br>
           <el-select v-model="format" class="m-2" placeholder="Select" size="large">
             <el-option v-for="item in selectFormat" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-        </div>
-        <div class="admin_product_edit_box" style="display: flex;">
-          <p class="divided3">release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
-          <p class="divided3">recodingDate      <br><input class="" type="test" v-model="recodingDate" placeholder=""></p>
-          <p class="divided3">releaseYear       <br><input class="" type="test" v-model="releaseYear" placeholder=""></p>
-        </div>
-        <div class="admin_product_edit_box">
-          <p>genre             <br><input class="" type="text" v-model="genre" placeholder=""></p>
           country           <br>
           <el-select v-model="country" class="m-2" placeholder="Select" size="large">
             <el-option v-for="item in selectCountry" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -40,43 +35,85 @@
           <p>barcode           <br><input class="" type="test" v-model="barcode" placeholder=""></p>
           <p>trackList         <br><input class="" type="test" v-model="trackList" placeholder=""></p>
           <p>personnel         <br><input class="" type="test" v-model="personnel" placeholder=""></p>
-          itemCondition     <br>
-          <el-select v-model="itemCondition" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectItemCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-          <br>
-          sleeveCondition   <br>
-          <el-select v-model="sleeveCondition" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectSleeveCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-          <p>sleeveDescription <br><input class="" type="test" v-model="sleeveDescription" placeholder=""></p>
-          vinylCondition    <br>
-          <el-select v-model="vinylCondition" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectVinylCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-          <p>vinylDescription  <br><input class="" type="test" v-model="vinylDescription" placeholder=""></p>
+        </div>
+        <div class="admin_product_edit_box">
+          <div style="display:flex;">
+            <p class="divided2">release_year      <br><input class="" type="text" v-model="releaseYear" placeholder=""></p>
+            <p class="divided2">recodingDate      <br><input class="" type="test" v-model="recodingDate" placeholder=""></p>
+          </div>
+          <div style="display:flex;">
+            <p class="divided2">registrationDate  <br><input class="" type="test" v-model="registrationDate" placeholder=""></p>
+            <p class="divided2">soldDate          <br><input class="" type="test" v-model="soldDate" placeholder=""></p>
+          </div>
+        </div>
+        <div class="admin_product_edit_box" style="">
+          <div>
+            itemCondition     <br>
+            <el-select v-model="itemCondition" class="m-2" placeholder="Select" size="large">
+              <el-option v-for="item in selectItemCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <div style="display:flex;">
+            <div class="divided3">
+              sleeveCondition<br>
+              <el-select v-model="sleeveCondition" class="m-2" placeholder="Select" size="large">
+                <el-option v-for="item in selectSleeveCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </div>
+            <div class="divided2">
+              sleeveDescription <br>
+              <input class="" type="test" v-model="sleeveDescription" placeholder="">
+            </div>
+          </div>
+          <div style="display:flex;">
+            <div class="divided3">
+              vinylCondition    <br>
+              <el-select v-model="vinylCondition" class="m-2" placeholder="Select" size="large">
+                <el-option v-for="item in selectVinylCondition" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </div>
+            <div class="divided2">
+              vinylDescription<br>
+              <input class="" type="test" v-model="vinylDescription" placeholder="">
+            </div>
+          </div>
+        </div>
+        <div class="admin_product_edit_box" style="">
           <p>quantity          <br><input class="" type="test" v-model="quantity" placeholder=""></p>
           <p>weight            <br><input class="" type="test" v-model="weight" placeholder=""></p>
-          <p>price             <br><input class="" type="test" v-model="price" placeholder=""></p>
-          <p>discogsPrice      <br><input class="" type="test" v-model="discogsPrice" placeholder=""></p>
-          <p>discogsId         <br><input class="" type="test" v-model="discogsId" placeholder=""></p>
-          <p>ebayPrice         <br><input class="" type="test" v-model="ebayPrice" placeholder=""></p>
-          <p>ebayId            <br><input class="" type="test" v-model="ebayId" placeholder=""></p>
+        </div>
+        <div class="admin_product_edit_box" style="">
+          <div style="display:flex;">
+            <p class="divided2">price             <br><input class="" type="test" v-model="price" placeholder=""></p>
+            <p class="divided2">soldPrice         <br><input class="" type="test" v-model="soldPrice" placeholder=""></p>
+          </div>
+          <div style="display:flex;">
+            <p class="divided2">discogsPrice      <br><input class="" type="test" v-model="discogsPrice" placeholder=""></p>
+            <p class="divided2">discogsId         <br><input class="" type="test" v-model="discogsId" placeholder=""></p>
+          </div>
+          <div style="display:flex;">
+            <p class="divided2">ebayPrice         <br><input class="" type="test" v-model="ebayPrice" placeholder=""></p>
+            <p class="divided2">ebayId            <br><input class="" type="test" v-model="ebayId" placeholder=""></p>
+          </div>
+        </div>
+        <div class="admin_product_edit_box" style="">
           <p>musicalInstrument <br><input class="" type="test" v-model="musicalInstrument" placeholder=""></p>
           <p>youtube           <br><input class="" type="test" v-model="youtube" placeholder=""></p>
           <p>imgCount          <br><input class="" type="test" v-model="imgCount" placeholder=""></p>
-          <p>registrationDate  <br><input class="" type="test" v-model="registrationDate" placeholder=""></p>
-          <p>soldDate          <br><input class="" type="test" v-model="soldDate" placeholder=""></p>
-          <p>soldPrice         <br><input class="" type="test" v-model="soldPrice" placeholder=""></p>
-          productStatus     <br>
-          <el-select v-model="productStatus" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectProductStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-          <br>
-          salesStatus       <br>
-          <el-select v-model="salesStatus" class="m-2" placeholder="Select" size="large">
-            <el-option v-for="item in selectSalesStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
+        </div>
+        <div class="admin_product_edit_box" style="display:flex;">
+          <div>
+            productStatus     <br>
+            <el-select v-model="productStatus" class="m-2" placeholder="Select" size="large">
+              <el-option v-for="item in selectProductStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <div>
+            salesStatus       <br>
+            <el-select v-model="salesStatus" class="m-2" placeholder="Select" size="large">
+              <el-option v-for="item in selectSalesStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
         </div>
         <div class="admin_product_edit_box">
           media
@@ -293,6 +330,10 @@ export default defineComponent({
 .bi-arrow-left-square {
   float: left;
   margin-right: 10px;
+}
+.divided2 {
+  width: 45%;
+  margin: 1%;
 }
 .divided3 {
   width: 30%;
