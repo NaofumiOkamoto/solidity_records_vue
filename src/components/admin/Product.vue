@@ -23,7 +23,23 @@
           <p>title             <br><input class="" type="text" v-model="title" placeholder=""></p>
           <p>label             <br><input class="" type="text" v-model="label" placeholder=""></p>
           <p>number            <br><input class="" type="text" v-model="number" placeholder=""></p>
-          <p>genre             <br><input class="" type="text" v-model="genre" placeholder=""></p>
+        </div>
+        <div class="admin_product_edit_box">
+          <p>genre             </p>
+          <el-select v-model="addGenre" class="m-2" placeholder="Select Genre" size="large">
+            <el-option v-for="item in selectGenre" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <button>add genre</button>
+          <div style="display:flex">
+            <div v-for="(g,key) in genre" :key="key">
+              <button class="label">
+                {{g}}
+                <span @click="removeGenre(g)" class="label_cancel"> × </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="admin_product_edit_box">
           format            <br>
           <el-select v-model="format" class="m-2" placeholder="Select" size="large">
             <el-option v-for="item in selectFormat" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -152,7 +168,9 @@ export default defineComponent({
       format: '',
       releaseYear: '',
       recodingDate: '',
-      genre: '',
+      genreId: '',
+      genre: [''],
+      addGenre: '',
       trackList: '',
       personnel: '',
       itemCondition: '',
@@ -175,20 +193,6 @@ export default defineComponent({
       soldPrice: '',
       productStatus: '',
       salesStatus: '',
-      selectTests: [
-        {
-          value: 'LP',
-          label: 'LP',
-        },
-        {
-          value: '2LP',
-          label: '2LP',
-        },
-        {
-          value: 'Gatefold LP',
-          label: 'Gatefold LP',
-        },
-      ],
       selectFormat: [{}],
       selectCountry: [{}],
       selectItemCondition: [{}],
@@ -196,11 +200,13 @@ export default defineComponent({
       selectVinylCondition: [{}],
       selectProductStatus: [{}],
       selectSalesStatus: [{}],
+      selectGenre: [{}],
     }
   },
   created() {
     this.getProduct()
     this.getNotDuplicateData()
+    this.getAllGenre()
   },
   methods: {
     getProduct() {
@@ -217,7 +223,7 @@ export default defineComponent({
           this.format = response.data[0]["format"]
           this.releaseYear = response.data[0]["release_year"]
           this.recodingDate = response.data[0]["recoding_date"]
-          this.genre = response.data[0]["genre"]
+          this.genreId = response.data[0]["genre"]
           this.country = response.data[0]["country"]
           this.barcode = response.data[0]["barcode"]
           this.trackList = response.data[0]["track_list"]
@@ -242,8 +248,33 @@ export default defineComponent({
           this.soldPrice = response.data[0]["sold_price"]
           this.productStatus = response.data[0]["product_status"]
           this.salesStatus = response.data[0]["sales_status"]
+        }).then((response) => {
+          const url = '/getGenre?sql=' + this.genreId;
+          axios.get(url).then((response) => {
+            if (response.status === 200) {
+              for (let i = 0; i < response.data.length; i++) {
+                this.genre.push(response.data[i]['sub'])
+              }
+              this.genre = this.genre.filter(function(s){return s !== '';})
+            }
+          })
         })
       }
+    },
+    getAllGenre() {
+      const url = '/getGenre?sql=genre';
+      axios.get(url).then((response) => {
+        if (response.status === 200) {
+          for (const format of response.data) {
+            const genre: string = Object.values(format).join()
+            if (genre !== '') { this.selectGenre.push({value: genre.split(',')[3], label: genre.split(',')[3]}) }
+          }
+        }
+      })
+    },
+    removeGenre(genre: string){
+      console.log('this', genre)
+
     },
     updateProduct() {
       if(this.paramsItemId !== 'new'){

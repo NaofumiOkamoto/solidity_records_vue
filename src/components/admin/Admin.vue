@@ -230,4 +230,16 @@ h1 {
 .mordal_title {
   font-size: 150%;
 }
+.label {
+  border: solid 1px #cbcbcb;
+  background-color: #eaeaea;
+  padding: 7px;
+  border-radius: 10px;
+  margin: 0 3px;
+}
+.label_cancel {
+  color: rgb(156, 156, 156);
+  padding: 0 0 0 5px;
+
+}
 </style>
