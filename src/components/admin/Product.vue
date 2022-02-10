@@ -29,7 +29,7 @@
           <el-select v-model="addGenre" class="m-2" placeholder="Select Genre" size="large">
             <el-option v-for="item in selectGenre" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <button>add genre</button>
+          <button @click="addGenreFunc()">add genre</button>
           <div style="display:flex">
             <div v-for="(g,key) in genre" :key="key">
               <button class="label">
@@ -249,7 +249,7 @@ export default defineComponent({
           this.productStatus = response.data[0]["product_status"]
           this.salesStatus = response.data[0]["sales_status"]
         }).then((response) => {
-          const url = '/getGenre?sql=' + this.genreId;
+          const url = '/getGenre?sql=' + "where sub = "+ this.genreId;
           axios.get(url).then((response) => {
             if (response.status === 200) {
               for (let i = 0; i < response.data.length; i++) {
@@ -272,27 +272,43 @@ export default defineComponent({
         }
       })
     },
-    removeGenre(genre: string){
-      console.log('this', genre)
-
+    addGenreFunc() {
+      if (this.genre.indexOf(this.addGenre) === -1 && this.addGenre !== '') {
+        this.genre.push(this.addGenre)
+      }
+    },
+    removeGenre(checkGenre: string){
+      this.genre.splice(this.genre.indexOf(checkGenre), 1)
     },
     updateProduct() {
-      if(this.paramsItemId !== 'new'){
-        const url = '/updateProduct?sql= ' + this.createUpdateUrl()
-        axios.get(url).then((response) => {
-          if (response.status === 200) {
-            alert("success!!")
-          }
-        })
-      } else {
-        const url = '/createProduct?sql= ' + this.createInsertUrl()
-        axios.get(url).then((response) => {
-          if (response.status === 200) {
-            alert("success!!")
-            this.$router.push({name: 'AdminProduct', params: { paramsItemId: this.itemId }})
-          }
-        })
-      }
+      // 先にgenre のidを取得する
+      this.genreId = ''
+      const url = '/getGenreIdBySearchText?sql=' + this.genre.join('_');
+      axios.get(url).then((response) => {
+        console.log('test', response.data)
+        for (let i = 0; i < response.data.length; i++) {
+          this.genreId += response.data[i]['id'] + '_'
+        }
+      }).then((re) => {
+        this.genreId = this.genreId.slice(0, -1)
+        console.log('this.genreId', this.genreId)
+        if(this.paramsItemId !== 'new'){
+          const url = '/updateProduct?sql= ' + this.createUpdateUrl()
+          axios.get(url).then((response) => {
+            if (response.status === 200) {
+              alert("success!!")
+            }
+          })
+        } else {
+          const url = '/createProduct?sql= ' + this.createInsertUrl()
+          axios.get(url).then((response) => {
+            if (response.status === 200) {
+              alert("success!!")
+              this.$router.push({name: 'AdminProduct', params: { paramsItemId: this.itemId }})
+            }
+          })
+        }
+      })
     },
     createUpdateUrl() {
       let url = this.itemId !== ''   ? 'item_id = "'      + this.itemId + '", '      : 'item_id = NULL, '
@@ -302,6 +318,7 @@ export default defineComponent({
       url += this.label !== ''       ? 'label = "'        + this.label + '", '       : 'label = NULL, '
       url += this.number !== ''      ? 'number = "'       + this.number + '", '      : 'number = NULL, '
       url += this.format !== ''      ? 'format = "'       + this.format + '", '      : 'format = NULL, '
+      url += this.genreId !== ''      ? 'genre = "'         + this.genreId + '", '     : 'genre = NULL, '
       url += this.releaseYear !== '' ? 'release_year = "' + this.releaseYear + '", ' : 'release_year = NULL, '
       url += this.recodingDate !== '' ? 'recoding_date = "' + this.recodingDate + '"' : 'recoding_date = NULL, '
       url += ' where item_id = ' + this.paramsItemId;
