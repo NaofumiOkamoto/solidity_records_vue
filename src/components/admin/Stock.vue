@@ -6,8 +6,8 @@
     <div style="display:flex;">
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_main_box">
-        ・同じid入れた時のバリデーション<br>
         ・追加<br>
+        ・同じid入れた時のバリデーション<br>
         <h1>ジャンル</h1>
         <table class="">
           <tr>
@@ -29,9 +29,15 @@
             <td v-if="editGenre === genre.id" class="column_num"> <input class="genre_input_num" v-model="genre.id"></td>
             <td v-if="editGenre === genre.id" class="column_text"><input class="genre_input_text" v-model="genre.main"></td>
             <td v-if="editGenre === genre.id" class="column_text"><input class="genre_input_text" v-model="genre.sub"></td>
-            <td v-if="editGenre === genre.id" class="column"><button @click="update(genre.id)">update</button></td>
+            <td v-if="editGenre === genre.id" class="column"><button @click="update(genre)">update</button></td>
           </tr>
-            <el-button type="primary" plain>Primary</el-button>
+            <!-- 追加時 -->
+            <td v-if="addGenre" class="column_num"> <input class="genre_input_num"  ></td>
+            <td v-if="addGenre" class="column_num"> <input class="genre_input_num"  ></td>
+            <td v-if="addGenre" class="column_text"><input class="genre_input_text" ></td>
+            <td v-if="addGenre" class="column_text"><input class="genre_input_text" ></td>
+            <!-- <td v-if="addGenre" class="column"><button @click="update(genre)">update</button></td> -->
+            <!-- <el-button @click="addGenre = true" type="primary" plain>Primary</el-button> -->
         </table>
       </div>
     </div>
@@ -46,8 +52,8 @@ export default defineComponent({
   data() {
     return {
       genres: [{}],
-      editGenre: '',
-
+      editGenre: 0,
+      addGenre: false,
     }
   },
   created() {
@@ -58,22 +64,32 @@ export default defineComponent({
       const url = '/getGenre?sql=genre';
       axios.get(url).then((response) => {
         if (response.status === 200) {
-          console.log("200", response.data)
             this.genres = response.data
         }
       })
     },
     addGenreFunc() {
-      if (this.genre.indexOf(this.addGenre) === -1 && this.addGenre !== '') {
-        this.genre.push(this.addGenre)
+      // if (this.genres.indexOf(this.addGenre) === -1 && this.addGenre !== '') {
+      if (this.genres.indexOf(this.addGenre) === -1 && this.addGenre) {
+        this.genres.push(this.addGenre)
       }
     },
-    edit(genreId) {
+    edit(genreId: number) {
       this.editGenre = genreId
     },
-    update(genreId) {
-      console.log('update genre', genreId)
-      this.editGenre = ''
+    update(genre: any) {
+      this.editGenre = 0
+      const url = '/updateGenre?sql=' + ' sort_num = ' + genre.sort_num + ', id = '+ genre.id + ', main = "' + genre.main + '", sub = "' + genre.sub + '" where id = ' + genre.id;
+      console.log('update url', url)
+      axios.get(url).then((response) => {
+        console.log('response', response.status)
+        if (response.status === 200) {
+            this.genres = response.data
+            alert('success!!')
+        }
+      }).then((res) => {
+        this.getAllGenre()
+      })
     }
   }
 });
