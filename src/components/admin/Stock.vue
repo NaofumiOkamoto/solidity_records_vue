@@ -6,8 +6,7 @@
     <div style="display:flex;">
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_main_box">
-        ・追加<br>
-        ・同じid入れた時のバリデーション<br>
+        <!-- ToDo: 同じid入れた時のバリデーション<br> -->
         <h1>ジャンル</h1>
         <table class="">
           <tr>
@@ -32,12 +31,13 @@
             <td v-if="editGenre === genre.id" class="column"><button @click="update(genre)">update</button></td>
           </tr>
             <!-- 追加時 -->
-            <td v-if="addGenre" class="column_num"> <input class="genre_input_num"  ></td>
-            <td v-if="addGenre" class="column_num"> <input class="genre_input_num"  ></td>
-            <td v-if="addGenre" class="column_text"><input class="genre_input_text" ></td>
-            <td v-if="addGenre" class="column_text"><input class="genre_input_text" ></td>
-            <!-- <td v-if="addGenre" class="column"><button @click="update(genre)">update</button></td> -->
-            <!-- <el-button @click="addGenre = true" type="primary" plain>Primary</el-button> -->
+            <td v-if="isAddGenre" class="column_num"> <input class="genre_input_num" v-model="addGenre.sort_num" ></td>
+            <td v-if="isAddGenre" class="column_num"> <input class="genre_input_num"  v-model="addGenre.id" ></td>
+            <td v-if="isAddGenre" class="column_text"><input class="genre_input_text" v-model="addGenre.main" ></td>
+            <td v-if="isAddGenre" class="column_text"><input class="genre_input_text" v-model="addGenre.sub" ></td>
+            <!-- ToDo: 追加<br> -->
+            <td v-if="isAddGenre" class="column"><button @click="addGenreFunc(addGenre)">update</button></td>
+            <el-button @click="isAddGenre = true" type="primary" plain>Primary</el-button>
         </table>
       </div>
     </div>
@@ -53,7 +53,8 @@ export default defineComponent({
     return {
       genres: [{}],
       editGenre: 0,
-      addGenre: false,
+      addGenre: {'sort_num': '', 'id': '', 'main': '', 'sub': ''},
+      isAddGenre: false,
     }
   },
   created() {
@@ -68,17 +69,17 @@ export default defineComponent({
         }
       })
     },
-    addGenreFunc() {
+    addGenreFunc(addGenre: object) {
+      console.log(addGenre)
       // if (this.genres.indexOf(this.addGenre) === -1 && this.addGenre !== '') {
-      if (this.genres.indexOf(this.addGenre) === -1 && this.addGenre) {
-        this.genres.push(this.addGenre)
-      }
+
     },
     edit(genreId: number) {
       this.editGenre = genreId
     },
     update(genre: any) {
       this.editGenre = 0
+      console.log(genre)
       const url = '/updateGenre?sql=' + ' sort_num = ' + genre.sort_num + ', id = '+ genre.id + ', main = "' + genre.main + '", sub = "' + genre.sub + '" where id = ' + genre.id;
       console.log('update url', url)
       axios.get(url).then((response) => {
