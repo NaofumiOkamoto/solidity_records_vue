@@ -31,12 +31,12 @@
             <td v-if="editGenre === genre.id" class="column"><button @click="update(genre)">update</button></td>
           </tr>
             <!-- 追加時 -->
-            <td v-if="isAddGenre" class="column_num"> <input class="genre_input_num" v-model="addGenre.sort_num" ></td>
-            <td v-if="isAddGenre" class="column_num"> <input class="genre_input_num"  v-model="addGenre.id" ></td>
+            <td v-if="isAddGenre" class="column_num"> <input class="genre_input_num" @blur="validateNum('sort_num')" v-model="addGenre.sort_num" ></td>
+            <td v-if="isAddGenre" class="column_num"> <input class="genre_input_num" @blur="validateNum('id')" v-model="addGenre.id" id="input_id" ></td>
             <td v-if="isAddGenre" class="column_text"><input class="genre_input_text" v-model="addGenre.main" ></td>
             <td v-if="isAddGenre" class="column_text"><input class="genre_input_text" v-model="addGenre.sub" ></td>
-            <!-- ToDo: 追加<br> -->
-            <td v-if="isAddGenre" class="column"><button @click="addGenreFunc(addGenre)">update</button></td>
+            <!-- ToDo: 追加 -->
+            <td v-if="isAddGenre" class="column"><button @click="addGenreFunc(addGenre)">add</button></td>
             <el-button @click="isAddGenre = true" type="primary" plain>Primary</el-button>
         </table>
       </div>
@@ -49,7 +49,12 @@ import axios from 'axios';
 
 export default defineComponent({
   name: 'AdminProduct',
-  data() {
+  data(): {
+      genres: [{}];
+      editGenre: number;
+      addGenre: {[key: string]: string};
+      isAddGenre: boolean;
+  } {
     return {
       genres: [{}],
       editGenre: 0,
@@ -71,6 +76,7 @@ export default defineComponent({
     },
     addGenreFunc(addGenre: object) {
       console.log(addGenre)
+      // ToDo: genreのinsert処理
       // if (this.genres.indexOf(this.addGenre) === -1 && this.addGenre !== '') {
 
     },
@@ -79,9 +85,7 @@ export default defineComponent({
     },
     update(genre: any) {
       this.editGenre = 0
-      console.log(genre)
       const url = '/updateGenre?sql=' + ' sort_num = ' + genre.sort_num + ', id = '+ genre.id + ', main = "' + genre.main + '", sub = "' + genre.sub + '" where id = ' + genre.id;
-      console.log('update url', url)
       axios.get(url).then((response) => {
         console.log('response', response.status)
         if (response.status === 200) {
@@ -91,6 +95,15 @@ export default defineComponent({
       }).then((res) => {
         this.getAllGenre()
       })
+    },
+    validateNum(key: string) {
+      if (!(/[0-9]/).test(this.addGenre[key])) {
+        alert(key + " は数字だろぉぉぉぉぉぉぉ")
+        const el = document.getElementById('input_id')
+        if (el) {
+          el.style.backgroundColor = "#fb94e58c"
+        }
+      }
     }
   }
 });

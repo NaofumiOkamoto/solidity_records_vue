@@ -21,7 +21,7 @@
                 <div class="sub_list" @click="handleChange('products')">全ての商品</div>
               </router-link>
               <router-link :to="{ name: 'AdminStock'}">
-                <div class="sub_list" @click="handleChange('stock')">在庫</div>
+                <div class="sub_list" @click="handleChange('stock')">ジャンル</div>
               </router-link>
             </div>
           </transition>
@@ -241,5 +241,13 @@ h1 {
   color: rgb(156, 156, 156);
   padding: 0 0 0 5px;
 
+}
+.admin_main_box table {
+  display: block;
+  overflow-x: scroll;  /*隠れた部分をx方向（=横）にスクロールして表示する*/
+  /* white-space: nowrap; 自動で改行しない（←必要であれば） */
+  -webkit-overflow-scrolling: touch; /* スマホで滑らかにスクールする */
+  border-collapse:  collapse; 
+  width:100%;
 }
 </style>

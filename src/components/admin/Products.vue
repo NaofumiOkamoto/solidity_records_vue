@@ -13,6 +13,9 @@
             <el-button class="add_button" style="">add product</el-button>
           </router-link>
         </div>
+        <!-- ToDo: インポートできるようにする 丸々反映？ -->
+        <!-- ToDo: sort変えた時、ページ選択を先頭にする<br> -->
+        <!-- ToDo: ページネーションのmax値を修正（アクティブ選択時とか）<br> -->
         <h1>商品管理</h1>
         <!-- export モーダル -->
         <div v-if="exportMordal" id="overlay">
@@ -67,15 +70,17 @@
             {{label}}
             <span @click="removeLabel(label)" class="label_cancel"> × </span>
           </button>
-          sort: {{sortSql}}
         </div>
         <!-- fillter button など -->
         <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
         <el-button plain @click="openFillter = true">More fillters</el-button>
-        <el-select v-model="sortSql" class="m-2" placeholder="sort" size="large">
+        <el-select @change="page = 1" v-model="sortSql" class="m-2" placeholder="sort" size="large">
           <el-option v-for="item in sortItem" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <!-- table -->
+        <div>
+          {{page * limit - limit + 1}} ~ {{page * limit}}
+        </div>
         <table class="">
           <tr>
             <th></th>
@@ -155,7 +160,7 @@ export default defineComponent({
       workers: [{}],
       openFillter: false,
       page: 1,
-      limit: 10, // 何件ずつ取得するか
+      limit: 6, // 何件ずつ取得するか
       pagesTotal: 0,
       sortItem: [
         {label: 'Date, new to old', value: ' ORDER BY registration_date DESC'},
@@ -176,7 +181,6 @@ export default defineComponent({
       this.productStatus = [String(this.status)]
     },
     removeLabel(label: string){
-      console.log(label)
       this.productStatus = []
     },
     downloadCSV(){
@@ -298,14 +302,6 @@ export default defineComponent({
 img {
   width:65px;
 }
-.admin_main_box table {
-  display: block;
-  overflow-x: scroll;  /*隠れた部分をx方向（=横）にスクロールして表示する*/
-  /* white-space: nowrap; 自動で改行しない（←必要であれば） */
-  -webkit-overflow-scrolling: touch; /* スマホで滑らかにスクールする */
-  border-collapse:  collapse; 
-  width:100%;
-}
 tr {
   border-bottom: solid 1px #e5e5e5;
   text-align: center;
@@ -335,17 +331,6 @@ a:hover{
 }
 .select_status_tab {
   border-bottom: solid 3px cadetblue;
-}
-.label {
-  border: solid 1px #cbcbcb;
-  background-color: #eaeaea;
-  padding: 3px;
-  border-radius: 10%;
-}
-.label_cancel {
-  color: rgb(156, 156, 156);
-  padding: 0 0 0 5px;
-
 }
 .header_right {
   float: right;

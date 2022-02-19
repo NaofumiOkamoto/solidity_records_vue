@@ -51,6 +51,11 @@ module.exports = {
           changeOrigin: true,
           pathRewrite: { "^/getNotDuplicateData": "/getNotDuplicateData" }
         },
+        '^/updateGenre': {
+          target: 'http://localhost:3030',
+          changeOrigin: true,
+          pathRewrite: { "^/updateGenre": "/updateGenre" }
+        },
 
       }
     }
