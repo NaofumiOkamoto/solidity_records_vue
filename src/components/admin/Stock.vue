@@ -33,21 +33,21 @@
           <tr class="search_result">
             <!-- 追加時 -->
             <td v-if="isAddGenre" class="column_num"> 
-              <input class="genre_input_num" @blur="validateNum($event, 'sort_num')" v-model="addGenre.sort_num" >
+              <input class="genre_input_num" @blur="validSortNum()" v-model="addGenre.sort_num" id="sort_num" >
             </td>
             <td v-if="isAddGenre" class="column_num">
-              <input class="genre_input_num" @blur="validateNum($event, 'id')" v-model="addGenre.id" id="input_id" >
+              <input class="genre_input_num" @blur="validId()" v-model="addGenre.id" id="input_id" >
             </td>
             <td v-if="isAddGenre" class="column_text">
-              <input class="genre_input_text" @blur="validateStr($event, 'main')" v-model="addGenre.main" >
+              <input class="genre_input_text" @blur="validMain()" v-model="addGenre.main" id="main">
             </td>
             <td v-if="isAddGenre" class="column_text">
-              <input class="genre_input_text" @blur="validateStr($event, 'main')" v-model="addGenre.sub" >
+              <input class="genre_input_text" @blur="validSub()" v-model="addGenre.sub" id="sub">
             </td>
             <!-- ToDo: 追加 -->
             <td v-if="isAddGenre" class="column">
               <button @click="addGenreFunc(addGenre)">add</button>
-              <button @click="addGenreFunc(addGenre)">cancel</button>
+              <button @click="cancel()">cancel</button>
             </td>
           </tr>
             <el-button v-if="!isAddGenre" @click="isAddGenre = true" type="primary" plain>Primary</el-button>
@@ -92,7 +92,11 @@ export default defineComponent({
       })
     },
     addGenreFunc(addGenre: object) {
-      console.log(addGenre)
+      // バリデーション
+      if (this.validSortNum() && this.validId() && this.validMain() && this.validSub()) {
+        console.log(this.validId() && this.validSortNum() && this.validMain() && this.validSub())
+      }
+      // ToDo: id被りバリデーション追加
       // ToDo: genreのinsert処理
     },
     edit(genreId: number) {
@@ -111,34 +115,58 @@ export default defineComponent({
         this.getAllGenre()
       })
     },
-    validateNum(event: any, key: string) {
-      if ((/[0-9]/).test(this.addGenre[key])) { // OKの時
-        event.target.style.backgroundColor = "#fff"
-        this.isValid = true
-      } else {// NGの場合
-        event.target.style.backgroundColor = "#fb94e58c" // formの色変え
-        const el = document.getElementById('tooltips')
-        if (el) {
-          el.style.display = 'block'
-          event.target.parentElement.insertBefore(el, event.target)
-          setTimeout(() => { el.style.display = 'none'}, 3000);
-        }
+    validId() {
+      const input = document.getElementById("input_id");
+      if (input && (/[0-9]/).test(this.addGenre['id'])) {
+        input.style.backgroundColor = "#fff";
+        return true
+      } else {
+        this.validateInput(input, 'tooltips')
+        return false
       }
     },
-    validateStr(event: any, key: string) {
-      if (!(/$^/).test(this.addGenre[key])) {
-        event.target.style.backgroundColor = "#fff"
-        this.isValid = true
-        // Todo: このバリデーション判断どうするか
+    validSortNum() {
+      const input = document.getElementById("sort_num");
+      if (input && (/[0-9]/).test(this.addGenre['sort_num'])) {
+        input.style.backgroundColor = "#fff";
+        return true
       } else {
-        event.target.style.backgroundColor = "#fb94e58c" // formの色変え
-        const el = document.getElementById('tooltips_str')
-        if (el) {
-          el.style.display = 'block'
-          event.target.parentElement.insertBefore(el, event.target)
-          setTimeout(() => { el.style.display = 'none'}, 3000);
-        }
+        this.validateInput(input, 'tooltips')
+        return false
       }
+    },
+    validMain() {
+      const input = document.getElementById("main");
+      if (input && !(/$^/).test(this.addGenre['main'])) {
+        input.style.backgroundColor = "#fff";
+        return true
+      } else {
+        this.validateInput(input, 'tooltips_str')
+        return false
+      }
+    },
+    validSub() {
+      const input = document.getElementById("sub");
+      if (input && !(/$^/).test(this.addGenre['sub'])) {
+        input.style.backgroundColor = "#fff";
+        return true
+      } else {
+        this.validateInput(input, 'tooltips_str')
+        return false
+      }
+    },
+    validateInput(input: any, id: string) {
+      input.style.backgroundColor = "#fb94e58c" // formの色変え
+      const el = document.getElementById(id)
+      if (el) {
+        el.style.display = 'block'
+        input.parentElement.insertBefore(el, input.target)
+        setTimeout(() => { el.style.display = 'none'}, 3000);
+      }
+    },
+    cancel() {
+      this.isAddGenre = false
+      this.addGenre = {'sort_num': '', 'id': '', 'main': '', 'sub': ''}
     }
   }
 });
