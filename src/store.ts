@@ -148,7 +148,6 @@ export const store = createStore<State>({
       const ofset = arg.ofset
       const sort = arg.sort
       const url = '/searchProducts?sql=' + selected + '__' + keyword + '__' + status + '__' + limit + '__' + ofset + '__' + sort;
-      console.log('search', url)
       axios.get(url).then((response) => {
         state.products = response.data
       });
