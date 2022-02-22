@@ -74,7 +74,7 @@
         <!-- fillter button など -->
         <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
         <el-button plain @click="openFillter = true">More fillters</el-button>
-        <el-select @change="page = 1" v-model="sortSql" class="m-2" placeholder="sort" size="large">
+        <el-select @change="sortChange()" v-model="sortSql" class="m-2" placeholder="sort" size="large">
           <el-option v-for="item in sortItem" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <!-- table -->
@@ -108,7 +108,7 @@
           </tr>
         </table>
       <!-- ページネーション -->
-        <div class="pagenate_box">
+        <div id="pagenate_box">
           <el-pagination background layout="prev, pager, next" :total="pagesTotal" @current-change="setPage">
           </el-pagination>
         </div>
@@ -160,7 +160,7 @@ export default defineComponent({
       workers: [{}],
       openFillter: false,
       page: 1,
-      limit: 6, // 何件ずつ取得するか
+      limit: 3, // 何件ずつ取得するか
       pagesTotal: 0,
       sortItem: [
         {label: 'Date, new to old', value: ' ORDER BY registration_date DESC'},
@@ -282,6 +282,23 @@ export default defineComponent({
         top: 0,
         behavior: "auto" // smooth,unstant,auto
       })
+    },
+    sortChange() {
+      this.page = 1
+      const el: any = document.getElementsByClassName('number')
+      const button: any = document.getElementsByClassName('btn-prev')[0]
+        for(let i = 0; i < el.length; i++) {
+          if (i === 0) {
+            button.disabled = true
+            button.setAttribute('aria-disabled', true)
+            el[i].setAttribute('aria-current', true)
+            el[i].className = 'active number'
+          } else {
+            el[i].setAttribute('aria-current', false)
+            el[i].className = 'number'
+          }
+        }
+      // Todo: ちょっど挙動が変(sort変える前のページを選択できなくなる)
     }
   },
   computed: {
@@ -359,7 +376,7 @@ a:hover{
   padding: 1em;
   background:#fff;
 }
-.pagenate_box {
+#pagenate_box {
   text-align: center;
   margin-top: 30px;
 }
