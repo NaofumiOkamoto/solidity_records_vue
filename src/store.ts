@@ -27,6 +27,7 @@ products: [
 cartCount: number;
 genre: string[];
 title: string[];
+productsCount: number;
 }
 
 // define injection key
@@ -57,7 +58,8 @@ export const store = createStore<State>({
       }
     ],
     genre: [""],
-    title: [""]
+    title: [""],
+    productsCount: 0
   },
   mutations: {
     getProducts(state, sql){
@@ -150,8 +152,19 @@ export const store = createStore<State>({
       const url = '/searchProducts?sql=' + selected + '__' + keyword + '__' + status + '__' + limit + '__' + ofset + '__' + sort;
       axios.get(url).then((response) => {
         state.products = response.data
-      });
+      })
+      ;
 		},
+		searchProductsCount(state, arg){
+      const selected = arg.selected
+      const keyword = arg.keyword
+      const status = arg.status
+      const url = '/searchProducts?sql=' + selected + '__' + keyword + '__' + status;
+      axios.get(url).then((response) => {
+        console.log('response', response.data.length)
+        state.productsCount = response.data.length
+      });
+    },
 		// setCartCount(state, addProductName){
     //   const cookies = document.cookie
     //   const cookiesArray = cookies.split(';'); // ;で分割し配列に
@@ -218,6 +231,9 @@ export const store = createStore<State>({
     },
     searchProducts(context, { selected, keyword, status, limit, ofset, sort } ) {
       context.commit('searchProducts', { selected, keyword, status, limit, ofset, sort })
+    },
+    searchProductsCount(context, { selected, keyword, status } ) {
+      context.commit('searchProductsCount', { selected, keyword, status })
     },
     sortProducts(context, sql) {
       context.commit('sortProducts', sql)

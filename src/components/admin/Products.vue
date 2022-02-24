@@ -14,8 +14,6 @@
           </router-link>
         </div>
         <!-- ToDo: インポートできるようにする 丸々反映？ -->
-        <!-- ToDo: sort変えた時、ページ選択を先頭にする<br> -->
-        <!-- ToDo: ページネーションのmax値を修正（アクティブ選択時とか）<br> -->
         <h1>商品管理</h1>
         <!-- export モーダル -->
         <div v-if="exportMordal" id="overlay">
@@ -179,6 +177,8 @@ export default defineComponent({
   methods: {
     label(){
       this.productStatus = [String(this.status)]
+      // ToDo: ここも変えた時ページネーションを先頭に変える
+      this.sortChange()
     },
     removeLabel(label: string){
       this.productStatus = []
@@ -271,11 +271,9 @@ export default defineComponent({
       this.scrollTop()
     },
     getPagesTotal(){
-      const url = '/getApi?sql=';
-      axios.get(url).then((response) => {
-        const length = response.data.length
-        this.pagesTotal = length / this.limit * 10
-      })
+      console.log('count', this.searchProductsCount['productsCount'])
+      const length = this.searchProductsCount['productsCount']
+      this.pagesTotal = length / this.limit * 10
     },
     scrollTop() {
       window.scrollTo({
@@ -287,17 +285,17 @@ export default defineComponent({
       this.page = 1
       const el: any = document.getElementsByClassName('number')
       const button: any = document.getElementsByClassName('btn-prev')[0]
-        for(let i = 0; i < el.length; i++) {
-          if (i === 0) {
-            button.disabled = true
-            button.setAttribute('aria-disabled', true)
-            el[i].setAttribute('aria-current', true)
-            el[i].className = 'active number'
-          } else {
-            el[i].setAttribute('aria-current', false)
-            el[i].className = 'number'
-          }
+      for(let i = 0; i < el.length; i++) {
+        if (i === 0) {
+          button.disabled = true
+          button.setAttribute('aria-disabled', true)
+          el[i].setAttribute('aria-current', true)
+          el[i].className = 'active number'
+        } else {
+          el[i].setAttribute('aria-current', false)
+          el[i].className = 'number'
         }
+      }
       // Todo: ちょっど挙動が変(sort変える前のページを選択できなくなる)
     }
   },
@@ -308,7 +306,15 @@ export default defineComponent({
       const limit = this.limit // 何件とるか
       const ofset = (pageNum - 1) * limit  // 何件目からとるか
       const status = this.productStatus[0]
+      this.getPagesTotal()
       store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
+      return store.state
+    },
+    searchProductsCount() {
+      const store = useStore(key)
+      const status = this.productStatus[0]
+      console.log('status', status)
+      store.dispatch('searchProductsCount', { selected: this.searchSelected, keyword: this.keyword, status: status})
       return store.state
     },
   }

@@ -6,7 +6,6 @@
     <div style="display:flex;">
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_main_box">
-        <!-- ToDo: 同じid入れた時のバリデーション<br> -->
         <h1>ジャンル</h1>
         <table class="">
           <tr>
@@ -32,6 +31,8 @@
           </tr>
           <tr class="search_result">
             <!-- 追加時 -->
+            <!-- ToDo: ボタンレイアウト -->
+            <!-- ToDo: キャンセルボタン -->
             <td v-if="isAddGenre" class="column_num"> 
               <input class="genre_input_num" @blur="validSortNum()" v-model="addGenre.sort_num" id="sort_num" >
             </td>
@@ -44,7 +45,6 @@
             <td v-if="isAddGenre" class="column_text">
               <input class="genre_input_text" @blur="validSub()" v-model="addGenre.sub" id="sub">
             </td>
-            <!-- ToDo: 追加 -->
             <td v-if="isAddGenre" class="column">
               <button @click="addGenreFunc(addGenre)">add</button>
               <button @click="cancel()">cancel</button>
@@ -53,6 +53,7 @@
             <el-button v-if="!isAddGenre" @click="isAddGenre = true" type="primary" plain>Primary</el-button>
             <span id="tooltips" class="tooltips">数字で入力してください</span>
             <span id="tooltips_str" class="tooltips">文字を入力してください</span>
+            <span id="tooltips_dupli" class="tooltips">このidは使用されています</span>
         </table>
       </div>
     </div>
@@ -65,14 +66,15 @@ import axios from 'axios';
 export default defineComponent({
   name: 'AdminProduct',
   data(): {
-      genres: [{}];
+      genres: [{[key: string]: string}];
       editGenre: number;
       addGenre: {[key: string]: string};
       isAddGenre: boolean;
       isValid: boolean;
   } {
     return {
-      genres: [{}],
+      // genres: [{}],
+      genres: [{'sort_num': '', 'id': '', 'main': '', 'sub': ''}],
       editGenre: 0,
       addGenre: {'sort_num': '', 'id': '', 'main': '', 'sub': ''},
       isAddGenre: false,
@@ -96,8 +98,6 @@ export default defineComponent({
       if (this.validSortNum() && this.validId() && this.validMain() && this.validSub()) {
         console.log(this.validId() && this.validSortNum() && this.validMain() && this.validSub())
       }
-      // ToDo: id被りバリデーション追加
-      // ToDo: genreのinsert処理
     },
     edit(genreId: number) {
       this.editGenre = genreId
@@ -116,8 +116,13 @@ export default defineComponent({
       })
     },
     validId() {
+      const ids = this.genres.map(g => String(g['id']))
+      const isDuplicate = ids.includes(this.addGenre['id'])
       const input = document.getElementById("input_id");
-      if (input && (/[0-9]/).test(this.addGenre['id'])) {
+      if (isDuplicate){ // id被り
+        this.validateInput(input, 'tooltips_dupli')
+        return false
+      } else if (input && (/[0-9]/).test(this.addGenre['id'])) {
         input.style.backgroundColor = "#fff";
         return true
       } else {
