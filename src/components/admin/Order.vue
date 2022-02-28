@@ -44,8 +44,9 @@
         </div>
         <table class="">
           <tr>
-            <th>aaa</th>
-            <th>bbb</th>
+            <th>Number</th>
+            <th>customer</th>
+            <th>total</th>
           </tr>
           <tr class="search_result" v-for="(order,key) in searchOrders['orders']" :key="key">
             <td style="float:left; margin:5px 5px 0 0;">
@@ -53,6 +54,9 @@
             </td>
             <td style="text-align: left">
 							{{order['Billing Name']}}
+            </td>
+            <td style="text-align: left">
+							{{order['Total']}}
             </td>
           </tr>
         </table>

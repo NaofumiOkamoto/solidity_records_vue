@@ -56,6 +56,11 @@ module.exports = {
           changeOrigin: true,
           pathRewrite: { "^/updateGenre": "/updateGenre" }
         },
+        '^/searchOrders': {
+          target: 'http://localhost:3030',
+          changeOrigin: true,
+          pathRewrite: { "^/searchOrders": "/searchOrders" }
+        },
 
       }
     }

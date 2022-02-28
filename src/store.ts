@@ -28,6 +28,7 @@ cartCount: number;
 genre: string[];
 title: string[];
 productsCount: number;
+orders: [{}];
 }
 
 // define injection key
@@ -59,7 +60,8 @@ export const store = createStore<State>({
     ],
     genre: [""],
     title: [""],
-    productsCount: 0
+    productsCount: 0,
+    orders: [{}]
   },
   mutations: {
     getProducts(state, sql){
@@ -203,7 +205,16 @@ export const store = createStore<State>({
       console.log("store sortProducts")
       console.log(state.products)
       // state.products.sort()
+    },
+    searchOrders(state, sql) {
+      // ToDo: 処理
+      const url = '/searchOrders?sql='// + selected + '__' + keyword + '__' + status;
+      axios.get(url).then((response) => {
+        console.log('response', response.data)
+        state.orders = response.data
+      });
     }
+
   },
   actions: {
 		getProducts(context, sql) {
@@ -240,6 +251,10 @@ export const store = createStore<State>({
     },
     getGenreBySearch(context, sql){
       context.commit('getGenreBySearch', sql)
+    },
+    // order関連
+    searchOrders(context, sql){
+      context.commit('searchOrders', sql)
     }
     // getCartCount(context) {
     //   context.commit('getCart')
