@@ -250,4 +250,16 @@ h1 {
   border-collapse:  collapse; 
   width:100%;
 }
+.status_tab {
+  padding: 0 5px;
+  border-bottom: solid 1px #cbcbcb;
+  margin-bottom: 10px;
+}
+.header_right {
+  float: right;
+}
+.no_button {
+  background-color: #fff;
+  border: none;
+}
 </style>

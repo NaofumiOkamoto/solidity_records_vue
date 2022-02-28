@@ -260,8 +260,7 @@ export default defineComponent({
           });
         }
         this.workers = workersArray;
-        console.log('this.workers', this.workers)
-        // ここにupdateかcreate処理をかく
+        // ToDo: ここにupdateかcreate処理をかく
       };
       reader.onload = loadFunc;
       reader.readAsBinaryString(file);
@@ -343,24 +342,8 @@ a {
 a:hover{
   color: #000;
 }
-.add_button {
-  background-color: #018b56;
-  color: #fff;
-}
-.status_tab {
-  padding: 0 5px;
-  border-bottom: solid 1px #cbcbcb;
-  margin-bottom: 10px;
-}
 .select_status_tab {
   border-bottom: solid 3px cadetblue;
-}
-.header_right {
-  float: right;
-}
-.no_button {
-  background-color: #fff;
-  border: none;
 }
 #fillter_overlay{
   z-index:1;
