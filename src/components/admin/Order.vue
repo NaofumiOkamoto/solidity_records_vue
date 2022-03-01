@@ -60,6 +60,11 @@
             </td>
           </tr>
         </table>
+				<!-- ページネーション -->
+				<div id="pagenate_box">
+					<el-pagination background layout="prev, pager, next" :total="pagesTotal" @current-change="setPage">
+					</el-pagination>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -88,24 +93,35 @@ export default defineComponent({
       keyword: ' ',
       activeName: 'all',
       orderStatus: [''],
+      pagesTotal: 0,
+      page: 1,
+      limit: 3, // 何件ずつ取得するか
     }
+  },
+  created() {
+    this.getPagesTotal()
   },
 	methods: {
     label(){
       this.orderStatus = [String(this.status)]
     },
+    getPagesTotal(){
+      // const length = this.searchProductsCount['productsCount']
+      // this.pagesTotal = length / this.limit * 10
+      this.pagesTotal = 100
+    },
 	},
 	computed: {
     searchOrders() {
       const store = useStore(key)
-      // const pageNum = this.page
-      // const limit = this.limit // 何件とるか
-      // const ofset = (pageNum - 1) * limit  // 何件目からとるか
+      const pageNum = this.page
+      const limit = this.limit // 何件とるか
+      const ofset = (pageNum - 1) * limit  // 何件目からとるか
       const status = this.orderStatus[0]
-      // this.getPagesTotal()
+      this.getPagesTotal()
+			// ToDo: ページネーション
       // store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
       store.dispatch('searchOrders', { keyword: this.keyword, status: status })
-			console.log(store.state)
       return store.state
     },
 	}

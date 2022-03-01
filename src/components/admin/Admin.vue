@@ -262,4 +262,8 @@ h1 {
   background-color: #fff;
   border: none;
 }
+#pagenate_box {
+  text-align: center;
+  margin-top: 30px;
+}
 </style>

@@ -177,7 +177,6 @@ export default defineComponent({
   methods: {
     label(){
       this.productStatus = [String(this.status)]
-      // ToDo: ここも変えた時ページネーションを先頭に変える
       this.sortChange()
     },
     removeLabel(label: string){
@@ -364,9 +363,5 @@ a:hover{
   height: 100%;
   padding: 1em;
   background:#fff;
-}
-#pagenate_box {
-  text-align: center;
-  margin-top: 30px;
 }
 </style>
