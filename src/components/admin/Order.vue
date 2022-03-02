@@ -90,12 +90,13 @@ export default defineComponent({
       //   title: [],
       //   artist: [],
       // } as Searches,
-      keyword: ' ',
+      keyword: '',
       activeName: 'all',
       orderStatus: [''],
       pagesTotal: 0,
       page: 1,
       limit: 3, // 何件ずつ取得するか
+      sortSql: ' ORDER BY Name DESC'
     }
   },
   created() {
@@ -108,7 +109,18 @@ export default defineComponent({
     getPagesTotal(){
       // const length = this.searchProductsCount['productsCount']
       // this.pagesTotal = length / this.limit * 10
+			// ToDo: totalpage設定
       this.pagesTotal = 100
+    },
+    setPage (val: number) {
+      this.page = val
+      this.scrollTop()
+    },
+    scrollTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "auto" // smooth,unstant,auto
+      })
     },
 	},
 	computed: {
@@ -119,9 +131,7 @@ export default defineComponent({
       const ofset = (pageNum - 1) * limit  // 何件目からとるか
       const status = this.orderStatus[0]
       this.getPagesTotal()
-			// ToDo: ページネーション
-      // store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
-      store.dispatch('searchOrders', { keyword: this.keyword, status: status })
+      store.dispatch('searchOrders', { keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql })
       return store.state
     },
 	}

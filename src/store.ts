@@ -201,9 +201,14 @@ export const store = createStore<State>({
       }
       state.cartCount = cartCount
     },
-    searchOrders(state, sql) {
+    searchOrders(state, arg) {
       // ToDo: 処理せいり
-      const url = '/searchOrders?sql='// + selected + '__' + keyword + '__' + status;
+      const keyword = arg.keyword
+      const status = arg.status
+      const limit = arg.limit
+      const ofset = arg.ofset
+      const sort = arg.sort
+      const url = '/searchOrders?sql=' + '__' + keyword + '__' + status + '__' + limit + '__' + ofset + '__' + sort;
       axios.get(url).then((response) => {
         console.log('response', response.data)
         state.orders = response.data
