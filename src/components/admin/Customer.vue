@@ -42,7 +42,7 @@ import { defineComponent } from 'vue';
 // }
 
 export default defineComponent({
-  name: 'AdminOrder',
+  name: 'AdminCustomer',
   data() {
     return {
       // search: {

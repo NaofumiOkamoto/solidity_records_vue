@@ -12,7 +12,7 @@ import AdminProduct from '../components/admin/Product.vue'
 import AdminProducts from '../components/admin/Products.vue'
 import AdminStock from '../components/admin/Stock.vue'
 import AdminCustomer from '../components/admin/Customer.vue'
-import AdminOrder from '../components/admin/Order.vue'
+import AdminOrders from '../components/admin/Orders.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -38,9 +38,9 @@ const routes: Array<RouteRecordRaw> = [
     component: AdminStock,
   },
   {
-    path: '/admin/order',
-    name: 'AdminOrder',
-    component: AdminOrder,
+    path: '/admin/orders',
+    name: 'AdminOrders',
+    component: AdminOrders,
     props: route => ({ status: String(route.params.status)}),
   },
   {

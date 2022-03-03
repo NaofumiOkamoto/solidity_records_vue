@@ -26,7 +26,7 @@
             </div>
           </transition>
 
-          <router-link :to="{ name: 'AdminOrder'}">
+          <router-link :to="{ name: 'AdminOrders'}">
             <div class="main_list">
               <span @click="isOrderTab = true">
                 <fa class="fa" icon="yen-sign" />注文管理{{isOrderTab}}
@@ -63,12 +63,6 @@
           </transition>
         </div>
       </div>
-      <!-- <div class="el-main"> -->
-        <!-- <div v-if="activeNames == 'products'"><AdminProducts/></div> -->
-        <!-- <div v-if="activeNames == 'stock'"><AdminStock/></div> -->
-        <!-- <div v-if="activeNames == 'order'"><AdminOrder/></div> -->
-        <!-- <div v-if="activeNames == 'customer'"><AdminCustomer/></div> -->
-      <!-- </div> -->
     </div>
 </template>
 

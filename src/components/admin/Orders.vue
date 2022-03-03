@@ -15,19 +15,19 @@
 				<span>{{status}}</span>
         <!-- タブ -->
         <div @click="label" style="display:flex">
-          <router-link :to="{ name: 'AdminOrder', params: { status: '' }}">
+          <router-link :to="{ name: 'AdminOrders', params: { status: '' }}">
             <div class="status_tab" :class="{ select_status_tab: orderStatus == '' || productStatus == ''}">All</div>
           </router-link>
-          <router-link :to="{ name: 'AdminOrder', params: { status: 'Unfulfilled' }}">
+          <router-link :to="{ name: 'AdminOrders', params: { status: 'Unfulfilled' }}">
             <div class="status_tab" :class="{ select_status_tab: orderStatus == 'Unfulfilled'}">Unfulfilled</div>
           </router-link>
-          <router-link :to="{ name: 'AdminOrder', params: { status: 'Unpaid' }}">
+          <router-link :to="{ name: 'AdminOrders', params: { status: 'Unpaid' }}">
             <div class="status_tab" :class="{ select_status_tab: orderStatus == 'Unpaid'}">Unpaid</div>
           </router-link>
-          <router-link :to="{ name: 'AdminOrder', params: { status: 'Open' }}">
+          <router-link :to="{ name: 'AdminOrders', params: { status: 'Open' }}">
             <div class="status_tab" :class="{ select_status_tab: orderStatus == 'Open'}">Open</div>
           </router-link>
-          <router-link :to="{ name: 'AdminOrder', params: { status: 'Closed' }}">
+          <router-link :to="{ name: 'AdminOrders', params: { status: 'Closed' }}">
             <div class="status_tab" :class="{ select_status_tab: orderStatus == 'Closed'}">Closed</div>
           </router-link>
         </div>
@@ -80,7 +80,7 @@ import { key } from '../../store'
 // }
 
 export default defineComponent({
-  name: 'AdminOrder',
+  name: 'AdminOrders',
   props: {
     status: String,
   },
@@ -95,7 +95,7 @@ export default defineComponent({
       orderStatus: [''],
       pagesTotal: 0,
       page: 1,
-      limit: 3, // 何件ずつ取得するか
+      limit: 6, // 何件ずつ取得するか
       sortSql: ' ORDER BY Name DESC'
     }
   },
