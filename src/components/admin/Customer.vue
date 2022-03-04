@@ -53,25 +53,34 @@
         </div>
         <!-- タブ -->
         <div @click="label" style="display:flex">
-          <router-link :to="{ name: 'AdminProducts', params: { status: '' }}">
-            <div class="status_tab" :class="{ select_status_tab: productStatus == 'undefined' || productStatus == ''}"></div>
+          <router-link :to="{ name: 'AdminCustomer', params: { status: '' }}">
+            <div class="status_tab" :class="{ select_status_tab: customerStatus == 'undefined' || customerStatus == ''}">All</div>
           </router-link>
-          <router-link :to="{ name: 'AdminProducts', params: { status: 'Active' }}">
-            <div class="status_tab" :class="{ select_status_tab: productStatus == 'Active'}">アクティブ</div>
+          <router-link :to="{ name: 'AdminCustomer', params: { status: 'new' }}">
+            <div class="status_tab" :class="{ select_status_tab: customerStatus == 'new'}">New</div>
           </router-link>
-          <router-link :to="{ name: 'AdminProducts', params: { status: 'Draft' }}">
-            <div class="status_tab" :class="{ select_status_tab: productStatus == 'Draft'}">下書き</div>
+          <router-link :to="{ name: 'AdminCustomer', params: { status: 'returning' }}">
+            <div class="status_tab" :class="{ select_status_tab: customerStatus == 'returning'}">Returning</div>
+          </router-link>
+          <router-link :to="{ name: 'AdminCustomer', params: { status: 'checkouts' }}">
+            <div class="status_tab" :class="{ select_status_tab: customerStatus == 'checkouts'}">Abandorned checkouts</div>
+          </router-link>
+          <router-link :to="{ name: 'AdminCustomer', params: { status: 'japan' }}">
+            <div class="status_tab" :class="{ select_status_tab: customerStatus == 'japan'}">From Japan</div>
+          </router-link>
+          <router-link :to="{ name: 'AdminCustomer', params: { status: 'email' }}">
+            <div class="status_tab" :class="{ select_status_tab: customerStatus == 'email'}">Email subscribers</div>
           </router-link>
         </div>
         <!-- fillter label -->
-        <div v-for="(label,key) in productStatus" :key="key">
+        <div v-for="(label,key) in customerStatus" :key="key">
           <button v-if="label != ''" class="label">
             {{label}}
             <span @click="removeLabel(label)" class="label_cancel"> × </span>
           </button>
         </div>
         <!-- fillter button など -->
-        <input class="search_form" type="text" v-model="keyword" placeholder="Search by artist or title">
+        <input class="search_form" type="text" v-model="keyword" placeholder="Search by name or email">
         <el-button plain @click="openFillter = true">More fillters</el-button>
         <el-select @change="sortChange()" v-model="sortSql" class="m-2" placeholder="sort" size="large">
           <el-option v-for="item in sortItem" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -82,28 +91,21 @@
         </div>
         <table class="">
           <tr>
-            <th></th>
-            <th>商品</th>
-            <th>ステータス</th>
-            <th>在庫</th>
-            <th>タイプ</th>
+            <th>名前</th>
+            <th>email</th>
+            <th>order数</th>
+            <th>購入金額</th>
           </tr>
-          <tr class="search_result" v-for="(product,key) in searchProducts['products']" :key="key">
-            <td style="float:left; margin:5px 5px 0 0;">
-              <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}">
-                <img v-if="product.img_count == null" class="products_img" src="https://t202001.jgt.jp/records/no_image.png">
-                <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
-                <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
-              </router-link>
-            </td>
+          <tr class="search_result" v-for="(customer,key) in searchCustomers['customers']" :key="key">
             <td style="text-align: left">
-              <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}">
-                {{ product['artist'] }} - {{ product['title']}}
-              </router-link>
+              <!-- <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}"> -->
+                {{ customer['Last Name'] }}  {{ customer['First Name']}}<br>
+				<span style="color: #9b9b9b;">{{ customer['Province'] }}</span>
+              <!-- </router-link> -->
             </td>
-            <td style="">{{ product['product_status'] }} </td>
-            <td style="">{{ product['quantity'] }} </td>
-            <td style="">{{ product['format'] }} </td>
+            <td style="">{{ customer['Email'] }} </td>
+            <td style="">order数</td><!-- ToDo: order数 -->
+            <td style="">購入金額</td><!-- ToDo: 購入金額 -->
           </tr>
         </table>
       <!-- ページネーション -->
@@ -145,13 +147,12 @@ export default defineComponent({
         title: [],
         artist: [],
       } as Searches,
-      keyword: ' ',
+      keyword: '',
       productKeyword: '',
       imgSrc: "https://cdn.shopify.com/s/files/1/0415/0791/3886/products/",
       searchItem: ['all field', 'artist', 'title', 'label', 'number', 'genre', 'track_list', 'personnel'],
       searchSelected: 'all field',
-      // activeName: 'all',
-      productStatus: [''],
+      customerStatus: [''],
       labels: [''],
       importMordal: false,
       exportMordal: false,
@@ -177,11 +178,11 @@ export default defineComponent({
   },
   methods: {
     label(){
-      this.productStatus = [String(this.status)]
+      this.customerStatus = [String(this.status)]
       this.sortChange()
     },
     removeLabel(label: string){
-      this.productStatus = []
+      this.customerStatus = []
     },
     downloadCSV(){
       const products = this.$store.getters.getProducts
@@ -253,7 +254,7 @@ export default defineComponent({
               registrationDate: workerData[30],
               soldDate: workerData[31],
               soldPrice: workerData[32],
-              productStatus: workerData[33],
+              customerStatus: workerData[33],
               salesStatus: workerData[34],
             };
             workersArray.push(worker);
@@ -270,9 +271,11 @@ export default defineComponent({
       this.scrollTop()
     },
     getPagesTotal(){
-      console.log('count', this.searchProductsCount['productsCount'])
-      const length = this.searchProductsCount['productsCount']
-      this.pagesTotal = length / this.limit * 10
+    //   console.log('count', this.searchProductsCount['productsCount'])
+    //   const length = this.searchProductsCount['productsCount']
+    //   this.pagesTotal = length / this.limit * 10
+	// ToDo: customer totalpage
+      this.pagesTotal = 100
     },
     scrollTop() {
       window.scrollTo({
@@ -299,23 +302,23 @@ export default defineComponent({
     }
   },
   computed: {
-    searchProducts() {
+    searchCustomers() {
       const store = useStore(key)
       const pageNum = this.page
       const limit = this.limit // 何件とるか
       const ofset = (pageNum - 1) * limit  // 何件目からとるか
-      const status = this.productStatus[0]
+      const status = this.customerStatus[0]
       this.getPagesTotal()
-      store.dispatch('searchProducts', { selected: this.searchSelected, keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
+      store.dispatch('searchCustomers', { keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
       return store.state
     },
-    searchProductsCount() {
-      const store = useStore(key)
-      const status = this.productStatus[0]
-      console.log('status', status)
-      store.dispatch('searchProductsCount', { selected: this.searchSelected, keyword: this.keyword, status: status})
-      return store.state
-    },
+    // searchProductsCount() {
+    //   const store = useStore(key)
+    //   const status = this.customerStatus[0]
+    //   console.log('status', status)
+    //   store.dispatch('searchProductsCount', { selected: this.searchSelected, keyword: this.keyword, status: status})
+    //   return store.state
+    // },
   }
 });
 </script>

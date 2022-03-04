@@ -47,6 +47,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/customer',
     name: 'AdminCustomer',
     component: AdminCustomer,
+    props: route => ({ status: String(route.params.status)}),
   },
   {
     path: '/product/:itemId',
