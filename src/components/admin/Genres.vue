@@ -30,9 +30,7 @@
             <td v-if="editGenre === genre.id" class="column"><button @click="update(genre)">update</button></td>
           </tr>
           <tr class="search_result">
-            <!-- 追加時 -->
-            <!-- ToDo: ボタンレイアウト -->
-            <!-- ToDo: キャンセルボタン -->
+            <!-- 追加時のフォーム -->
             <td v-if="isAddGenre" class="column_num"> 
               <input class="genre_input_num" @blur="validSortNum()" v-model="addGenre.sort_num" id="sort_num" >
             </td>
@@ -46,7 +44,7 @@
               <input class="genre_input_text" @blur="validSub()" v-model="addGenre.sub" id="sub">
             </td>
             <td v-if="isAddGenre" class="column">
-              <button @click="addGenreFunc(addGenre)">add</button>
+              <button @click="addGenreFunc(addGenre)">add</button><!-- ToDo: ボタンレイアウト -->
               <button @click="cancel()">cancel</button>
             </td>
           </tr>
@@ -64,7 +62,7 @@ import { defineComponent } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'AdminProduct',
+  name: 'AdminGenres',
   data(): {
       genres: [{[key: string]: string}];
       editGenre: number;

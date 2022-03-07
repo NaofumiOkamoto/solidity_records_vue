@@ -20,7 +20,7 @@
               <router-link :to="{ name: 'AdminProducts', params: {status: ''}}">
                 <div class="sub_list" @click="handleChange('products')">全ての商品</div>
               </router-link>
-              <router-link :to="{ name: 'AdminStock'}">
+              <router-link :to="{ name: 'AdminGenres'}">
                 <div class="sub_list" @click="handleChange('stock')">ジャンル</div>
               </router-link>
             </div>

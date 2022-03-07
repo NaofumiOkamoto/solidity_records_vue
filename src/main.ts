@@ -13,7 +13,7 @@ import Category from '@/components/Category.vue'
 import Admin from '@/components/admin/Admin.vue'
 import AdminProducts from '@/components/admin/Products.vue'
 import AdminProduct from '@/components/admin/Product.vue'
-import AdminStock from '@/components/admin/Stock.vue'
+import AdminGenres from '@/components/admin/Genres.vue'
 import AdminOrders from '@/components/admin/Orders.vue'
 import AdminCustomer from '@/components/admin/Customer.vue'
 import AdminProductsTable from '@/components/admin/ProductsTable.vue'
@@ -64,7 +64,7 @@ app.component('Loading', Loading)
 app.component('Admin', Admin)
 app.component('AdminProducts', AdminProducts)
 app.component('AdminProduct', AdminProduct)
-app.component('AdminStock', AdminStock)
+app.component('AdminGenres', AdminGenres)
 app.component('AdminOrders', AdminOrders)
 app.component('AdminCustomer', AdminCustomer)
 app.component('AdminProductsTable', AdminProductsTable)

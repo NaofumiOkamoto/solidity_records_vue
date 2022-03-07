@@ -10,7 +10,7 @@ import Genres from '../views/Genres.vue'
 // import Admin from '../views/Admin.vue'
 import AdminProduct from '../components/admin/Product.vue'
 import AdminProducts from '../components/admin/Products.vue'
-import AdminStock from '../components/admin/Stock.vue'
+import AdminGenres from '../components/admin/Genres.vue'
 import AdminCustomer from '../components/admin/Customer.vue'
 import AdminOrders from '../components/admin/Orders.vue'
 
@@ -33,9 +33,9 @@ const routes: Array<RouteRecordRaw> = [
     props: route => ({  paramsItemId: String(route.params.paramsItemId) }),
   },
   {
-    path: '/admin/stock',
-    name: 'AdminStock',
-    component: AdminStock,
+    path: '/admin/Genres',
+    name: 'AdminGenres',
+    component: AdminGenres,
   },
   {
     path: '/admin/orders',
