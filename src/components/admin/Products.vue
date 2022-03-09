@@ -158,7 +158,7 @@ export default defineComponent({
       workers: [{}],
       openFillter: false,
       page: 1,
-      limit: 3, // 何件ずつ取得するか
+      limit: 10, // 何件ずつ取得するか
       pagesTotal: 0,
       sortItem: [
         {label: 'Date, new to old', value: ' ORDER BY registration_date DESC'},

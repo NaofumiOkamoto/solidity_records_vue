@@ -7,12 +7,11 @@
 			<div style="width: 20%; height: 10px;"></div>
 			<div class="admin_main_box">
         <div class="header_right">
-          <button class="no_button" v-on:click="exportMordal = true">export</button>
-          <button class="no_button" v-on:click="importMordal = true">import</button>
-					<el-button class="add_button" style="">create order</el-button>
+          <button class="no_button" v-on:click="exportMordal = true">export</button><!-- ToDo: order export-->
+          <button class="no_button" v-on:click="importMordal = true">import</button><!-- ToDo: order import?-->
+					<el-button class="add_button" style="">create order(まだ)</el-button><!-- ToDo: create order -->
         </div>
 				<h1>注文管理</h1>
-				<span>{{status}}</span>
         <!-- タブ -->
         <div @click="label" style="display:flex">
           <router-link :to="{ name: 'AdminOrders', params: { status: '' }}">
@@ -40,7 +39,7 @@
         </div>
         <!-- table -->
         <div>
-          <!-- {{page * limit - limit + 1}} ~ {{page * limit}} -->
+          {{page * limit - limit + 1}} ~ {{page * limit}}
         </div>
         <table class="">
           <tr>
@@ -55,7 +54,7 @@
             <td style="text-align: left">
 							{{order['Billing Name']}}
             </td>
-            <td style="text-align: left">
+            <td style="text-align: right">
 							{{order['Total']}}
             </td>
           </tr>
@@ -74,11 +73,6 @@ import { defineComponent } from 'vue';
 import { useStore } from 'vuex'
 import { key } from '../../store'
 
-// interface Searches {
-//   title: Array<string>;
-//   artist: string[];
-// }
-
 export default defineComponent({
   name: 'AdminOrders',
   props: {
@@ -86,12 +80,7 @@ export default defineComponent({
   },
   data() {
     return {
-      // search: {
-      //   title: [],
-      //   artist: [],
-      // } as Searches,
       keyword: '',
-      activeName: 'all',
       orderStatus: [''],
       pagesTotal: 0,
       page: 1,
@@ -107,16 +96,15 @@ export default defineComponent({
       this.orderStatus = [String(this.status)]
     },
     getPagesTotal(){
-      // const length = this.searchProductsCount['productsCount']
-      // this.pagesTotal = length / this.limit * 10
-			// ToDo: totalpage設定
-      this.pagesTotal = 100
+      const length = this.searchOrdersCount['ordersCount']
+      this.pagesTotal = length / this.limit * 10
     },
     setPage (val: number) {
       this.page = val
       this.scrollTop()
     },
     scrollTop() {
+      // ToDo: メソッド共通化できるか？
       window.scrollTo({
         top: 0,
         behavior: "auto" // smooth,unstant,auto
@@ -132,6 +120,12 @@ export default defineComponent({
       const status = this.orderStatus[0]
       this.getPagesTotal()
       store.dispatch('searchOrders', { keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql })
+      return store.state
+    },
+    searchOrdersCount() {
+      const store = useStore(key)
+      const status = this.orderStatus[0]
+      store.dispatch('searchOrdersCount', { keyword: this.keyword, status: status})
       return store.state
     },
 	}

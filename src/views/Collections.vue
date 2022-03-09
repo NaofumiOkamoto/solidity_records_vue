@@ -167,6 +167,7 @@
       </div>
     </div>
     <div style="text-align: center;">
+      <!-- ToDo: user側のページネーションをadmin側と同じようにlimit使う -->
       <button @click="paginateDown()"> ＜ </button>
       Page {{ paginateMinNum / paginateBaseNum + 1 }} of {{ Math.ceil( productsCount / paginateBaseNum ) }}
       <button @click="paginateUp()"> ＞ </button>
