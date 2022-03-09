@@ -29,6 +29,7 @@ genre: string[];
 title: string[];
 productsCount: number;
 orders: [{}];
+ordersCount: number;
 customers: [{}];
 }
 
@@ -63,6 +64,7 @@ export const store = createStore<State>({
     title: [""],
     productsCount: 0,
     orders: [{}],
+    ordersCount: 0,
     customers: [{}]
   },
   mutations: {
@@ -215,6 +217,15 @@ export const store = createStore<State>({
         state.orders = response.data
       });
     },
+		searchOrdersCount(state, arg){
+      const keyword = arg.keyword
+      const status = arg.status
+      const url = '/searchOrders?sql=' + keyword + '__' + status;
+      axios.get(url).then((response) => {
+        console.log('response count', response.data.length)
+        state.ordersCount = response.data.length
+      });
+    },
     searchCustomers(state, arg) {
       const keyword = arg.keyword
       const status = arg.status
@@ -265,6 +276,9 @@ export const store = createStore<State>({
     // order関連
     searchOrders(context, sql){
       context.commit('searchOrders', sql)
+    },
+    searchOrdersCount(context, sql){
+      context.commit('searchOrdersCount', sql)
     },
     // customer関連
     searchCustomers(context, sql){
