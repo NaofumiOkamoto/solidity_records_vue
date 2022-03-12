@@ -48,9 +48,11 @@
             <th>total</th>
           </tr>
           <tr class="search_result" v-for="(order,key) in searchOrders['orders']" :key="key">
-            <td style="float:left; margin:5px 5px 0 0;">
-							{{order['Name']}}
-            </td>
+            <router-link :to="{ name: 'AdminOrder', params: { paramsOrderId: order['Id'] }}">
+              <td style="float:left; margin:5px 5px 0 0;">
+                {{order['Name']}}
+              </td>
+            </router-link>
             <td style="text-align: left">
 							{{order['Billing Name']}}
             </td>
@@ -113,6 +115,7 @@ export default defineComponent({
 	},
 	computed: {
     searchOrders() {
+      // ToDo: ordersは代表の１件のみ取得する必要がある
       const store = useStore(key)
       const pageNum = this.page
       const limit = this.limit // 何件とるか

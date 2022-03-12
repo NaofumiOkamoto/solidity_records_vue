@@ -21,13 +21,16 @@
             <td v-if="editGenre !== genre.id" class="column_num"> {{ genre.id }} </td>
             <td v-if="editGenre !== genre.id" class="column_text">{{ genre.main }} </td>
             <td v-if="editGenre !== genre.id" class="column_text">{{ genre.sub }} </td>
-            <td v-if="editGenre !== genre.id" class="column_text"><button @click="edit(genre.id)">edit</button></td>
+            <td v-if="editGenre !== genre.id" class="column_text"><el-button type="info" @click="edit(genre.id)">edit</el-button></td>
             <!-- 編集時 -->
             <td v-if="editGenre === genre.id" class="column_num"> <input class="genre_input_num" v-model="genre.sort_num"></td>
             <td v-if="editGenre === genre.id" class="column_num"> <input class="genre_input_num" v-model="genre.id"></td>
             <td v-if="editGenre === genre.id" class="column_text"><input class="genre_input_text" v-model="genre.main"></td>
             <td v-if="editGenre === genre.id" class="column_text"><input class="genre_input_text" v-model="genre.sub"></td>
-            <td v-if="editGenre === genre.id" class="column"><button @click="update(genre)">update</button></td>
+            <td v-if="editGenre === genre.id" class="column">
+              <el-button type="primary" @click="update(genre)">update</el-button>
+              <el-button type="warning" @click="cancelEdit()" style="margin: 3px 0;">cancel</el-button>
+            </td>
           </tr>
           <tr class="search_result">
             <!-- 追加時のフォーム -->
@@ -170,6 +173,10 @@ export default defineComponent({
     cancel() {
       this.isAddGenre = false
       this.addGenre = {'sort_num': '', 'id': '', 'main': '', 'sub': ''}
+    },
+    cancelEdit() {
+      this.editGenre = 0
+      // genre edit で変更したものを戻す
     }
   }
 });
