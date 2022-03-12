@@ -13,6 +13,7 @@ import AdminProducts from '../components/admin/Products.vue'
 import AdminGenres from '../components/admin/Genres.vue'
 import AdminCustomer from '../components/admin/Customer.vue'
 import AdminOrders from '../components/admin/Orders.vue'
+import AdminOrder from '../components/admin/Order.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +43,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AdminOrders',
     component: AdminOrders,
     props: route => ({ status: String(route.params.status)}),
+  },
+  {
+    path: '/admin/order/:paramsOrderId',
+    name: 'AdminOrder',
+    component: AdminOrder,
+    props: route => ({ paramsOrderId: String(route.params.paramsOrderId)}),
   },
   {
     path: '/admin/customer',
