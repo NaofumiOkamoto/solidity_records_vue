@@ -226,6 +226,14 @@ export const store = createStore<State>({
         state.ordersCount = response.data.length
       });
     },
+    getOrderProducts(state, arg) {
+      console.log('store', arg.name)
+      const sql =  arg.name === '' ? '' : arg.name.substring(1)
+      const url = '/getOrderProducts?sql=' + sql // #の文字列消す
+      axios.get(url).then((response) => {
+        state.products = response.data
+      });
+    },
     searchCustomers(state, arg) {
       const keyword = arg.keyword
       const status = arg.status
@@ -279,6 +287,9 @@ export const store = createStore<State>({
     },
     searchOrdersCount(context, sql){
       context.commit('searchOrdersCount', sql)
+    },
+    getOrderProducts(context, sql){
+      context.commit('getOrderProducts', sql)
     },
     // customer関連
     searchCustomers(context, sql){

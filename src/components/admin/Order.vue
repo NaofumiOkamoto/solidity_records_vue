@@ -13,12 +13,13 @@
         </router-link>
         <h3>{{ name }}</h3>
         <div class="admin_product_edit_box">
-          <div style="display:flex;">
-            <p class="divided2">{{id}}</p>
+          <div style="display:flex;"><p class="divided2">{{id}}</p></div>
+          <div v-for="(product,key) in orderProducts['products']" :key="key">
+            {{ product.title }}
           </div>
         </div>
         <div class="admin_product_edit_box">
-          media
+          paid
         </div>
         <el-button @click="updateProduct()" type="success">save</el-button>
       </div>
@@ -32,7 +33,7 @@ import { key } from '../../store'
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'AdminProduct',
+  name: 'AdminOrder',
   props: {
     paramsOrderId: String
   },
@@ -40,26 +41,32 @@ export default defineComponent({
     return {
       email: '',
       id: 0,
-      name: ''
+      name: '',
+      // orderProduct: [{name: 'aaa'}]
     }
   },
   created() {
-    // ToDo: order 1から作成
     this.getOrder()
   },
   methods: {
     getOrder() {
-      console.log('paramsOrderId', this.paramsOrderId)
       const url = '/getOrder?sql' + '=where Id = ' + String(this.paramsOrderId);
-      console.log('getOrder url', url)
       axios.get(url).then((response) => {
-        console.log('res', response.data)
-        // this.itemId = response.data[0]["item_id"]
-        console.log('res', response.data[0]['Id'])
         this.id = response.data[0]['Id']
         this.name = response.data[0]['Name']
       })
     },
+  },
+  computed: {
+    orderProducts() {
+      if (this.name === '') {
+        return []
+      }
+      const store = useStore(key)
+      store.dispatch('getOrderProducts', {name: this.name})
+      console.log('state', store.state)
+      return store.state
+    }
   }
 });
 </script>
