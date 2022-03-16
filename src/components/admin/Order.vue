@@ -14,9 +14,21 @@
         <h3>{{ name }}</h3>
         <div class="admin_product_edit_box">
           <div style="display:flex;"><p class="divided2">{{id}}</p></div>
-          <div v-for="(product,key) in orderProducts['products']" :key="key">
-            {{ product.title }}
-          </div>
+          <table class="">
+            <tr class="search_result" v-for="(product,key) in orderProducts['products']" :key="key">
+              <td style="float:left; margin:5px 5px 0 0;">
+                <!-- <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: product['item_id'] }}"> -->
+                  <img v-if="product.img_count == null" class="products_img" src="https://t202001.jgt.jp/records/no_image.png">
+                  <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
+                  <img v-else class="products_img" v-bind:src="imgSrc + product.item_id + '_01.jpg' ">
+                <!-- </router-link> -->
+              </td>
+              <td style="text-align: left">
+                  {{ product['artist'] }} - {{ product['title']}}
+              </td>
+              <td style="">{{ product['price'] }} </td>
+            </tr>
+          </table>
         </div>
         <div class="admin_product_edit_box">
           paid
@@ -99,5 +111,8 @@ export default defineComponent({
 .divided3 {
   width: 30%;
   margin: 1%;
+}
+img {
+  width:65px;
 }
 </style>
