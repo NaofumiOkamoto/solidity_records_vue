@@ -45,7 +45,7 @@
           </transition>
 
 
-          <router-link :to="{ name: 'AdminCustomer'}">
+          <router-link :to="{ name: 'AdminCustomers'}">
             <div class="main_list">
               <span @click="isCustomerTab = true" style="text-align: left;">
                 <fa class="fa" icon="users" />顧客管理

@@ -11,6 +11,7 @@ import Genres from '../views/Genres.vue'
 import AdminProduct from '../components/admin/Product.vue'
 import AdminProducts from '../components/admin/Products.vue'
 import AdminGenres from '../components/admin/Genres.vue'
+import AdminCustomers from '../components/admin/Customers.vue'
 import AdminCustomer from '../components/admin/Customer.vue'
 import AdminOrders from '../components/admin/Orders.vue'
 import AdminOrder from '../components/admin/Order.vue'
@@ -51,10 +52,16 @@ const routes: Array<RouteRecordRaw> = [
     props: route => ({ paramsOrderId: String(route.params.paramsOrderId)}),
   },
   {
-    path: '/admin/customer',
+    path: '/admin/customers',
+    name: 'AdminCustomers',
+    component: AdminCustomers,
+    props: route => ({ status: String(route.params.status)}),
+  },
+  {
+    path: '/admin/customer/:paramsEmail',
     name: 'AdminCustomer',
     component: AdminCustomer,
-    props: route => ({ status: String(route.params.status)}),
+    props: route => ({ paramsEmail: String(route.params.paramsEmail)}),
   },
   {
     path: '/product/:itemId',

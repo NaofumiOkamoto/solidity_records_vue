@@ -16,7 +16,7 @@ import AdminProduct from '@/components/admin/Product.vue'
 import AdminGenres from '@/components/admin/Genres.vue'
 import AdminOrders from '@/components/admin/Orders.vue'
 import AdminOrder from '@/components/admin/Order.vue'
-import AdminCustomer from '@/components/admin/Customer.vue'
+import AdminCustomers from '@/components/admin/Customers.vue'
 import AdminProductsTable from '@/components/admin/ProductsTable.vue'
 import { VueCookieNext } from 'vue-cookie-next'
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -68,7 +68,7 @@ app.component('AdminProduct', AdminProduct)
 app.component('AdminGenres', AdminGenres)
 app.component('AdminOrders', AdminOrders)
 app.component('AdminOrder', AdminOrder)
-app.component('AdminCustomer', AdminCustomer)
+app.component('AdminCustomers', AdminCustomers)
 app.component('AdminProductsTable', AdminProductsTable)
 app.component("fa", FontAwesomeIcon)
 app.mount('#app')
