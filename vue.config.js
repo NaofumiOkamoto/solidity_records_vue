@@ -76,6 +76,11 @@ module.exports = {
           changeOrigin: true,
           pathRewrite: { "^/searchCustomers": "/searchCustomers" }
         },
+        '^/getCustomer': {
+          target: 'http://localhost:3030',
+          changeOrigin: true,
+          pathRewrite: { "^/getCustomer": "/getCustomer" }
+        },
 
       }
     }
