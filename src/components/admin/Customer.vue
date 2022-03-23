@@ -14,7 +14,14 @@
         </router-link>
         <h3>{{ lastName }} {{ firstName }}</h3>
         <div class="admin_product_edit_box">
-          <div style="display:flex;"><p class="divided2">{{paramsEmail}}</p></div>
+          <div class="subtitle">Customer</div>
+          <div style=""><p class="divided2">{{paramsEmail}}</p></div>
+          <hr>
+          <div class="subtitle">DEFAULT ADDRESS</div>
+          <div style=""><p class="divided2">{{province}} {{provinceCode}}</p></div>
+          <div style=""><p class="divided2">{{city}}</p></div>
+          <div style=""><p class="divided2">{{address1}}</p></div>
+          <div style=""><p class="divided2">{{address2}}</p></div>
         </div>
         <div class="admin_product_edit_box">
           aaa
@@ -39,6 +46,12 @@ export default defineComponent({
       email: '',
       firstName: '',
       lastName: '',
+      country: '',
+      province: '',
+      provinceCode: '',
+      city: '',
+      address1: '',
+      address2: '',
       // orderProduct: [{name: 'aaa'}]
     }
   },
@@ -52,6 +65,12 @@ export default defineComponent({
       axios.get(url).then((response) => {
         this.firstName = response.data[0]['First Name']
         this.lastName = response.data[0]['Last Name']
+        this.country = response.data[0]['Country']
+        this.province = response.data[0]['Province']
+        this.provinceCode = response.data[0]['Province Code']
+        this.city = response.data[0]['City']
+        this.address1 = response.data[0]['Address1']
+        this.address2 = response.data[0]['Address2']
       })
     },
   },
@@ -89,5 +108,9 @@ export default defineComponent({
 }
 img {
   width:65px;
+}
+.subtitle {
+  font-weight: bold;
+  font-size: 120%;
 }
 </style>
