@@ -269,7 +269,6 @@ export default defineComponent({
       this.scrollTop()
     },
     getPagesTotal(){
-      console.log('count', this.searchProductsCount['productsCount'])
       const length = this.searchProductsCount['productsCount']
       this.pagesTotal = length / this.limit * 10
     },

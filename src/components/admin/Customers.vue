@@ -7,50 +7,7 @@
     <div style="display:flex;">
       <div style="width: 20%; height: 10px;"></div>
       <div class="admin_main_box">
-        <div class="header_right">
-          <button class="no_button" v-on:click="exportMordal = true">export</button>
-          <button class="no_button" v-on:click="importMordal = true">import</button>
-          <router-link :to="{ name: 'AdminProduct', params: { paramsItemId: 'new' }}">
-            <el-button class="add_button" style="">add product</el-button>
-          </router-link>
-        </div>
-        <!-- ToDo: インポートできるようにする 丸々反映？ -->
         <h1>顧客管理</h1>
-        <!-- export モーダル -->
-        <div v-if="exportMordal" id="overlay">
-          <div class="mordal">
-            <button class="mordal_close batsu" v-on:click="exportMordal = false"></button>
-            <p class="mordal_title">Export products</p>
-            <hr>
-            <p>Export</p>
-            <input type="radio" id="all" value="all" v-model="picked" />
-            <label for="all">All products（まだ）</label>
-            <br>
-            <input type="radio" id="select" value="select" v-model="picked" />
-            <label for="select">selected:  products（まだ）</label>
-            <br>
-            <input type="radio" id="match" value="match" v-model="picked" />
-            <label for="match">{{searchProducts.products.length}} produts matching your search</label>
-            <br>
-            <div style="float: right">
-              <el-button class="cancel" v-on:click="exportMordal = false">cancel</el-button>
-              <el-button class="add_button" v-on:click="downloadCSV">export</el-button>
-            </div>
-          </div>
-        </div>
-        <!-- import モーダル -->
-        <div v-if="importMordal" id="overlay">
-          <div class="mordal">
-            <button class="mordal_close batsu" v-on:click="importMordal = false"></button>
-            <p class="mordal_title">Import products by csv</p>
-            <hr>
-            <input @change="fileChange" type="file" id="file_input_expense" name="file_input_expense">
-            <div style="float: right">
-              <el-button class="cancel" v-on:click="importMordal = false">cancel</el-button>
-              <el-button class="add_button" v-on:click="importCSV">importまだ</el-button>
-            </div>
-          </div>
-        </div>
         <!-- タブ -->
         <div @click="label" style="display:flex">
           <router-link :to="{ name: 'AdminCustomers', params: { status: '' }}">
@@ -195,88 +152,6 @@ export default defineComponent({
     },
     removeLabel(label: string){
       this.customerStatus = []
-    },
-    downloadCSV(){
-      const products = this.$store.getters.getProducts
-      const label = Object.keys(products[0])
-      let csv = '\ufeff' + label.join() + '\n' // ここをカラムにするか、stateのkeyにする
-      for (let i = 0; i < products.length; i++){
-        let line = ''
-        for (let j = 0; j < label.length; j++) {
-          line += '"' + String(products[i][label[j]]) + '"' + ','
-        }
-        line += '\n'
-        csv += line
-      }
-      const blob = new Blob([csv], { type: 'text/csv' })
-      const link = document.createElement('a')
-      link.href = window.URL.createObjectURL(blob)
-      link.download = 'products.csv'
-      link.click()
-    },
-    fileChange: function(e: any) {
-      const url = '/getApi?sql='
-      axios.get(url).then((response) => {
-        console.log('response', response.data.map((obj: any): obj is any => obj['item_id']))
-      })
-      const file = e.target.files[0];
-      const reader = new FileReader();
-
-      const loadFunc = () => {
-        const result = reader.result;
-        let lines = ['']
-        if(typeof result === 'string') {
-          lines = result.split('\n')
-        }
-        const workersArray: object[] = [];
-        if(0 < lines.length) {
-          lines.forEach(element => {
-            const workerData = element.split(",");
-            const worker = {
-              // カラム情報追加
-              itemId: workerData[0],
-              masterId: workerData[1],
-              artist: workerData[2],
-              title: workerData[3],
-              label: workerData[4],
-              country: workerData[5],
-              number: workerData[6],
-              barcode: workerData[7],
-              format: workerData[8],
-              releaseYear: workerData[9],
-              recodingDate: workerData[10],
-              genre: workerData[11],
-              trackList: workerData[12],
-              personnel: workerData[13],
-              itemCondition: workerData[14],
-              sleeveCondition: workerData[15],
-              sleeveDescription: workerData[16],
-              vinylCondition: workerData[17],
-              vinylDescription: workerData[18],
-              quantity: workerData[19],
-              weight: workerData[21],
-              price: workerData[22],
-              discogsPrice: workerData[23],
-              discogsId: workerData[24],
-              ebayPrice: workerData[25],
-              ebayId: workerData[26],
-              musicalInstrument: workerData[27],
-              youtube: workerData[28],
-              imgCount: workerData[29],
-              registrationDate: workerData[30],
-              soldDate: workerData[31],
-              soldPrice: workerData[32],
-              customerStatus: workerData[33],
-              salesStatus: workerData[34],
-            };
-            workersArray.push(worker);
-          });
-        }
-        this.workers = workersArray;
-        // ToDo: ここにupdateかcreate処理をかく
-      };
-      reader.onload = loadFunc;
-      reader.readAsBinaryString(file);
     },
     setPage (val: number) {
       this.page = val

@@ -14,6 +14,9 @@
         <h3>{{ name }}</h3>
         <div class="admin_product_edit_box">
           <div style="display:flex;"><p class="divided2">{{id}}</p></div>
+          <!-- products table -->
+          <!-- ToDo: ステータスごとに分ける() -->
+          <!-- ToDo: ステータスの詳細はかずき確認 -->
           <table class="">
             <tr class="search_result" v-for="(product,key) in orderProducts['products']" :key="key">
               <td style="float:left; margin:5px 5px 0 0;">
@@ -33,7 +36,6 @@
         <div class="admin_product_edit_box">
           paid
         </div>
-        <el-button @click="updateProduct()" type="success">save</el-button>
       </div>
 		</div>
 	</div>
