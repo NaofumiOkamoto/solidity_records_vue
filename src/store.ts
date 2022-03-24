@@ -31,6 +31,7 @@ productsCount: number;
 orders: [{}];
 ordersCount: number;
 customers: [{}];
+customersCount: number;
 }
 
 // define injection key
@@ -65,7 +66,8 @@ export const store = createStore<State>({
     productsCount: 0,
     orders: [{}],
     ordersCount: 0,
-    customers: [{}]
+    customers: [{}],
+    customersCount: 0,
   },
   mutations: {
     getProducts(state, sql){
@@ -242,10 +244,16 @@ export const store = createStore<State>({
       const sort = arg.sort
       const url = '/searchCustomers?sql=' + '__' + keyword + '__' + status + '__' + limit + '__' + ofset + '__' + sort;
       axios.get(url).then((response) => {
-        console.log('response', response.data)
         state.customers = response.data
       });
-    }
+    },
+		searchCustomersCount(state, arg){
+      const keyword = arg.keyword
+      const url = '/searchCustomers?sql=' + '__'+ keyword;
+      axios.get(url).then((response) => {
+        state.customersCount = response.data.length
+      });
+    },
 
   },
   actions: {
@@ -294,7 +302,10 @@ export const store = createStore<State>({
     // customer関連
     searchCustomers(context, sql){
       context.commit('searchCustomers', sql)
-    }
+    },
+    searchCustomersCount(context, sql){
+      context.commit('searchCustomersCount', sql)
+    },
     // getCartCount(context) {
     //   context.commit('getCart')
     // },

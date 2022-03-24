@@ -103,9 +103,21 @@
                 <span style="color: #9b9b9b;">{{ customer['Province'] }}</span>
               </router-link>
             </td>
-            <td style="">{{ customer['Email'] }} </td>
-            <td style="">order数</td><!-- ToDo: order数 -->
-            <td style="">購入金額</td><!-- ToDo: 購入金額 -->
+            <td style="">
+              <router-link :to="{ name: 'AdminCustomer', params: { paramsEmail: customer['Email'] }}">
+                {{ customer['Email'] }} 
+              </router-link>
+            </td>
+            <td style="">
+              <router-link :to="{ name: 'AdminCustomer', params: { paramsEmail: customer['Email'] }}">
+                order数<!-- ToDo: order数 -->
+              </router-link>
+            </td>
+            <td style="">
+              <router-link :to="{ name: 'AdminCustomer', params: { paramsEmail: customer['Email'] }}">
+                購入金額<!-- ToDo: 購入金額 -->
+              </router-link>
+            </td>
           </tr>
         </table>
       <!-- ページネーション -->
@@ -271,11 +283,8 @@ export default defineComponent({
       this.scrollTop()
     },
     getPagesTotal(){
-    //   console.log('count', this.searchProductsCount['productsCount'])
-    //   const length = this.searchProductsCount['productsCount']
-    //   this.pagesTotal = length / this.limit * 10
-	// ToDo: customer totalpage
-      this.pagesTotal = 100
+      const length = this.searchCustomersCount['customersCount']
+      this.pagesTotal = length / this.limit * 10
     },
     scrollTop() {
       window.scrollTo({
@@ -312,13 +321,13 @@ export default defineComponent({
       store.dispatch('searchCustomers', { keyword: this.keyword, status: status, limit: limit, ofset: ofset, sort: this.sortSql})
       return store.state
     },
-    // searchProductsCount() {
-    //   const store = useStore(key)
-    //   const status = this.customerStatus[0]
-    //   console.log('status', status)
-    //   store.dispatch('searchProductsCount', { selected: this.searchSelected, keyword: this.keyword, status: status})
-    //   return store.state
-    // },
+    searchCustomersCount() {
+      const store = useStore(key)
+      console.log('this.keyword', this.keyword)
+      const status = this.customerStatus[0]
+      store.dispatch('searchCustomersCount', { keyword: this.keyword })
+      return store.state
+    },
   }
 });
 </script>
