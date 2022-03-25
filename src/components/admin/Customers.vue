@@ -67,12 +67,13 @@
             </td>
             <td style="">
               <router-link :to="{ name: 'AdminCustomer', params: { paramsEmail: customer['Email'] }}">
-                order数<!-- ToDo: order数 -->
+                {{ searchCustomers['customerOrdersCount'][customer['Email']] || 0 }}
               </router-link>
             </td>
             <td style="">
               <router-link :to="{ name: 'AdminCustomer', params: { paramsEmail: customer['Email'] }}">
-                購入金額<!-- ToDo: 購入金額 -->
+                {{ 1000 }}
+                <!--  ToDo: カスタマーのtotal購入金額を取得 -->
               </router-link>
             </td>
           </tr>
@@ -198,7 +199,6 @@ export default defineComponent({
     },
     searchCustomersCount() {
       const store = useStore(key)
-      console.log('this.keyword', this.keyword)
       const status = this.customerStatus[0]
       store.dispatch('searchCustomersCount', { keyword: this.keyword })
       return store.state

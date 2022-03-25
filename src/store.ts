@@ -30,8 +30,9 @@ title: string[];
 productsCount: number;
 orders: [{}];
 ordersCount: number;
-customers: [{}];
+customers: [object];
 customersCount: number;
+customerOrdersCount: [object];
 }
 
 // define injection key
@@ -68,6 +69,7 @@ export const store = createStore<State>({
     ordersCount: 0,
     customers: [{}],
     customersCount: 0,
+    customerOrdersCount: [{}],
   },
   mutations: {
     getProducts(state, sql){
@@ -245,6 +247,17 @@ export const store = createStore<State>({
       const url = '/searchCustomers?sql=' + '__' + keyword + '__' + status + '__' + limit + '__' + ofset + '__' + sort;
       axios.get(url).then((response) => {
         state.customers = response.data
+      }).then((res) => {
+        // 顧客単位でのorder数を取得してオブジェクト形式に保持する
+        const url = '/coutCustomersOrder'
+        axios.get(url).then((response) => {
+          console.log('coutCustomersOrder', response.data)
+          const result: any = new Object()
+          for(let i = 0; i < response.data.length; i++) {
+            result[response.data[i]['Email']] = response.data[i]['COUNT(*)']
+          }
+          state.customerOrdersCount = result
+        })
       });
     },
 		searchCustomersCount(state, arg){
