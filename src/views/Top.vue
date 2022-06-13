@@ -115,13 +115,6 @@ iframe{
   width: 100%;
   height: 100%;
 }
-a{
-  text-decoration: none;
-  color: #000;
-}
-a:hover{
-  text-decoration: underline;
-}
 .view_all_button{
   width: 100%;
   text-align: center;
@@ -149,5 +142,21 @@ a:hover{
   padding: 2%;
   width: 50%;
 
+}
+/* .products_box > a{
+  text-decoration: none;
+  color: #000;
+}
+.products_box > a:hover{
+  text-decoration: underline;
+  color: #7a7a7a
+} */
+.app a{
+  text-decoration: none;
+  color: #000;
+}
+.app a:hover{
+  text-decoration: underline;
+  color: #7a7a7a
 }
 </style>
