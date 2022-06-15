@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="checkouts">
     <Header/>
     <h1>checkout page</h1>
     <Footer/>
@@ -12,7 +12,7 @@ import { defineComponent } from 'vue';
 // import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default defineComponent({
-  name: 'Home',
+  name: 'Checkouts',
   data() {
     return {
       productId: 6

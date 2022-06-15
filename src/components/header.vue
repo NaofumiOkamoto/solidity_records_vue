@@ -9,7 +9,7 @@
 				<fa @click.stop="search" class="header_icon" icon="search" />
 				<router-link to="/about"><fa class="header_icon" icon="user" /></router-link>
 				<span>{{ $store.state.cartCount }}</span>
-				<router-link to="/home"> <fa class="header_icon" icon="shopping-cart" /></router-link>
+				<router-link to="/cart"> <fa class="header_icon" icon="shopping-cart" /></router-link>
 				<fa v-if="!isPC" @click="hamburger" class="header_icon" icon="bars" />
 			</div>
 		</div>

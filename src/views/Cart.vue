@@ -3,7 +3,13 @@
     <Header/>
     <div class="cart">
       <h1>Your Cart</h1>
-      <div class="flex_box">
+      <div v-if="!loadingShow && $store.state.cartCount === 0" class="cart_empty">
+        Your cart is currently empty.
+        <router-link to="/">
+          <p class="cart_link_btn">CONTINUE SHOPPING →</p>
+        </router-link>
+      </div>
+      <div v-else class="flex_box">
         <p class="header_product" :class="{ header_product_pc: isPC }">PRODUCT</p>
         <p class="header_price" :class="{ header_price_pc: isPC }">PRICE</p>
         <p class="header_qty" :class="{ header_qty_pc: isPC }">QUANTITY</p>
@@ -11,7 +17,7 @@
       </div>
       <Loading v-if="loadingShow" />
       <section v-for="product in cartProducts" :key="product.id" class="">
-        <div class="flex_box">
+        <div v-if="!loadingShow" class="flex_box">
           <div class="img_box" :class="{ img_box_pc: isPC }">
             <img v-if="product.img_count == null" class="products_img" src="https://t202001.jgt.jp/records/no_image.png"><!-- 一旦仮画像 -->
             <img v-else-if="product.condition == 'New'" class="products_img" v-bind:src="imgSrc + (product.item_id % 10000) + 'N.jpg' ">
@@ -37,6 +43,9 @@
           </div>
         </div>
       </section>
+      <div v-if="$store.state.cartCount !== 0" class="cart_link_btn checkout_btn">
+        checkout!
+      </div>
     </div>
     <Footer/>
   </div>
@@ -48,7 +57,7 @@ import { config } from '../const'
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'Home',
+  name: 'Cart',
   data(): {
     imgSrc: string;
     cartProducts: { [key: string]: string | number }[];
@@ -78,6 +87,7 @@ export default defineComponent({
     // カート内の商品削除
     removeCart(product: { [key: string]: string | number}){
       this.cartProducts.splice( this.cartProducts.indexOf(product), 1 )
+      this.cartProducts.splice( this.cartProducts.indexOf(product), 1 )
       let ids = ""
       for(let i = 0; i < this.cartProducts.length; i++) {
         if ( i < this.cartProducts.length -1 ) {
@@ -86,11 +96,16 @@ export default defineComponent({
           ids += this.cartProducts[i]['item_id']
         }
       }
+      console.log('ids', ids === "")
       if ( ids === "" ) {
-        document.cookie = "cart-products=; max-age=0";
+        console.log('if')
+        // document.cookie = "cart-products=; max-age=0";
+        document.cookie = "cart-products=; expires=0";
       } else {
+        console.log('else')
         document.cookie = "cart-products=" + ids
       }
+      console.log(document.cookie)
       this.$store.dispatch('getCartCount')
     },
     // カート内の商品取得
@@ -113,12 +128,15 @@ export default defineComponent({
                     self.findIndex(product => product === element ) === index
                     );
       // item_id から商品情報を取得
+      console.log(cartProduct)
       for(let i = 0; i < cartProduct.length; i++){
-        const url = '/getApi?sql=where item_id = ' + cartProduct[i];
-        axios.get(url).then((response) => {
-          const hash = response['data'][0]
-          this.cartProducts.push(hash)
-        })
+        if (cartProduct[i] !== '') {
+          const url = '/getApi?sql=where item_id = ' + cartProduct[i];
+          axios.get(url).then((response) => {
+            const hash = response['data'][0]
+            this.cartProducts.push(hash)
+          })
+        }
       }
     },
     handleResize() {
@@ -127,6 +145,11 @@ export default defineComponent({
     }
   },
   updated: function(){
+    setTimeout(() => {
+      this.loadingShow = false
+    }, 200);
+  },
+  beforeMount: function(){ // ToDo: この使い方はあってる？
     setTimeout(() => {
       this.loadingShow = false
     }, 200);
@@ -143,6 +166,24 @@ p {
 .cart{
   width: 90%;
   margin: 0 auto;
+}
+.cart_empty {
+  width: 100%;
+  margin: 100px 0;
+  text-align: center;
+}
+.cart_link_btn {
+  background-color: #3e3e3e;
+  color: #fff;
+  width: 250px;
+  margin: 30px auto;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+}
+.checkout_btn {
+  width: 150px;
 }
 .flex_box {
   display: flex;
