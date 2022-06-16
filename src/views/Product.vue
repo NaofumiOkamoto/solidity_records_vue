@@ -120,7 +120,7 @@ export default defineComponent({
       document.cookie = "cart-products=" + id
       for(const c of cookiesArray){
         const cArray = c.split('='); //さらに=で分割して配列に
-        if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
+        if( cArray[0].indexOf("cart-products") > -1 && cArray[1] !== ''){ // 取り出したいkeyと合致したら
           cartProducts = cArray[1] + "_" + id
           this.cartCount = cartProducts.split('_').length
           document.cookie = "cart-products=" + cartProducts
