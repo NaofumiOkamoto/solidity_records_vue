@@ -127,6 +127,7 @@ export default defineComponent({
 }
 .head_text {
   padding: 3px 10px;
+  cursor: pointer;
 }
 .head_text:hover {
   border-bottom: 1px solid #9e9d9d;

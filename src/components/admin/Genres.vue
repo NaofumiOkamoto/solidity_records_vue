@@ -48,7 +48,8 @@
             </td>
             <td v-if="isAddGenre" class="column">
               <button @click="addGenreFunc(addGenre)">add</button><!-- ToDo: ボタンレイアウト -->
-              <button @click="cancel()">cancel</button>
+              <button @click="cancelAdd()">cancel</button>
+              <!-- ToDo: 編集してキャンセル押した時、見た目が変わってしまう -->
             </td>
           </tr>
             <el-button v-if="!isAddGenre" @click="isAddGenre = true" type="primary" plain>Primary</el-button>
@@ -170,13 +171,13 @@ export default defineComponent({
         setTimeout(() => { el.style.display = 'none'}, 3000);
       }
     },
-    cancel() {
+    cancelAdd() {
       this.isAddGenre = false
       this.addGenre = {'sort_num': '', 'id': '', 'main': '', 'sub': ''}
     },
     cancelEdit() {
       this.editGenre = 0
-      // genre edit で変更したものを戻す
+      this.getAllGenre()
     }
   }
 });

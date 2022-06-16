@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
+import Cart from '../views/Cart.vue'
 import About from '../views/About.vue'
 import Top from '../views/Top.vue'
 import Product from '../views/Product.vue'
@@ -94,9 +94,9 @@ const routes: Array<RouteRecordRaw> = [
     props: route => ({ genre: String(route.params.genre) })
   },
   {
-    path: '/Home',
-    name: 'Home',
-    component: Home
+    path: '/cart',
+    name: 'Cart',
+    component: Cart
   },
   {
     path: '/about',

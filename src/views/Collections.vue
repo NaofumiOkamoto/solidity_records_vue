@@ -409,15 +409,16 @@ export default defineComponent({
       } else if ( this.paginateMaxNum !== 10) {
         this.paginateMaxNum -= this.paginateBaseNum
       }
-      const duration = 300;  // 移動速度（1秒で終了）
-      const interval = 3;    // 0.025秒ごとに移動
-      const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
-      const timer = setInterval(() => {
-          window.scrollBy(0, step);   // スクロール位置を移動
-          if(window.scrollY <= 0) {
-              clearInterval(timer);
-          }
-      }, interval);
+      window.scroll(0, 0);   // スクロール位置を移動
+      // const duration = 1000;  // 移動速度（1秒で終了）
+      // const interval = 25;    // 0.025秒ごとに移動
+      // const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
+      // const timer = setInterval(() => {
+      //     window.scrollBy(0, step);   // スクロール位置を移動
+      //     if(window.scrollY <= 0) {
+      //         clearInterval(timer);
+      //     }
+      // }, interval);
     },
     paginateUp() {
       this.loadingShow = true
@@ -426,15 +427,16 @@ export default defineComponent({
         this.paginateMaxNum += this.paginateBaseNum
         this.paginateMaxNum = ( this.paginateMaxNum > this.productsCount ) ? this.productsCount : this.paginateMaxNum
       }
-      const duration = 1;  // 移動速度（1秒で終了）
-      const interval = 1;    // 0.025秒ごとに移動
-      const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
-      const timer = setInterval(() => {
-          window.scrollBy(0, step);   // スクロール位置を移動
-          if(window.scrollY <= 0) {
-              clearInterval(timer);
-          }
-      }, interval);
+      window.scroll(0, 0);   // スクロール位置を移動
+      // const duration = 1000;  // 移動速度（1秒で終了）
+      // const interval = 25;    // 0.025秒ごとに移動
+      // const step = -window.scrollY / Math.ceil(duration / interval); // 1回に移動する距離
+      // const timer = setInterval(() => {
+      //     window.scrollBy(0, step);   // スクロール位置を移動
+      //     if(window.scrollY <= 0) {
+      //         clearInterval(timer);
+      //     }
+      // }, interval);
     },
     filterOpen() {
       this.isFilter = !this.isFilter
