@@ -33,6 +33,7 @@ ordersCount: number;
 customers: [object];
 customersCount: number;
 customerOrdersCount: [object];
+customerTotalPrice: [object];
 }
 
 // define injection key
@@ -70,6 +71,7 @@ export const store = createStore<State>({
     customers: [{}],
     customersCount: 0,
     customerOrdersCount: [{}],
+    customerTotalPrice: [{}],
   },
   mutations: {
     getProducts(state, sql){
@@ -203,7 +205,7 @@ export const store = createStore<State>({
       let cartCount = 0
       for(const c of cookiesArray){
         const cArray = c.split('='); //さらに=で分割して配列に
-        if( cArray[0].indexOf("cart-products") > -1){ // 取り出したいkeyと合致したら
+        if( cArray[0].indexOf("cart-products") > -1 && cArray[1] !== ''){ // 取り出したいkeyと合致したら
           cartCount = cArray[1].split('_').length
         }
       }
@@ -251,13 +253,22 @@ export const store = createStore<State>({
         // 顧客単位でのorder数を取得してオブジェクト形式に保持する
         const url = '/coutCustomersOrder'
         axios.get(url).then((response) => {
-          console.log('coutCustomersOrder', response.data)
-          const result: any = new Object()
+          const customerOrdersCount: any = new Object()
           for(let i = 0; i < response.data.length; i++) {
-            result[response.data[i]['Email']] = response.data[i]['COUNT(*)']
+            customerOrdersCount[response.data[i]['Email']] = response.data[i]['COUNT(*)']
           }
-          state.customerOrdersCount = result
-        })
+          state.customerOrdersCount = customerOrdersCount
+      }).then((res) => {
+        // ToDo: 顧客単位でのtotal購入金額を取得してオブジェクト形式に保持する
+        // const url = '/customersTotalPrice'
+        // axios.get(url).then((response) => {
+        //   const customerTtalPrice: any = new Object()
+        //   for(let i = 0; i < response.data.length; i++) {
+        //     customerTtalPrice[response.data[i]['Email']] = response.data[i]['SUM(total)']
+        //   }
+        //   state.customerOrdersCount = customerTtalPrice
+        // })
+      })
       });
     },
 		searchCustomersCount(state, arg){
